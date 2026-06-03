@@ -1,0 +1,22 @@
+{
+  "eyebrow": "Studio",
+  "title": "Einer für alles?\n*Einer, der alle kennt.*",
+  "lead": "dcentral ist kein Apparat — es bin ich, Lukas, als feste Konstante. Für jedes Projekt setze ich aus einem gewachsenen Netzwerk genau die Leute zusammen, die es braucht. Du koordinierst nichts. Das mache ich.",
+  "points": [
+    "Ein Ansprechpartner, von Briefing bis Übergabe.",
+    "Das Team wird pro Projekt passend gewählt — nicht verwaltet.",
+    "Regionale Nähe, wo es zählt. Remote, wo es Sinn macht."
+  ],
+  "cta": "Team zusammenstellen →",
+  "nodes": [
+    { "label": "Foto", "kind": "disc" },
+    { "label": "Film", "kind": "disc" },
+    { "label": "Aerial", "kind": "disc" },
+    { "label": "Web", "kind": "disc" },
+    { "label": "KI", "kind": "disc" },
+    { "label": "Ton", "kind": "partner" },
+    { "label": "Text", "kind": "partner" },
+    { "label": "Print", "kind": "partner" },
+    { "label": "Grafik", "kind": "partner" }
+  ]
+}

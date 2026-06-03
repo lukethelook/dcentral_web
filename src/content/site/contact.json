@@ -1,0 +1,14 @@
+{
+  "eyebrow": "Reden wir",
+  "headline": "Dein nächstes\nProjekt fängt mit\neinem *Hallo* an.",
+  "email": "hallo@dcentral.at",
+  "phone": "+43 650 000 00 00",
+  "phoneHref": "+436500000000",
+  "location": ["Salzkammergut, OÖ", "Termine nach Vereinbarung"],
+  "response": ["meist < 24 h", "Erstgespräch kostenlos"],
+  "social": [
+    { "label": "Instagram", "href": "#" },
+    { "label": "LinkedIn", "href": "#" }
+  ],
+  "name": "Lukas Kirschbichler"
+}

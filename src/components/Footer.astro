@@ -1,0 +1,96 @@
+---
+import data from '../content/site/contact.json';
+import { hl } from '../lib/text';
+const year = new Date().getFullYear();
+const headlineLines = data.headline.split('\n');
+---
+
+<footer class="ft" id="kontakt">
+  <div class="shell shell--wide">
+    <p class="eyebrow" data-ft>[ 06 ] {data.eyebrow}</p>
+
+    <h2 class="ft__big display">
+      {headlineLines.map((line) => (
+        <span class="line-mask"><span data-ftline set:html={hl(line)} /></span>
+      ))}
+    </h2>
+
+    <a class="ft__mail display" href={`mailto:${data.email}`} data-ft data-magnetic>{data.email}</a>
+
+    <div class="ft__grid">
+      <div class="ft__col" data-ft>
+        <span class="ft__k meta">Direkt</span>
+        <a href={`tel:${data.phoneHref}`} class="link-underline">{data.phone}</a>
+        <a href={`mailto:${data.email}`} class="link-underline">{data.email}</a>
+      </div>
+      <div class="ft__col" data-ft>
+        <span class="ft__k meta">Vor Ort</span>
+        {data.location.map((l) => <span>{l}</span>)}
+      </div>
+      <div class="ft__col" data-ft>
+        <span class="ft__k meta">Antwort</span>
+        {data.response.map((l) => <span>{l}</span>)}
+      </div>
+      <div class="ft__col" data-ft>
+        <span class="ft__k meta">Social</span>
+        {data.social.map((s) => <a href={s.href} class="link-underline">{s.label}</a>)}
+      </div>
+    </div>
+
+    <hr class="rule" />
+
+    <div class="ft__base">
+      <a href="#top" class="ft__mark display">dcentral<span>.</span></a>
+      <p class="ft__legal">
+        <a href="/impressum" class="link-underline">Impressum</a>
+        <a href="/datenschutz" class="link-underline">Datenschutz</a>
+      </p>
+      <p class="ft__copy meta">© {year} · {data.name} · Foto · Film · Web · KI</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft { padding-block: var(--section-y) clamp(2rem, 4vw, 3rem); position: relative; overflow: hidden; }
+  .ft__big { font-size: var(--step-5); margin: 1.4rem 0 0; }
+  .ft__big em { font-style: normal; color: var(--color-signal); }
+
+  .ft__mail {
+    display: inline-block; margin: clamp(2.2rem, 5vw, 3.6rem) 0 clamp(2.6rem, 6vw, 4rem);
+    font-size: var(--step-3); color: var(--color-paper); text-decoration: none;
+    text-transform: none; font-variation-settings: "wght" 600, "wdth" 100; will-change: transform;
+    transition: color 0.4s ease;
+  }
+  .ft__mail:hover { color: var(--color-signal); }
+
+  .ft__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1.4rem, 3vw, 2.4rem); padding-bottom: clamp(2.4rem, 5vw, 3.4rem); }
+  .ft__col { display: flex; flex-direction: column; gap: 0.5rem; font-size: var(--step-0); color: var(--color-paper); }
+  .ft__col a { text-decoration: none; width: fit-content; }
+  .ft__k { margin-bottom: 0.3rem; }
+
+  .ft__base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: clamp(1.6rem, 4vw, 2.6rem); }
+  .ft__mark { font-size: 1.4rem; text-decoration: none; color: var(--color-paper); }
+  .ft__mark span { color: var(--color-signal); }
+  .ft__legal { display: flex; gap: 1.4rem; margin: 0; }
+  .ft__legal a { text-decoration: none; color: var(--color-ash); font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.05em; }
+  .ft__copy { margin: 0; }
+
+  @media (max-width: 820px) { .ft__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .ft__mail { font-size: var(--step-2); } .ft__base { flex-direction: column; align-items: flex-start; } }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { prefersReducedMotion, registerGsap, magnetic } from '../lib/motion';
+
+  document.querySelectorAll<HTMLElement>('#kontakt [data-magnetic]').forEach((el) => magnetic(el, 0.2));
+  if (!prefersReducedMotion) {
+    registerGsap();
+    const tl = gsap.timeline({ scrollTrigger: { trigger: '#kontakt', start: 'top 68%' } });
+    tl.set('#kontakt [data-ftline]', { yPercent: 110 })
+      .set('#kontakt [data-ft]', { opacity: 0, y: 22 })
+      .to('#kontakt [data-ftline]', { yPercent: 0, duration: 1, stagger: 0.1, ease: 'expo.out' })
+      .to('#kontakt [data-ft]', { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'expo.out' }, '-=0.6');
+  }
+</script>

@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────────────────
+   dcentral — Design System  ·  „MONO + SIGNAL"
+
+   Brutalist-Tech: near-black Carbon, warmes Paper-Weiß, EIN elektrischer
+   Lime-„Signal". Harte Kanten, sichtbares Raster, XXL-Grotesk, viel Struktur.
+   Konzept-Spine bleibt: ein zentraler Knoten + Netzwerk, Salzkammergut.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --color-carbon:     #0E0E0E;
+  --color-void:       #060606;
+  --color-surface:    #161616;
+  --color-surface-2:  #1d1d1c;
+  --color-paper:      #F4F4F0;
+  --color-ash:        #8A8A85;
+  --color-line:       #2A2A28;
+  --color-signal:     #C2F23D;
+  --color-signal-dim: #9BC42F;
+
+  /* Fonts — selbst gehostet (Import im Layout) */
+  --font-display: "Archivo Variable", "Arial Narrow", Helvetica, sans-serif;
+  --font-body:    "Space Grotesk Variable", system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+/* ── Fluide Type-Scale — XXL-fähig ──────────────────────────────────────── */
+:root {
+  --step--1: clamp(0.78rem, 0.74rem + 0.18vw, 0.88rem);
+  --step-0:  clamp(0.95rem, 0.90rem + 0.26vw, 1.10rem);
+  --step-1:  clamp(1.15rem, 1.02rem + 0.62vw, 1.50rem);
+  --step-2:  clamp(1.45rem, 1.18rem + 1.30vw, 2.30rem);
+  --step-3:  clamp(1.95rem, 1.45rem + 2.40vw, 3.60rem);
+  --step-4:  clamp(2.60rem, 1.70rem + 4.40vw, 5.80rem);
+  --step-5:  clamp(3.40rem, 1.80rem + 7.60vw, 8.50rem);
+  --step-6:  clamp(4.20rem, 1.40rem + 12.5vw, 13.0rem);
+
+  --gutter:    clamp(1.2rem, 3vw, 2.4rem);
+  --measure:   1440px;
+  --section-y: clamp(5rem, 12vw, 11rem);
+
+  --ease-out:  cubic-bezier(0.16, 1, 0.30, 1);   /* expo.out — reveals */
+  --ease-io:   cubic-bezier(0.76, 0, 0.24, 1);   /* power4.inOut — wipes */
+  --ease-snap: cubic-bezier(0.5, 0, 0, 1);
+
+  color-scheme: dark;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--color-carbon);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  overflow-x: hidden;
+  font-synthesis: none;
+}
+
+::selection { background: var(--color-signal); color: var(--color-carbon); }
+
+/* Display type — Archivo, gespannt, hart, uppercase per Default für Headlines */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-variation-settings: "wght" 760, "wdth" 120;
+  font-weight: 760;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.display--tight { font-variation-settings: "wght" 800, "wdth" 100; }
+.display--mixed { text-transform: none; }
+
+a { color: inherit; }
+
+/* CMS inline highlight (from `*word*` in editable copy) */
+.hl { color: var(--color-signal); font-style: normal; }
+
+/* Mono-Eyebrow / Index-Label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-signal);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.eyebrow::before {
+  content: ""; width: 1.4rem; height: 1px; background: currentColor;
+}
+
+/* Mono-Metadaten */
+.meta {
+  font-family: var(--font-mono); font-size: var(--step--1);
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-ash);
+}
+
+/* Container & Grid */
+.shell { max-width: var(--measure); margin-inline: auto; padding-inline: var(--gutter); }
+.shell--wide { max-width: 1760px; }
+
+/* Sichtbares 12-Spalten-Hairline-Raster (dekorativ, optional pro Sektion) */
+.gridlines { position: relative; }
+.gridlines::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  max-width: var(--measure); margin-inline: auto; left: 0; right: 0;
+  padding-inline: var(--gutter);
+  background-image: repeating-linear-gradient(
+    to right, transparent, transparent calc((100% / 12) - 1px),
+    color-mix(in srgb, var(--color-line) 60%, transparent) calc((100% / 12) - 1px),
+    color-mix(in srgb, var(--color-line) 60%, transparent) calc(100% / 12)
+  );
+  background-clip: content-box; -webkit-background-clip: content-box;
+  opacity: 0.5;
+}
+
+/* Hairline-Trenner mit Mono-Index */
+.rule { height: 1px; border: 0; background: var(--color-line); }
+
+/* Animierter Link-Unterstrich (Signal) */
+.link-underline { position: relative; text-decoration: none; }
+.link-underline::after {
+  content: ""; position: absolute; left: 0; bottom: -2px;
+  width: 100%; height: 1px; background: var(--color-signal);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform 0.45s var(--ease-out);
+}
+.link-underline:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* ── Motion-Primitives ──────────────────────────────────────────────────── */
+.line-mask { display: block; overflow: hidden; padding-block: 0.02em; }
+.line-mask > span { display: block; will-change: transform; }
+[data-reveal] { will-change: transform, opacity; }
+
+/* ── Custom cursor (Signal) ─────────────────────────────────────────────── */
+.cursor {
+  position: fixed; top: 0; left: 0; z-index: 90; pointer-events: none;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--color-signal);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out),
+              background 0.3s ease, opacity 0.35s ease, border-radius 0.3s ease;
+  opacity: 0; mix-blend-mode: difference;
+}
+.cursor.is-active { opacity: 1; }
+.cursor.is-hover {
+  width: 54px; height: 54px; background: var(--color-signal);
+  mix-blend-mode: normal; opacity: 0.18;
+}
+.cursor.is-text { width: 2px; height: 28px; border-radius: 1px; }
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+/* ── Page-load curtain / transition wipe ────────────────────────────────── */
+.curtain {
+  position: fixed; inset: 0; z-index: 100; background: var(--color-signal);
+  display: grid; place-items: center; will-change: transform;
+  transform: translateY(0);
+}
+.curtain__mark {
+  font-family: var(--font-display); font-variation-settings: "wght" 800, "wdth" 125;
+  font-size: clamp(2.4rem, 9vw, 7rem); color: var(--color-carbon);
+  text-transform: uppercase; letter-spacing: -0.03em; overflow: hidden;
+}
+
+/* ── Legal pages (Impressum / Datenschutz) ──────────────────────────────── */
+.legal { padding-top: clamp(7rem, 13vw, 10rem); padding-bottom: var(--section-y); max-width: 72ch; }
+.legal__back { display: inline-block; font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-ash); text-decoration: none; margin-bottom: 2.4rem; }
+.legal h1 { font-size: var(--step-4); margin-bottom: 1.6rem; }
+.legal h2 { font-family: var(--font-display); text-transform: uppercase; font-variation-settings: "wght" 640, "wdth" 105; font-size: var(--step-1); margin: 2.4rem 0 0.6rem; color: var(--color-signal); }
+.legal p { color: var(--color-paper); line-height: 1.65; margin: 0 0 1rem; }
+.legal a { color: var(--color-signal); }
+.legal__note { font-family: var(--font-mono); font-size: var(--step--1); color: var(--color-ash); border-left: 2px solid var(--color-signal); padding-left: 1rem; }
+
+/* ── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .line-mask > span,
+  [data-reveal] { transform: none !important; opacity: 1 !important; }
+  html { scroll-behavior: auto; }
+  .curtain { display: none !important; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

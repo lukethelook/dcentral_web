@@ -1,0 +1,85 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+const {
+  title = 'dcentral — Foto, Film, Web & KI aus dem Salzkammergut',
+  description = 'Fotografie, Film & Aerial, Webdesign und KI-gestützte Kreativkonzepte. Ein Ansprechpartner, ein Netzwerk dahinter — gemacht im Salzkammergut, gedacht für überall.',
+  ogImage = '/og.svg',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://www.dcentral.at').href;
+
+// Self-hosted fonts (DSGVO-konform). Archivo (display, mit Breitenachse) + Space Grotesk.
+import '@fontsource-variable/archivo';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0E0E0E" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_AT" />
+    <meta property="og:site_name" content="dcentral" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://www.dcentral.at').href} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="curtain" id="curtain" aria-hidden="true">
+      <span class="curtain__mark">dcentral</span>
+    </div>
+    <div class="cursor" id="cursor" aria-hidden="true"></div>
+
+    <slot />
+
+    <script>
+      import { initSmoothScroll, prefersReducedMotion } from '../lib/motion';
+      import { initTransitions } from '../lib/transitions';
+
+      initSmoothScroll();
+      initTransitions();
+
+      /* ── Custom cursor ── */
+      const dot = document.getElementById('cursor');
+      const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (dot && fine && !prefersReducedMotion) {
+        const pos = { x: innerWidth / 2, y: innerHeight / 2 };
+        const tgt = { ...pos };
+        addEventListener('pointermove', (e) => {
+          tgt.x = e.clientX; tgt.y = e.clientY; dot.classList.add('is-active');
+        }, { passive: true });
+        const loop = () => {
+          pos.x += (tgt.x - pos.x) * 0.2; pos.y += (tgt.y - pos.y) * 0.2;
+          dot.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
+          requestAnimationFrame(loop);
+        };
+        loop();
+        const bind = () => {
+          document.querySelectorAll('a, button, [data-magnetic], .filter, summary, .idx__row').forEach((el) => {
+            el.addEventListener('pointerenter', () => dot.classList.add('is-hover'));
+            el.addEventListener('pointerleave', () => dot.classList.remove('is-hover'));
+          });
+        };
+        bind();
+      }
+    </script>
+  </body>
+</html>

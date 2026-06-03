@@ -1,0 +1,10 @@
+{
+  "eyebrow": "Der zentrale Knoten",
+  "lines": [
+    { "text": "Große Ideen scheitern", "dim": false },
+    { "text": "selten am *Können* —", "dim": false },
+    { "text": "sondern an zu vielen", "dim": true },
+    { "text": "Ansprechpartnern.", "dim": true }
+  ],
+  "foot": "Bei dcentral sprichst du mit *einer* Person. Dahinter steht ein Netzwerk aus Fotograf:innen, Filmer:innen, Entwickler:innen und KI-Köpfen, das sich pro Projekt neu zusammensetzt. Du bekommst die Bandbreite einer Agentur — ohne ihren Apparat."
+}

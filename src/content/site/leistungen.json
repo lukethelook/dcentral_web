@@ -1,0 +1,38 @@
+{
+  "eyebrow": "Leistungen",
+  "title": "Vier Disziplinen.\n*Ein Anspruch.*",
+  "services": [
+    {
+      "no": "01",
+      "title": "Fotografie",
+      "tag": "Bilder, die bleiben.",
+      "body": "Hotellerie, Tourismus, Produkt, Architektur und Menschen. Vom Seehotel am Traunsee bis zur Manufaktur im Hinterland — Aufnahmen, die wertig wirken, ohne zu inszenieren.",
+      "entry": "Einstieg: ein halber Tag reicht für einen frischen Bildstock.",
+      "items": ["Hotel & Tourismus", "Produkt & Food", "Architektur", "Porträt"]
+    },
+    {
+      "no": "02",
+      "title": "Film & Aerial",
+      "tag": "Bewegtbild mit Höhe.",
+      "body": "Imagefilm, Social-Reels, Eventdoku und Luftaufnahmen mit zertifizierter Drohne. Seen, Berge und Betriebe aus einer Perspektive, die man sonst nur vom Sessellift kennt.",
+      "entry": "Einstieg: vom schnellen Reel bis zum kompletten Imagefilm.",
+      "items": ["Imagefilm", "Social-Reels", "Aerial / Drohne", "Eventdoku"]
+    },
+    {
+      "no": "03",
+      "title": "Web & Entwicklung",
+      "tag": "Auftritte, die performen.",
+      "body": "Markenwebsites, Landingpages und Onepager — schnell geladen, sauber gefunden, einfach pflegbar. Technisch auf Höhe (genau wie diese Seite), nicht aus dem Baukasten.",
+      "entry": "Einstieg: von der Onepage bis zur mehrsprachigen Markenwelt.",
+      "items": ["Markenwebsites", "Landingpages", "SEO-Basis", "Pflege & Hosting"]
+    },
+    {
+      "no": "04",
+      "title": "KI-Konzepte",
+      "tag": "Ideen, schneller gedacht.",
+      "body": "KI-Bildwelten, Moodboards, Kampagnen-Konzeption und Automatisierung. Als Beschleuniger fürs Handwerk gedacht — nie als Ersatz. Du bekommst Vorsprung, kein Stockfoto-Gefühl.",
+      "entry": "Einstieg: vom Konzept-Sprint bis zur fertigen Bildkampagne.",
+      "items": ["KI-Bildwelten", "Moodboards", "Kampagne", "Automatisierung"]
+    }
+  ]
+}

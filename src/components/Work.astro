@@ -1,0 +1,200 @@
+---
+import { getCollection } from 'astro:content';
+
+const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+const filters = ['Alle', 'Foto', 'Film & Aerial', 'Web', 'KI'] as const;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<section class="work" id="arbeiten">
+  <div class="shell shell--wide work__head">
+    <p class="eyebrow" data-st>Arbeiten — Index</p>
+    <div class="work__filters" data-st role="tablist" aria-label="Nach Disziplin filtern">
+      {filters.map((f, i) => (
+        <button class="filter" data-filter={f} aria-selected={i === 0 ? 'true' : 'false'}>{f}</button>
+      ))}
+    </div>
+  </div>
+
+  <div class="shell shell--wide">
+    <hr class="rule" />
+    <ul class="idx">
+      {cases.map((c, i) => (
+        <li class="idx__item" data-discipline={c.data.discipline} data-hue={c.data.hue}>
+          <a
+            class="idx__row"
+            href={`/arbeiten/${c.id}`}
+            data-index={i}
+            aria-label={`${c.data.client} — ${c.data.title}`}
+          >
+            <span class="idx__no meta">{pad(i + 1)}</span>
+            <span class="idx__client">{c.data.client}</span>
+            <span class="idx__title">{c.data.title}</span>
+            <span class="idx__disc meta">{c.data.discipline}</span>
+            <span class="idx__year meta">{c.data.year}</span>
+            <span class="idx__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <hr class="rule" />
+  </div>
+
+  <!-- floating webgl preview -->
+  <div class="work__preview" id="work-preview" aria-hidden="true">
+    <canvas id="work-preview-canvas"></canvas>
+  </div>
+</section>
+
+<style>
+  .work { padding-block: var(--section-y); position: relative; }
+  .work__head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1.4rem; flex-wrap: wrap; margin-bottom: clamp(1.6rem, 4vw, 2.6rem);
+  }
+  .work__filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .filter {
+    background: none; cursor: pointer; font-family: var(--font-mono);
+    font-size: var(--step--1); letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--color-ash); border: 1px solid var(--color-line);
+    padding: 0.5rem 0.9rem; transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .filter:hover { color: var(--color-paper); border-color: var(--color-ash); }
+  .filter[aria-selected="true"] { background: var(--color-signal); color: var(--color-carbon); border-color: var(--color-signal); }
+
+  .idx { list-style: none; margin: 0; padding: 0; }
+  .idx__item { border-bottom: 1px solid var(--color-line); }
+  .idx__item[hidden] { display: none; }
+  .idx__row {
+    display: grid; align-items: center; gap: clamp(0.6rem, 2vw, 2rem);
+    grid-template-columns: 3.5rem 1fr 1.4fr auto auto 2rem;
+    padding: clamp(1rem, 2.4vw, 1.7rem) 0; text-decoration: none; color: var(--color-paper);
+    position: relative; transition: padding-left 0.5s var(--ease-out), color 0.4s ease;
+  }
+  .idx__row::before {
+    content: ""; position: absolute; inset: 0; right: auto; width: 0; z-index: -1;
+    background: var(--color-surface); transition: width 0.5s var(--ease-out);
+  }
+  .idx__row:hover { padding-left: clamp(0.6rem, 2vw, 1.4rem); }
+  .idx__row:hover::before { width: 100%; }
+  .idx__client { font-family: var(--font-body); font-weight: 500; font-size: var(--step-0); color: var(--color-ash); }
+  .idx__title {
+    font-family: var(--font-display); font-variation-settings: "wght" 640, "wdth" 110;
+    text-transform: uppercase; font-size: clamp(1.3rem, 3.2vw, 2.6rem); line-height: 1;
+    letter-spacing: -0.02em; transition: color 0.3s ease;
+  }
+  .idx__row:hover .idx__title { color: var(--color-signal); }
+  .idx__arrow { justify-self: end; color: var(--color-signal); opacity: 0; transform: translateX(-8px); transition: all 0.4s var(--ease-out); }
+  .idx__row:hover .idx__arrow { opacity: 1; transform: translateX(0); }
+
+  .work__preview {
+    position: fixed; top: 0; left: 0; width: clamp(220px, 24vw, 360px);
+    height: clamp(280px, 30vw, 460px); z-index: 40; pointer-events: none;
+    opacity: 0; will-change: transform;
+  }
+  .work__preview canvas { width: 100%; height: 100%; display: block; }
+
+  @media (max-width: 860px) {
+    .idx__row { grid-template-columns: 2.4rem 1fr auto; gap: 0.8rem 1rem; }
+    .idx__client, .idx__year { display: none; }
+    .idx__disc { grid-column: 2; justify-self: start; }
+    .idx__title { grid-column: 1 / -1; grid-row: 2; font-size: clamp(1.6rem, 8vw, 2.4rem); }
+  }
+  @media (hover: none), (pointer: coarse) { .work__preview { display: none; } }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { prefersReducedMotion, registerGsap } from '../lib/motion';
+  import { floatingPreview } from '../lib/gl';
+
+  const section = document.getElementById('arbeiten')!;
+  const rows = Array.from(section.querySelectorAll<HTMLElement>('.idx__item'));
+  const filters = section.querySelectorAll<HTMLButtonElement>('.filter');
+
+  /* filtering */
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filters.forEach((b) => b.setAttribute('aria-selected', 'false'));
+      btn.setAttribute('aria-selected', 'true');
+      const f = btn.dataset.filter;
+      rows.forEach((row) => {
+        const show = f === 'Alle' || row.dataset.discipline === f;
+        if (prefersReducedMotion) { row.hidden = !show; return; }
+        if (show) { row.hidden = false; gsap.fromTo(row, { opacity: 0 }, { opacity: 1, duration: 0.4 }); }
+        else row.hidden = true;
+      });
+    });
+  });
+
+  /* floating preview */
+  const wrap = document.getElementById('work-preview') as HTMLElement | null;
+  const pcanvas = document.getElementById('work-preview-canvas') as HTMLCanvasElement | null;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (wrap && pcanvas && fine && !prefersReducedMotion) {
+    let preview: ReturnType<typeof floatingPreview> | null = null;
+    try { preview = floatingPreview(pcanvas); } catch { preview = null; }
+
+    if (preview) {
+      const texCache = new Map<number, HTMLCanvasElement>();
+      const makeTex = (i: number, client: string, disc: string) => {
+        if (texCache.has(i)) return texCache.get(i)!;
+        const c = document.createElement('canvas'); c.width = 600; c.height = 760;
+        const x = c.getContext('2d')!;
+        const g = x.createLinearGradient(0, 0, 600, 760);
+        g.addColorStop(0, '#1d1d1c'); g.addColorStop(1, '#0b0b0b');
+        x.fillStyle = g; x.fillRect(0, 0, 600, 760);
+        // faint grid
+        x.strokeStyle = 'rgba(255,255,255,0.05)'; x.lineWidth = 1;
+        for (let gx = 60; gx < 600; gx += 60) { x.beginPath(); x.moveTo(gx, 0); x.lineTo(gx, 760); x.stroke(); }
+        // ghosted index
+        x.fillStyle = 'rgba(244,244,240,0.06)';
+        x.font = '800 360px "Archivo Variable", sans-serif'; x.textBaseline = 'middle'; x.textAlign = 'center';
+        x.fillText(String(i + 1).padStart(2, '0'), 300, 400);
+        // signal tag
+        x.fillStyle = '#C2F23D'; x.fillRect(40, 40, 70, 8);
+        x.fillStyle = '#8A8A85'; x.font = '500 22px "JetBrains Mono", monospace'; x.textAlign = 'left';
+        x.fillText(disc.toUpperCase(), 40, 90);
+        x.fillStyle = '#F4F4F0'; x.font = '600 30px "Space Grotesk Variable", sans-serif';
+        x.fillText(client, 40, 700);
+        texCache.set(i, c); return c;
+      };
+
+      const setX = gsap.quickTo(wrap, 'x', { duration: 0.55, ease: 'power3.out' });
+      const setY = gsap.quickTo(wrap, 'y', { duration: 0.55, ease: 'power3.out' });
+      let lastX = 0, lastY = 0, active = false;
+
+      rows.forEach((row, i) => {
+        const link = row.querySelector<HTMLElement>('.idx__row')!;
+        const client = row.querySelector('.idx__client')?.textContent || '';
+        const disc = row.dataset.discipline || '';
+        link.addEventListener('pointerenter', () => {
+          preview!.setImage(makeTex(i, client, disc));
+          gsap.to(wrap, { opacity: 1, duration: 0.3 });
+          preview!.show(); active = true;
+        });
+        link.addEventListener('pointerleave', () => {
+          gsap.to(wrap, { opacity: 0, duration: 0.3 });
+          preview!.hide(); active = false;
+        });
+      });
+
+      addEventListener('pointermove', (e) => {
+        if (!active) return;
+        setX(e.clientX - wrap.offsetWidth / 2);
+        setY(e.clientY - wrap.offsetHeight / 2);
+        preview!.setVelocity((e.clientX - lastX) / innerWidth, (e.clientY - lastY) / innerHeight);
+        lastX = e.clientX; lastY = e.clientY;
+      }, { passive: true });
+    }
+  }
+
+  /* reveal */
+  if (!prefersReducedMotion) {
+    registerGsap();
+    gsap.from('#arbeiten [data-st]', { y: 24, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.06, scrollTrigger: { trigger: section, start: 'top 75%' } });
+    gsap.from('#arbeiten .idx__item', { y: 30, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.05, scrollTrigger: { trigger: '.idx', start: 'top 80%' } });
+  }
+</script>
