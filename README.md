@@ -3,78 +3,86 @@
 Portfolio-Site für ein Salzkammergut-EPU: **ein Ansprechpartner, ein Netzwerk
 dahinter.** Foto · Film & Aerial · Web · KI.
 
-**Stack:** Astro 5 (static) · Tailwind v4 · GSAP (+ScrollTrigger) · Lenis
-(Smooth-Scroll) · **OGL** (schlanke WebGL-Shader) · selbst gehostete Fonts
-(@fontsource). Baut statisch → läuft auf jedem Hostinger-Plan.
+**Stack:** Astro 5 · Tailwind v4 · GSAP (+ScrollTrigger) · Lenis · **OGL**
+(WebGL-Shader) · selbst gehostete Fonts (@fontsource) · **Keystatic CMS** ·
+Deploy auf **Vercel**.
 
-Designkonzept: **„Mono + Signal"** — Brutalist-Tech. Carbon-Schwarz `#0E0E0E`,
-Paper-Weiß `#F4F4F0`, ein elektrischer Lime-„Signal" `#C2F23D` (sparsam: CTA,
-Hover, Key-Words). XXL-Grotesk (Archivo), sichtbares Hairline-Raster, Mono-
-Metadaten. Spine bleibt: ein zentraler Knoten + Netzwerk, Salzkammergut.
-Durchgehend WebGL (Hero-Flowmap, Arbeiten-Preview), MPA-Curtain-Übergänge,
-alles mit `prefers-reduced-motion`-Fallback.
+Designkonzept: **„Mono + Signal"** — Brutalist-Tech. Carbon `#0E0E0E`, Paper
+`#F4F4F0`, ein elektrischer Lime-„Signal" `#C2F23D`. XXL-Grotesk (Archivo),
+Hairline-Raster, Mono-Metadaten. WebGL-Signature: Hero-Flowmap + Studio-
+Knotennetz mit zentralem Flowmap-Logo. Alles mit `prefers-reduced-motion`-Fallback.
 
 ## Loslegen
 
-Voraussetzung: Node.js 22+.
-
 ```bash
 npm install
-npm run dev      # → http://localhost:4321
-npm run build    # → ./dist  (auf Hostinger public_html hochladen)
+npm run dev      # Seite: http://127.0.0.1:4321  ·  CMS: http://127.0.0.1:4321/keystatic
+npm run build    # Produktions-Build (Vercel)
 ```
+
+## Inhalte bearbeiten (Keystatic CMS)
+
+**Lokal:** `npm run dev` → `http://127.0.0.1:4321/keystatic`. Schreibt direkt in
+die Dateien. **Live (nach Deploy):** `https://DEINE-DOMAIN/keystatic` → Login mit
+GitHub → Änderungen werden committet → Vercel veröffentlicht automatisch neu.
+
+Editierbar im UI:
+- **Arbeiten / Projekte** — Cases anlegen/ändern, inkl. Titelbild-Upload.
+- **Seiteninhalte** — Hero, Manifest, Leistungen, Studio, Region, Prozess, FAQ,
+  Kontakt (alle Texte, Listen, Kennzahlen, Social-Links).
+
+Konvention in Textfeldern: `*Wort*` = Akzentfarbe (Signal), Zeilenumbruch = neue
+Zeile.
+
+**Wo liegen die Inhalte?**
+- Projekte: `src/content/cases/*.json`
+- Sektionen: `src/content/site/*.json`
+- Design (Farben/Fonts/Signal): `src/styles/global.css` → `@theme`
+- Recht: `src/pages/impressum.astro`, `datenschutz.astro`
+
+## Deploy & „von überall editieren" — Einrichtungs-Checkliste
+
+Einmalig nötig (Konten: GitHub + Vercel, beide gratis):
+
+1. **GitHub-Repo:** Repo anlegen, dann pushen:
+   ```bash
+   git remote add origin https://github.com/DEIN-USER/dcentral.git
+   git push -u origin main
+   ```
+2. **Vercel:** vercel.com → „Add New Project" → Repo importieren (Astro wird
+   erkannt). Deploy. → Seite ist live, baut bei jedem Push automatisch neu.
+3. **`keystatic.config.ts`:** `const repo = 'OWNER/REPO'` auf dein GitHub-Repo
+   setzen (z.B. `'DEIN-USER/dcentral'`), committen/pushen.
+4. **Keystatic-GitHub-Login** (für Editieren von überall): auf der deployten Seite
+   `…/keystatic` öffnen → dem Setup-Flow folgen (legt eine GitHub-App an) →
+   die erzeugten Werte als **Environment Variables** in Vercel eintragen:
+   `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`,
+   `KEYSTATIC_SECRET` → in Vercel neu deployen.
+   (Docs: keystatic.com/docs/github-mode)
+5. **Domain:** in Vercel unter „Domains" deine Domain hinzufügen und die
+   DNS-Einträge beim Domain-Anbieter setzen. (Hostinger-Hosting nicht mehr nötig.)
+
+Danach: `domain/keystatic` → mit GitHub einloggen → editieren → speichern → live.
 
 ## Struktur
 
 ```
 src/
-  styles/global.css          Tokens (Mono+Signal), Type-Scale, Cursor, Curtain, Legal, Base
-  lib/motion.ts              Lenis↔GSAP-Sync, magnetic(), whenVisible(), reduced-motion-Guard
-  lib/gl.ts                  OGL-Layer: flowmapText() (Hero) + floatingPreview() (Work)
-  lib/transitions.ts         MPA-Curtain-Wipe (Signal) zwischen Seiten
-  layouts/Layout.astro       <head>, Fonts, SEO/OG, Smooth-Scroll, Cursor, Transitions
-  components/
-    Nav.astro                Fixed, scroll-aware, Mono, Signal-Hover
-    Hero.astro               Flowmap-Typo-Distortion (OGL) — XXL „DCENTRAL", cursor-velocity + RGB-Split
-    Manifest.astro           XXL-Statement, zeilenweiser Reveal, Signal-Highlights
-    Leistungen.astro         4 Disziplinen als nummerierte Index-Zeilen (Akkordeon)
-    Work.astro               Cases als Index-Liste + Floating-WebGL-Preview (velocity-distortion)
-    Studio.astro             Knoten-Netzwerk als Signal-Wireframe (2D-Canvas)
-    Region.astro             XXL-Grotesk-Ticker + Count-up-Stats
-    Prozess.astro            4-Schritt-Stepper mit scrub-Linie (Signal)
-    Faq.astro                Index-Akkordeon + FAQPage-JSON-LD
-    Footer.astro             XXL-Kontakt-CTA (magnetisch) + Rechtslinks
-  content.config.ts          Schema der "cases"-Collection
-  content/cases/*.md         Case-Studies (Platzhalter — Frontmatter editieren)
-  pages/
-    index.astro              Onepage-Komposition
-    arbeiten/[...id].astro    Case-Detailseiten
-    impressum.astro · datenschutz.astro
+  styles/global.css      Tokens (Mono+Signal), Type-Scale, Cursor, Curtain, .hl
+  lib/ motion.ts         Lenis↔GSAP, magnetic(), whenVisible()
+       gl.ts             OGL: flowmapText() (Hero + Studio-Logo), floatingPreview()
+       transitions.ts    Curtain-Wipe zwischen Seiten
+       text.ts           hl(): `*…*`→Signal, \n→<br>
+  content.config.ts      Schema der cases-Collection (JSON)
+  content/cases/*.json   Projekte  ·  content/site/*.json  Sektionstexte
+  components/            Hero, Manifest, Leistungen, Work, Studio, Region,
+                         Prozess, Faq, Footer, Nav  (lesen aus content/*)
+  pages/                 index, arbeiten/[...id], impressum, datenschutz
+keystatic.config.ts      CMS-Schema (Collections + Singletons)
+astro.config.mjs         react + keystatic + vercel-Adapter
 ```
 
-## Inhalte pflegen
-
-**Neuer Case:** Markdown-Datei in `src/content/cases/` ablegen. Frontmatter:
-`title, client, discipline (Foto|Film & Aerial|Web|KI), year, summary, tags[],
-hue (0–360 für Platzhalter-Visual), format (portrait|landscape|square), cover?,
-featured, order`. Sobald echte Bilder da sind: `cover: "/images/…"` setzen —
-das generative Platzhalter-Visual wird automatisch ersetzt.
-
-**Echtes Hero-Bild:** Der Shader kann statt des generativen Felds ein Foto als
-Textur samplen und übers Ripple verzerren (siehe Kommentar in `Hero.astro`).
-
-## Auf Hostinger deployen
-
-1. **Statisch (jeder Plan):** `npm run build`, dann *Inhalt* von `dist/` per
-   File Manager/FTP in `public_html`. Fertig.
-2. **Git-Deploy (Business/Cloud):** Repo zu GitHub, in hPanel verknüpfen,
-   Node 22+ wählen — baut bei jedem Push.
-
-## Offene Punkte / Optionen
-
-- WebGL-Layer läuft über OGL (~17 kB gzip, geteilt von Hero + Work).
-- Signal-Lime ist an einer Stelle tauschbar (`@theme` → `--color-signal`),
-  Alternative `--color-signal-dim`, falls zu grell.
-- Echte Fotos/Logos/Projektnamen eintauschen.
-- Impressum/Datenschutz mit echten Daten füllen (Platzhalter markiert).
-- Finale Headlines/Copy gegenlesen.
+## Offene Punkte
+- Echte Fotos/Logos eintauschen (Cases → Titelbild im CMS hochladen).
+- Impressum/Datenschutz mit echten Daten füllen.
+- Signal-Lime tauschbar in `global.css` (`--color-signal`, alt: `--color-signal-dim`).
