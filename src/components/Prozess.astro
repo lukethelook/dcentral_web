@@ -60,8 +60,8 @@ const steps = data.steps;
     const section = document.getElementById('prozess')!;
     const line = section.querySelector<HTMLElement>('[data-line]')!;
     const steps = gsap.utils.toArray<HTMLElement>('#prozess .step');
-    gsap.from(steps, { y: 28, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: section, start: 'top 72%' } });
-    gsap.from('#prozess [data-st]', { y: 24, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: '.proz__head', start: 'top 82%' } });
+    // single reveal for all [data-st] (eyebrow, title, steps) — no double-tween
+    gsap.from('#prozess [data-st]', { y: 26, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: '#prozess', start: 'top 75%' } });
     ScrollTrigger.create({
       trigger: '.proz__steps', start: 'top 78%', end: 'bottom 78%', scrub: 0.5,
       onUpdate: (self) => {

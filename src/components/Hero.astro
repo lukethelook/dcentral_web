@@ -25,9 +25,7 @@ import { hl } from '../lib/text';
 
   <div class="hero__ticker" aria-hidden="true">
     <div class="hero__ticker-track" data-ticker>
-      {Array.from({ length: 2 }).map(() => (
-        <span>{data.ticker.map((w) => (<>{w} <i>✳</i> </>))}</span>
-      ))}
+      <span class="ticker__set">{data.ticker.map((w) => (<>{w} <i>✳</i> </>))}</span>
     </div>
   </div>
 </section>
@@ -54,10 +52,12 @@ import { hl } from '../lib/text';
     gap: 2rem; flex-wrap: wrap; padding-bottom: clamp(3.5rem, 8vh, 5rem);
   }
   .hero__claim {
-    margin: 0; max-width: 30ch; font-size: var(--step-2); line-height: 1.15;
+    margin: 0; max-width: 34ch; min-width: 0; font-size: var(--step-2); line-height: 1.2;
     color: var(--color-paper); font-family: var(--font-body); font-weight: 500;
   }
-  .hero__claim span { color: var(--color-signal); }
+  .hero__claim .hl { color: var(--color-signal); }
+  /* keep the discipline group together on one line — only where it fits (≥ tablet) */
+  @media (min-width: 721px) { .hero__claim .hl { white-space: nowrap; } }
 
   .hero__actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
@@ -95,15 +95,15 @@ import { hl } from '../lib/text';
 
 <script>
   import gsap from 'gsap';
-  import { prefersReducedMotion, magnetic } from '../lib/motion';
+  import { prefersReducedMotion, magnetic, marquee } from '../lib/motion';
   import { flowmapText } from '../lib/gl';
 
   document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => magnetic(el, 0.3));
 
-  /* ── Ticker ── */
+  /* ── Ticker (seamless, always full) ── */
   const track = document.querySelector<HTMLElement>('[data-ticker]');
   if (track && !prefersReducedMotion) {
-    gsap.to(track, { xPercent: -50, duration: 22, ease: 'none', repeat: -1 });
+    (document.fonts?.ready ?? Promise.resolve()).then(() => marquee(track, 90));
   }
 
   /* ── Flowmap wordmark ── */

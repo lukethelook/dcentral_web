@@ -133,6 +133,7 @@ export function flowmapText(canvas: HTMLCanvasElement, opts: FlowmapTextOpts) {
   resize();
   window.addEventListener('resize', resize);
 
+  let lastMove = -1e9;
   const onMove = (e: PointerEvent) => {
     const r = canvas.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
@@ -143,13 +144,27 @@ export function flowmapText(canvas: HTMLCanvasElement, opts: FlowmapTextOpts) {
     }
     mouse.set(x, y);
     lastMouse.set(x, y);
+    lastMove = performance.now();
   };
   window.addEventListener('pointermove', onMove, { passive: true });
 
   let raf = 0; let running = false; const t0 = performance.now();
+  let autoX = 0.5, autoY = 0.5;
   function frame(now: number) {
-    // decay velocity each frame
-    velocity.x *= 0.86; velocity.y *= 0.86;
+    // Auto-drive when there's no active cursor (touch devices always, desktop
+    // when idle): a virtual point glides along a path so the distortion lives
+    // without input. Real pointer movement takes over instantly.
+    if (now - lastMove > 1600) {
+      const at = now / 1000;
+      const tx = 0.5 + Math.sin(at * 0.7) * 0.34 + Math.sin(at * 0.23) * 0.08;
+      const ty = 0.5 + Math.sin(at * 1.03 + 1.2) * 0.26;
+      velocity.set((tx - autoX) * 11, (ty - autoY) * 11);
+      mouse.set(tx, ty);
+      autoX = tx; autoY = ty;
+    } else {
+      // decay velocity each frame
+      velocity.x *= 0.86; velocity.y *= 0.86;
+    }
 
     // update flowmap: read rtA → write rtB, then swap so rtB holds latest
     flowProgram.uniforms.tMap.value = rtA.texture;

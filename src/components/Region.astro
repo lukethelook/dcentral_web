@@ -12,7 +12,7 @@ const { clients, stats } = data;
 
   <div class="region__marquee" aria-label="Auswahl an Kund:innen">
     <div class="region__track" data-track>
-      {[...clients, ...clients].map((c) => (<span class="region__logo">{c}<i aria-hidden="true">✳</i></span>))}
+      {clients.map((c) => (<span class="region__logo">{c}<i aria-hidden="true">✳</i></span>))}
     </div>
   </div>
 
@@ -29,7 +29,7 @@ const { clients, stats } = data;
 <style>
   .region { padding-block: var(--section-y); }
   .region__intro { margin-bottom: clamp(2.6rem, 6vw, 4rem); }
-  .region__title { font-size: var(--step-4); margin-top: 1rem; }
+  .region__title { font-size: var(--step-4); margin-top: 1rem; overflow-wrap: anywhere; }
   .region__title em { font-style: normal; color: var(--color-signal); }
 
   .region__marquee { border-block: 1px solid var(--color-line); overflow: hidden; padding-block: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: clamp(3rem, 6vw, 4.5rem); }
@@ -47,16 +47,19 @@ const { clients, stats } = data;
   .stat { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--color-line); padding-top: 1.2rem; }
   .stat__n { font-size: var(--step-5); color: var(--color-signal); line-height: 0.9; }
   .stat__l { color: var(--color-ash); }
-  @media (max-width: 720px) { .region__stats { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 720px) {
+    .region__stats { grid-template-columns: repeat(2, 1fr); }
+    .region__title { font-size: clamp(1.6rem, 8vw, 2.4rem); }
+  }
 </style>
 
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { prefersReducedMotion, registerGsap } from '../lib/motion';
+  import { prefersReducedMotion, registerGsap, marquee } from '../lib/motion';
 
   const track = document.querySelector<HTMLElement>('#region [data-track]');
-  if (track && !prefersReducedMotion) gsap.to(track, { xPercent: -50, duration: 26, ease: 'none', repeat: -1 });
+  if (track && !prefersReducedMotion) (document.fonts?.ready ?? Promise.resolve()).then(() => marquee(track, 70));
 
   if (!prefersReducedMotion) {
     registerGsap();

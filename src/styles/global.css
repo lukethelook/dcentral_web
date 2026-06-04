@@ -77,6 +77,7 @@ h1, h2, h3, .display {
   letter-spacing: -0.02em;
   text-transform: uppercase;
   margin: 0;
+  overflow-wrap: anywhere; /* XXL-Headlines brechen statt über den Rand zu ragen */
 }
 .display--tight { font-variation-settings: "wght" 800, "wdth" 100; }
 .display--mixed { text-transform: none; }

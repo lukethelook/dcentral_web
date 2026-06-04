@@ -66,6 +66,28 @@ export function magnetic(el: HTMLElement, strength = 0.35) {
   el.addEventListener('pointerleave', reset);
 }
 
+/**
+ * Seamless marquee. `track` must contain exactly ONE set of items. The set is
+ * cloned until the track is wider than the viewport + one set, then scrolled by
+ * exactly one set width and looped — so it's always full (no empty gaps) on any
+ * screen width, on a true infinite loop. Call after fonts are ready.
+ */
+export function marquee(track: HTMLElement, pxPerSec = 60) {
+  if (prefersReducedMotion) return;
+  const base = track.innerHTML;
+  const unit = track.scrollWidth; // width of one set
+  if (!unit) return;
+  let guard = 0;
+  while (track.scrollWidth < window.innerWidth + unit && guard++ < 60) {
+    track.insertAdjacentHTML('beforeend', base);
+  }
+  gsap.fromTo(
+    track,
+    { x: 0 },
+    { x: -unit, duration: unit / pxPerSec, ease: 'none', repeat: -1 },
+  );
+}
+
 /** Lazily run a callback when an element first scrolls into view (for below-fold WebGL). */
 export function whenVisible(el: Element, cb: () => void, rootMargin = '200px') {
   if (!('IntersectionObserver' in window)) return cb();
