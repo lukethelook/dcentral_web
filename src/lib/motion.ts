@@ -51,6 +51,12 @@ export function initSmoothScroll(): Lenis | null {
   return lenis;
 }
 
+/** Smoothly scroll to the very top (via Lenis if available). */
+export function scrollTop() {
+  if (lenis) lenis.scrollTo(0, { duration: 1.2 });
+  else window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 /** Lock / unlock page scroll (e.g. while the mobile menu is open). */
 export function lockScroll() {
   lenis?.stop();

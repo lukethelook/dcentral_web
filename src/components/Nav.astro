@@ -10,7 +10,7 @@ const menu = [...links, { href: '#kontakt', label: 'Reden wir' }];
 
 <header class="nav" id="site-nav" data-top="true">
   <div class="nav__inner shell shell--wide">
-    <a href="#top" class="wordmark" aria-label="dcentral — zum Seitenanfang">dcentral<span>.</span></a>
+    <a href="/" class="wordmark" id="nav-wordmark" aria-label="dcentral — zur Startseite">dcentral<span>.</span></a>
 
     <nav class="nav__links" aria-label="Hauptnavigation">
       {links.map((l, i) => (
@@ -136,11 +136,12 @@ const menu = [...links, { href: '#kontakt', label: 'Reden wir' }];
 </style>
 
 <script>
-  import { magnetic, prefersReducedMotion, lockScroll, unlockScroll } from '../lib/motion';
+  import { magnetic, prefersReducedMotion, lockScroll, unlockScroll, scrollTop } from '../lib/motion';
 
   const nav = document.getElementById('site-nav');
   const menu = document.getElementById('navmenu');
   const burger = document.getElementById('nav-burger');
+  const wordmark = document.getElementById('nav-wordmark');
 
   if (nav) {
     nav.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => magnetic(el, 0.25));
@@ -174,5 +175,11 @@ const menu = [...links, { href: '#kontakt', label: 'Reden wir' }];
     burger.addEventListener('click', () => (menu.hasAttribute('data-open') ? close() : open()));
     menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
     addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.hasAttribute('data-open')) close(); });
+
+    // Logo → Startseite. Auf der Startseite: Menü schließen + smooth nach oben.
+    wordmark?.addEventListener('click', (e) => {
+      if (menu.hasAttribute('data-open')) close();
+      if (location.pathname === '/') { e.preventDefault(); e.stopPropagation(); scrollTop(); }
+    });
   }
 </script>
