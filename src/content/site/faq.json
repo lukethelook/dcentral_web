@@ -3,11 +3,29 @@
   "title": "Was sich Kund:innen *am Anfang fragen.*",
   "cta": "Frage stellen →",
   "items": [
-    { "q": "Bist du nicht nur eine Person — stemmst du größere Projekte?", "a": "Genau dafür gibt es das Netzwerk. Ich koordiniere, und je nach Projekt kommen erprobte Filmer:innen, Entwickler:innen oder Grafiker:innen dazu. Du bekommst die Schlagkraft eines Teams und trotzdem nur einen Ansprechpartner." },
-    { "q": "Was kostet das ungefähr?", "a": "Nach einem kurzen, kostenlosen Erstgespräch bekommst du ein Angebot mit Fixpreis — kein Stundenraten-Risiko, keine Überraschungen. Der Einstieg ist bewusst niederschwellig." },
-    { "q": "Arbeitest du nur im Salzkammergut?", "a": "Verwurzelt bin ich hier — Traunsee, Attersee, Dachstein. Gearbeitet wird aber überall: vor Ort, wo Nähe zählt, remote, wo es Sinn macht." },
-    { "q": "Kann ich auch nur eine Leistung buchen?", "a": "Klar. Du kannst einzelne Disziplinen einzeln beauftragen oder kombinieren. Oft ergibt sich der Mehrwert erst im Zusammenspiel — Fotos plus Website plus Reels aus einem Guss." },
-    { "q": "Wie schnell geht es los?", "a": "Auf Anfragen antworte ich meist innerhalb von 24 Stunden. Drehtermine richten sich nach deinem Zeitplan — kurzfristig ist je nach Auslastung oft machbar." },
-    { "q": "Wem gehören am Ende die Rechte?", "a": "Die Nutzungsrechte werden im Angebot klar geregelt und gehen in der Regel umfassend an dich über. Du sollst mit dem Material frei arbeiten können." }
+    {
+      "q": "Bist du nicht nur eine Person — stemmst du größere Projekte?",
+      "a": "Genau dafür gibt es das Netzwerk. Ich koordiniere und je nach Projekt kommen erprobte Filmer:innen, Entwickler:innen oder Grafiker:innen dazu. Du bekommst die Schlagkraft eines Teams und trotzdem nur einen Ansprechpartner."
+    },
+    {
+      "q": "Was kostet das ungefähr?",
+      "a": "Nach einem kurzen, kostenlosen Erstgespräch bekommst du ein Angebot mit Fixpreis — kein Stundenraten-Risiko, keine Überraschungen. Der Einstieg ist bewusst niederschwellig."
+    },
+    {
+      "q": "Arbeitest du nur im Salzkammergut?",
+      "a": "Verwurzelt bin ich hier — Almsee, Traunsee, Attersee, Dachstein. Gearbeitet wird aber überall: vor Ort, wo Nähe zählt, remote, wo es Sinn macht."
+    },
+    {
+      "q": "Kann ich auch nur eine Leistung buchen?",
+      "a": "Klar. Du kannst einzelne Disziplinen einzeln beauftragen oder kombinieren. Oft ergibt sich der Mehrwert erst im Zusammenspiel — Fotos plus Website plus Reels aus einem Guss."
+    },
+    {
+      "q": "Wie schnell geht es los?",
+      "a": "Auf Anfragen antworte ich meist innerhalb von 48 Stunden. Drehtermine richten sich nach deinem Zeitplan — kurzfristig ist je nach Auslastung oft machbar."
+    },
+    {
+      "q": "Wem gehören am Ende die Rechte?",
+      "a": "Die Nutzungsrechte werden im Angebot klar geregelt und gehen in der Regel umfassend an dich über. Du sollst mit dem Material frei arbeiten können."
+    }
   ]
 }
