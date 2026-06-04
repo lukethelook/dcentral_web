@@ -4,7 +4,7 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 // Lokal (npm run dev) schreibt direkt auf die Festplatte. In Produktion (Vercel)
 // committet Keystatic via GitHub — dann `repo` auf dein GitHub-Repo setzen und
 // die Env-Vars KEYSTATIC_GITHUB_CLIENT_ID / _SECRET / KEYSTATIC_SECRET hinterlegen.
-const repo = 'OWNER/REPO'; // ← nach GitHub-Setup anpassen, z.B. 'lukethelook/dcentral'
+const repo = 'lukethelook/dcentral_web';
 
 const TEXT = (label: string, opts: { multiline?: boolean; description?: string } = {}) =>
   fields.text({ label, multiline: opts.multiline, description: opts.description });
