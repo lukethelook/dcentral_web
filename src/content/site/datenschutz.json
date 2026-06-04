@@ -1,0 +1,11 @@
+{
+  "title": "Datenschutz",
+  "note": "Platzhalter — vor dem Livegang von einer fachkundigen Stelle prüfen lassen. Diese Seite kommt bewusst ohne Tracking, Cookies und externe Schriften aus (Fonts selbst gehostet).",
+  "blocks": [
+    { "heading": "Verantwortlicher", "body": "Lukas Kirschbichler · [Adresse] · hallo@dcentral.at" },
+    { "heading": "Grundsatz der Datensparsamkeit", "body": "Diese Website ist statisch ausgeliefert und setzt keine Cookies, kein Analytics und keine externen Schriftarten ein. Beim bloßen Besuch werden keine personenbezogenen Daten in einer Datenbank gespeichert." },
+    { "heading": "Server-Logs", "body": "Der Hosting-Anbieter verarbeitet zur Auslieferung technisch notwendige Server-Logfiles (IP-Adresse, Zeitpunkt, abgerufene Ressource). Rechtsgrundlage: berechtigtes Interesse, Art. 6 Abs. 1 lit. f DSGVO." },
+    { "heading": "Kontaktaufnahme", "body": "Wenn du uns per E-Mail kontaktierst, verarbeiten wir deine Angaben zur Bearbeitung der Anfrage. Die Daten werden gelöscht, sobald sie nicht mehr erforderlich sind." },
+    { "heading": "Deine Rechte", "body": "Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch. Beschwerdestelle: Österreichische Datenschutzbehörde (dsb.gv.at)." }
+  ]
+}

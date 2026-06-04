@@ -1,0 +1,11 @@
+{
+  "title": "Impressum",
+  "note": "Platzhalter — bitte mit deinen echten Daten füllen (Pflichtangaben nach § 5 ECG / § 14 UGB / § 25 MedienG).",
+  "blocks": [
+    { "heading": "Medieninhaber & Diensteanbieter", "body": "Lukas Kirschbichler\n[Straße Nr.]\n[PLZ Ort], Österreich" },
+    { "heading": "Kontakt", "body": "E-Mail: hallo@dcentral.at\nTel.: [+43 …]" },
+    { "heading": "Unternehmensgegenstand", "body": "Fotografie, Film & Aerial, Webdesign und KI-gestützte Kreativkonzepte." },
+    { "heading": "Unternehmensdaten", "body": "UID: [ATU…] (falls vorhanden)\nMitglied der WKO [Bundesland]\nBerufsrecht: Gewerbeordnung (www.ris.bka.gv.at)" },
+    { "heading": "Haftung für Inhalte", "body": "Die Inhalte dieser Seiten wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr übernommen." }
+  ]
+}

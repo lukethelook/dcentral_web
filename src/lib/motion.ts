@@ -51,6 +51,16 @@ export function initSmoothScroll(): Lenis | null {
   return lenis;
 }
 
+/** Lock / unlock page scroll (e.g. while the mobile menu is open). */
+export function lockScroll() {
+  lenis?.stop();
+  document.documentElement.style.overflow = 'hidden';
+}
+export function unlockScroll() {
+  lenis?.start();
+  document.documentElement.style.overflow = '';
+}
+
 /** Magnetic hover: element drifts toward the cursor, springs back on leave. */
 export function magnetic(el: HTMLElement, strength = 0.35) {
   if (prefersReducedMotion) return;
@@ -86,6 +96,39 @@ export function marquee(track: HTMLElement, pxPerSec = 60) {
     { x: 0 },
     { x: -unit, duration: unit / pxPerSec, ease: 'none', repeat: -1 },
   );
+}
+
+/** Scroll-velocity distortion: elements with [data-skew] tilt slightly with
+ *  scroll speed and settle back when it stops. Driven by Lenis' velocity. */
+export function initScrollSkew() {
+  if (prefersReducedMotion) return;
+  const els = Array.from(document.querySelectorAll<HTMLElement>('[data-skew]'));
+  if (!els.length) return;
+  const setters = els.map((el) => gsap.quickSetter(el, 'skewY', 'deg'));
+  let cur = 0;
+  const loop = () => {
+    const v = lenis?.velocity ?? 0;
+    const target = gsap.utils.clamp(-3.5, 3.5, v * 0.05);
+    cur += (target - cur) * 0.12;
+    if (Math.abs(cur) < 0.002) cur = 0;
+    for (const s of setters) s(cur);
+    requestAnimationFrame(loop);
+  };
+  loop();
+}
+
+/** Thin scroll-progress bar (element with [data-progress]); scaleX 0→1. */
+export function initScrollProgress() {
+  const bar = document.querySelector<HTMLElement>('[data-progress]');
+  if (!bar) return;
+  const update = () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const p = h > 0 ? Math.min(1, window.scrollY / h) : 0;
+    bar.style.transform = `scaleX(${p})`;
+  };
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
 }
 
 /** Lazily run a callback when an element first scrolls into view (for below-fold WebGL). */

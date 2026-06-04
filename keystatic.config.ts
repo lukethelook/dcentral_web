@@ -21,6 +21,7 @@ export default config({
     navigation: {
       Arbeiten: ['cases'],
       Seiteninhalte: ['hero', 'manifest', 'leistungen', 'studio', 'region', 'prozess', 'faq', 'contact'],
+      Rechtliches: ['impressum', 'datenschutz'],
     },
   },
 
@@ -186,6 +187,30 @@ export default config({
           { label: 'Social-Links', itemLabel: (p) => p.fields.label.value },
         ),
         name: TEXT('Name (Copyright)'),
+      },
+    }),
+
+    impressum: singleton({
+      label: 'Impressum', path: 'src/content/site/impressum', format: { data: 'json' },
+      schema: {
+        title: TEXT('Überschrift'),
+        note: TEXT('Hinweis (optional, oben)', { multiline: true }),
+        blocks: fields.array(
+          fields.object({ heading: TEXT('Abschnitt'), body: TEXT('Text', { multiline: true }) }),
+          { label: 'Abschnitte', itemLabel: (p) => p.fields.heading.value },
+        ),
+      },
+    }),
+
+    datenschutz: singleton({
+      label: 'Datenschutz', path: 'src/content/site/datenschutz', format: { data: 'json' },
+      schema: {
+        title: TEXT('Überschrift'),
+        note: TEXT('Hinweis (optional, oben)', { multiline: true }),
+        blocks: fields.array(
+          fields.object({ heading: TEXT('Abschnitt'), body: TEXT('Text', { multiline: true }) }),
+          { label: 'Abschnitte', itemLabel: (p) => p.fields.heading.value },
+        ),
       },
     }),
   },

@@ -27,6 +27,11 @@ const steps = data.steps;
 
 <style>
   .proz { padding-block: var(--section-y); background: var(--color-void); }
+  /* Desktop: full-viewport panel so the pinned sequence shows everything at once */
+  @media (min-width: 901px) {
+    .proz { min-height: 100vh; display: flex; align-items: center; padding-block: clamp(4rem, 9vh, 7rem); }
+    .proz > .shell { width: 100%; }
+  }
   .proz__head { max-width: 60ch; margin-bottom: clamp(2.6rem, 6vw, 4.5rem); }
   .proz__title { font-size: var(--step-4); margin-top: 1rem; }
   .proz__title em { font-style: normal; color: var(--color-signal); }
@@ -60,15 +65,40 @@ const steps = data.steps;
     const section = document.getElementById('prozess')!;
     const line = section.querySelector<HTMLElement>('[data-line]')!;
     const steps = gsap.utils.toArray<HTMLElement>('#prozess .step');
-    // single reveal for all [data-st] (eyebrow, title, steps) — no double-tween
-    gsap.from('#prozess [data-st]', { y: 26, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: '#prozess', start: 'top 75%' } });
-    ScrollTrigger.create({
-      trigger: '.proz__steps', start: 'top 78%', end: 'bottom 78%', scrub: 0.5,
-      onUpdate: (self) => {
-        line.style.setProperty('--p', String(self.progress));
-        const active = Math.floor(self.progress * steps.length + 0.15);
-        steps.forEach((s, i) => (i <= active ? s.setAttribute('data-on', '') : s.removeAttribute('data-on')));
-      },
+
+    // head (eyebrow + title) always reveals on enter
+    gsap.from('#prozess .proz__head [data-st]', {
+      y: 26, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08,
+      scrollTrigger: { trigger: '#prozess', start: 'top 75%' },
     });
+
+    const reveal = (p: number) => {
+      line.style.setProperty('--p', String(gsap.utils.clamp(0, 1, p)));
+      steps.forEach((s, i) => {
+        const r = gsap.utils.clamp(0, 1, (p - i / steps.length) * steps.length + 0.5);
+        s.style.opacity = String(0.2 + 0.8 * r);
+        s.style.transform = `translateY(${(1 - r) * 22}px)`;
+        r > 0.55 ? s.setAttribute('data-on', '') : s.removeAttribute('data-on');
+      });
+    };
+
+    const desktop = window.matchMedia('(min-width: 901px)').matches;
+    if (desktop) {
+      // Pinned storytelling: section stays fixed while the four steps reveal in sequence.
+      steps.forEach((s) => { s.style.opacity = '0.2'; });
+      ScrollTrigger.create({
+        trigger: '#prozess', start: 'top top', end: '+=170%',
+        pin: true, scrub: 0.6, anticipatePin: 1,
+        onUpdate: (self) => reveal(self.progress),
+        onRefresh: (self) => reveal(self.progress),
+      });
+    } else {
+      // Mobile / fallback: normal scroll-driven reveal (no pin)
+      ScrollTrigger.create({
+        trigger: '.proz__steps', start: 'top 85%', end: 'bottom 70%', scrub: 0.5,
+        onUpdate: (self) => reveal(self.progress),
+        onRefresh: (self) => reveal(self.progress),
+      });
+    }
   } else document.querySelectorAll('#prozess .step').forEach((s) => s.setAttribute('data-on', ''));
 </script>

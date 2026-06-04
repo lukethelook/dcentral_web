@@ -10,7 +10,7 @@ const { clients, stats } = data;
     <h2 class="region__title display" data-st set:html={hl(data.title)}></h2>
   </div>
 
-  <div class="region__marquee" aria-label="Auswahl an Kund:innen">
+  <div class="region__marquee" data-skew aria-label="Auswahl an Kund:innen">
     <div class="region__track" data-track>
       {clients.map((c) => (<span class="region__logo">{c}<i aria-hidden="true">✳</i></span>))}
     </div>

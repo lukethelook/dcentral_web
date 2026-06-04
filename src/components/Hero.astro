@@ -88,8 +88,12 @@ import { hl } from '../lib/text';
   .hero__ticker-track i { color: var(--color-signal); font-style: normal; margin-inline: 0.6em; }
 
   @media (max-width: 720px) {
-    .hero__claim { font-size: var(--step-1); }
-    .hero__word { font-size: 30vw; bottom: 40%; }
+    .hero__claim { font-size: var(--step-1); max-width: 100%; }
+    .hero__word { font-size: 26vw; bottom: 42%; }
+    .hero__bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding-bottom: clamp(2.6rem, 7vh, 3.5rem); }
+    .hero__actions { width: 100%; }
+    .hero__top { padding-top: clamp(5rem, 15vh, 7rem); }
+    .btn { padding: 0.9rem 1.3rem; }
   }
 </style>
 

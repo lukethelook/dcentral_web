@@ -13,7 +13,7 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntit
       <a href="#kontakt" class="faq__cta link-underline" data-st>{data.cta}</a>
     </div>
 
-    <ul class="faq__list">
+    <ul class="faq__list" data-skew>
       {faqs.map((f) => (
         <li class="faq__item" data-st>
           <details>

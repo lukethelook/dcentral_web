@@ -46,16 +46,19 @@ import '../styles/global.css';
     <div class="curtain" id="curtain" aria-hidden="true">
       <span class="curtain__mark">dcentral</span>
     </div>
+    <div class="scroll-progress" data-progress aria-hidden="true"></div>
     <div class="cursor" id="cursor" aria-hidden="true"></div>
 
     <slot />
 
     <script>
-      import { initSmoothScroll, prefersReducedMotion } from '../lib/motion';
+      import { initSmoothScroll, initScrollSkew, initScrollProgress, prefersReducedMotion } from '../lib/motion';
       import { initTransitions } from '../lib/transitions';
 
       initSmoothScroll();
       initTransitions();
+      initScrollProgress();
+      initScrollSkew();
 
       /* ── Custom cursor ── */
       const dot = document.getElementById('cursor');

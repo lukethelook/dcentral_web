@@ -162,6 +162,13 @@ a { color: inherit; }
 .cursor.is-text { width: 2px; height: 28px; border-radius: 1px; }
 @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 
+/* Scroll-progress bar */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 95; height: 2px; width: 100%;
+  background: var(--color-signal); transform: scaleX(0); transform-origin: left;
+  will-change: transform; pointer-events: none;
+}
+
 /* ── Page-load curtain / transition wipe ────────────────────────────────── */
 .curtain {
   position: fixed; inset: 0; z-index: 100; background: var(--color-signal);

@@ -1,43 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import data from '../content/site/datenschutz.json';
+import { hl } from '../lib/text';
 ---
 
-<Layout title="Datenschutz · dcentral" description="Datenschutzerklärung gemäß DSGVO.">
+<Layout title={`${data.title} · dcentral`} description="Datenschutzerklärung gemäß DSGVO.">
   <Nav />
   <main class="legal shell">
     <a href="/" class="legal__back link-underline">← Startseite</a>
-    <h1>Datenschutz</h1>
-    <p class="legal__note">Platzhalter — vor dem Livegang von einer fachkundigen Stelle prüfen lassen. Diese Seite kommt bewusst ohne Tracking, Cookies und externe Schriften aus (Fonts selbst gehostet).</p>
-
-    <h2>Verantwortlicher</h2>
-    <p>Lukas Kirschbichler · [Adresse] · <a href="mailto:hallo@dcentral.at" class="link-underline">hallo@dcentral.at</a></p>
-
-    <h2>Grundsatz der Datensparsamkeit</h2>
-    <p>
-      Diese Website ist statisch ausgeliefert und setzt keine Cookies, kein Analytics
-      und keine externen Schriftarten ein. Beim bloßen Besuch werden keine
-      personenbezogenen Daten in einer Datenbank gespeichert.
-    </p>
-
-    <h2>Server-Logs</h2>
-    <p>
-      Der Hosting-Anbieter (Hostinger) verarbeitet zur Auslieferung technisch
-      notwendige Server-Logfiles (IP-Adresse, Zeitpunkt, abgerufene Ressource).
-      Rechtsgrundlage: berechtigtes Interesse, Art. 6 Abs. 1 lit. f DSGVO.
-    </p>
-
-    <h2>Kontaktaufnahme</h2>
-    <p>
-      Wenn du uns per E-Mail kontaktierst, verarbeiten wir deine Angaben zur
-      Bearbeitung der Anfrage. Die Daten werden gelöscht, sobald sie nicht mehr
-      erforderlich sind.
-    </p>
-
-    <h2>Deine Rechte</h2>
-    <p>
-      Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und
-      Widerspruch. Beschwerdestelle: Österreichische Datenschutzbehörde (dsb.gv.at).
-    </p>
+    <h1>{data.title}</h1>
+    {data.note && <p class="legal__note">{data.note}</p>}
+    {data.blocks.map((b) => (
+      <>
+        <h2>{b.heading}</h2>
+        <p set:html={hl(b.body)} />
+      </>
+    ))}
   </main>
 </Layout>
