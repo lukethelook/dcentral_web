@@ -1,16 +1,55 @@
 ---
+import seo from '../content/site/seo.json';
+
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
 }
 const {
-  title = 'dcentral — Foto, Film, Web & KI aus dem Salzkammergut',
-  description = 'Fotografie, Film & Aerial, Webdesign und KI-gestützte Kreativkonzepte. Ein Ansprechpartner, ein Netzwerk dahinter — gemacht im Salzkammergut, gedacht für überall.',
+  title = seo.defaultTitle,
+  description = seo.defaultDescription,
   ogImage = '/og.svg',
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://www.dcentral.at').href;
+const origin = (Astro.site ?? new URL('https://www.dcentral.at')).origin;
+const canonical = new URL(Astro.url.pathname, origin).href;
+const ogImageAbs = new URL(ogImage, origin).href;
+const b = seo.business;
+
+// LocalBusiness / ProfessionalService — the key signal for local organic search.
+const businessLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${origin}/#business`,
+  name: b.name,
+  legalName: b.legalName,
+  url: origin,
+  image: ogImageAbs,
+  email: b.email,
+  telephone: b.phone,
+  priceRange: b.priceRange,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: b.street,
+    postalCode: b.postalCode,
+    addressLocality: b.city,
+    addressRegion: b.region,
+    addressCountry: b.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: b.lat, longitude: b.lng },
+  areaServed: b.areaServed,
+  knowsAbout: seo.keywords,
+  founder: { '@type': 'Person', name: b.legalName },
+  ...(b.sameAs && b.sameAs.length ? { sameAs: b.sameAs } : {}),
+};
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: seo.siteName,
+  url: origin,
+  inLanguage: 'de-AT',
+};
 
 // Self-hosted fonts (DSGVO-konform). Archivo (display, mit Breitenachse) + Space Grotesk.
 import '@fontsource-variable/archivo';
@@ -27,18 +66,31 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={seo.keywords.join(', ')} />
+    <meta name="author" content={b.legalName} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#0E0E0E" />
+    <meta name="geo.region" content="AT-4" />
+    <meta name="geo.placename" content={b.city} />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_AT" />
-    <meta property="og:site_name" content="dcentral" />
+    <meta property="og:site_name" content={seo.siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site ?? 'https://www.dcentral.at').href} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:image:alt" content={seo.defaultTitle} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbs} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(businessLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
 
     <slot name="head" />
   </head>

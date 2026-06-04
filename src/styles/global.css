@@ -87,6 +87,12 @@ a { color: inherit; }
 /* CMS inline highlight (from `*word*` in editable copy) */
 .hl { color: var(--color-signal); font-style: normal; }
 
+/* Screen-reader-only (accessible + crawlable, visually hidden) */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
 /* Mono-Eyebrow / Index-Label */
 .eyebrow {
   font-family: var(--font-mono);

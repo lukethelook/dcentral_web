@@ -1,0 +1,32 @@
+{
+  "siteName": "dcentral",
+  "defaultTitle": "dcentral — Fotografie, Film, Webdesign & KI im Salzkammergut",
+  "titleTemplate": "%s · dcentral",
+  "defaultDescription": "Fotografie, Film & Aerial, Webdesign und KI-gestützte Kreativkonzepte aus dem Salzkammergut. Ein Ansprechpartner, ein Netzwerk aus Spezialist:innen — für Hotellerie, Tourismus, Manufakturen und Marken.",
+  "keywords": [
+    "Fotograf Salzkammergut",
+    "Filmproduktion Salzkammergut",
+    "Imagefilm Gmunden",
+    "Drohne Aerial Oberösterreich",
+    "Webdesign Salzkammergut",
+    "Werbeagentur Grünau im Almtal",
+    "KI Bildwelten",
+    "Markenauftritt"
+  ],
+  "business": {
+    "name": "dcentral — Lukas Kirschbichler",
+    "legalName": "Mag. Lukas Kirschbichler",
+    "street": "Am Weiher 4",
+    "postalCode": "4645",
+    "city": "Grünau im Almtal",
+    "region": "Oberösterreich",
+    "country": "AT",
+    "lat": "47.8497",
+    "lng": "13.956",
+    "email": "hallo@dcentral.at",
+    "phone": "+436604022786",
+    "priceRange": "€€",
+    "areaServed": ["Salzkammergut", "Gmunden", "Oberösterreich", "Österreich"],
+    "sameAs": []
+  }
+}

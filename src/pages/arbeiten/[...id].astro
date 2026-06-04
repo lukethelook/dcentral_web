@@ -22,7 +22,7 @@ const idx = all.findIndex((c) => c.id === entry.id);
 const next = all[(idx + 1) % all.length];
 ---
 
-<Layout title={`${d.client} — ${d.title} · dcentral`} description={d.summary}>
+<Layout title={`${d.title} — ${d.discipline} für ${d.client} · dcentral`} description={d.summary}>
   <Nav />
   <main class="case">
     <article class="shell">

@@ -8,7 +8,10 @@ import { hl } from '../lib/text';
 
 <section class="hero" id="top" aria-label="Intro">
   <canvas id="hero-canvas" aria-hidden="true" data-word={data.wordmark}></canvas>
-  <h1 class="hero__word" id="hero-word">{data.wordmark}</h1>
+  <h1 class="hero__word" id="hero-word">
+    <span class="sr-only">dcentral — Fotografie, Film &amp; Aerial, Webdesign und KI-gestützte Kreativkonzepte im Salzkammergut</span>
+    <span aria-hidden="true">{data.wordmark}</span>
+  </h1>
 
   <div class="hero__top shell shell--wide">
     <span class="meta">{data.locatorLeft}</span>
