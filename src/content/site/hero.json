@@ -1,9 +1,13 @@
 {
-  "locatorLeft": "47.9°N 13.8°E — Salzkammergut",
-  "locatorRight": "EPU + Netzwerk · seit 2014",
+  "locatorLeft": "Grünau im Almtal - Salzkammergut",
   "wordmark": "dcentral",
-  "claim": "Ein Ansprechpartner für *Foto, Film, Web & KI*.\nEin ganzes Netzwerk dahinter.",
+  "claim": "Der Ansprechpartner für *Foto, Film, Web & KI*.\nEin ganzes Netzwerk dahinter.",
   "ctaPrimary": "Projekt starten",
   "ctaSecondary": "Arbeiten",
-  "ticker": ["Fotografie", "Film & Aerial", "Webdesign", "KI-Konzepte"]
+  "ticker": [
+    "Fotografie",
+    "Film & Aerial",
+    "Webdesign",
+    "KI-Konzepte"
+  ]
 }
