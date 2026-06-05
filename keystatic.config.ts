@@ -20,7 +20,7 @@ export default config({
     brand: { name: 'dcentral' },
     navigation: {
       Arbeiten: ['cases'],
-      Seiteninhalte: ['hero', 'manifest', 'leistungen', 'studio', 'region', 'prozess', 'faq', 'contact'],
+      Seiteninhalte: ['hero', 'manifest', 'leistungen', 'studio', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
       Rechtliches: ['impressum', 'datenschutz'],
       'SEO & Firma': ['seo'],
     },
@@ -188,6 +188,26 @@ export default config({
           { label: 'Social-Links', itemLabel: (p) => p.fields.label.value },
         ),
         name: TEXT('Name (Copyright)'),
+      },
+    }),
+
+    accelerator: singleton({
+      label: 'Accelerator (Impact)', path: 'src/content/site/accelerator', format: { data: 'json' },
+      schema: {
+        eyebrow: TEXT('Label'),
+        title: TEXT('Überschrift', { multiline: true, description: RICH }),
+        lead: TEXT('Einleitung', { multiline: true }),
+        offer: fields.array(
+          fields.object({ t: TEXT('Titel'), d: TEXT('Untertitel') }),
+          { label: 'Was ich einbringe', itemLabel: (p) => p.fields.t.value },
+        ),
+        causes: fields.array(fields.text({ label: 'Themenfeld' }), { label: 'Themenfelder', itemLabel: (p) => p.value }),
+        steps: fields.array(
+          fields.object({ no: TEXT('Nr.'), t: TEXT('Titel'), d: TEXT('Text', { multiline: true }) }),
+          { label: 'Ablauf', itemLabel: (p) => p.fields.t.value },
+        ),
+        ctaLabel: TEXT('Button-Text'),
+        ctaHref: TEXT('Button-Link (z.B. mailto:…)'),
       },
     }),
 

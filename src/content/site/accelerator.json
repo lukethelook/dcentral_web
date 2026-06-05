@@ -1,0 +1,19 @@
+{
+  "eyebrow": "Purpose-Driven Accelerator",
+  "title": "Gute Ideen verdienen\n*großartige Umsetzung.*",
+  "lead": "Einen Teil meiner Zeit gebe ich zurück — an Projekte, die gesellschaftlich oder ökologisch etwas bewegen. Mit Foto, Film, Web & KI und meinem Netzwerk helfe ich guten Vorhaben, so stark zu wirken wie ihre Mission.",
+  "offer": [
+    { "t": "Bild & Film", "d": "Sichtbarkeit, die berührt." },
+    { "t": "Web & Marke", "d": "Auftritt, der Vertrauen schafft." },
+    { "t": "KI & Konzept", "d": "Mehr Wirkung mit weniger Budget." },
+    { "t": "Netzwerk", "d": "Die richtigen Köpfe dazu." }
+  ],
+  "causes": ["Klima & Natur", "Soziales", "Bildung", "Kultur", "Regional", "Gesundheit"],
+  "steps": [
+    { "no": "01", "t": "Vorschlagen", "d": "Erzähl mir kurz vom Projekt und eurer Wirkung." },
+    { "no": "02", "t": "Auswahl", "d": "Pro Quartal wähle ich Vorhaben, die ich pro bono oder stark vergünstigt begleite." },
+    { "no": "03", "t": "Umsetzung", "d": "Wir setzen gemeinsam um — mit demselben Anspruch wie bei jedem Auftrag." }
+  ],
+  "ctaLabel": "Projekt vorschlagen",
+  "ctaHref": "mailto:hallo@dcentral.at?subject=Purpose%20Accelerator%20%E2%80%93%20Projektvorschlag"
+}
