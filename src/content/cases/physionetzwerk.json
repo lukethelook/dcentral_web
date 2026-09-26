@@ -1,0 +1,109 @@
+{
+  "title": "Ein Netzwerk, das den richtigen Physio findet",
+  "signal": "den richtigen Physio findet",
+  "client": "Physionetzwerk Almtal",
+  "clientLabel": "Physionetzwerk Almtal · Zusammenschluss von Physiotherapeut*innen",
+  "discipline": "Web",
+  "also": [
+    "Foto"
+  ],
+  "year": 2024,
+  "url": "https://www.physio-netzwerk-almtal.at",
+  "summary": "Mehr als 15 Physiotherapeut*innen, fünf Orte, über 20 Leistungsbereiche – und eine Frage, die Patient*innen wirklich haben: Wer im Almtal kann mir jetzt helfen? Für das Physionetzwerk entstanden Konzept, Logo, Website, Drucksorten und Fotografie aus einem Gedanken: dem Netz.",
+  "body": "Eine ärztliche Überweisung in der Hand, lange Wartezeiten beim Wunschtherapeuten, eine Beschwerde, die eine Zusatzausbildung braucht – genau hier setzt das Physionetzwerk Almtal an. Seine Therapeut*innen vermitteln Patient*innen untereinander weiter: an die passende Spezialisierung, an einen freien Termin, auf Wunsch bis zum Hausbesuch.\n\nDiesen Gedanken habe ich sichtbar gemacht. Das Logo ist ein Netz aus farbigen Knoten, die Website ordnet Therapeut*innen und Leistungsbereiche so, dass man schnell die richtige Person findet, und Visitenkarte mit QR-Code wie Teamfoto erzählen dieselbe Geschichte: viele Einzelne, ein Netz.\n\nDie Website läuft seit 2024 und bildet das Netzwerk bis heute ab – hier in neuem Rahmen gezeigt.",
+  "tags": [
+    "Netzwerk & Gesundheit",
+    "Konzept",
+    "Logo & Drucksorten",
+    "Website"
+  ],
+  "scope": [
+    "Konzept & Logik",
+    "Logoaufbau",
+    "Website",
+    "Drucksorten",
+    "Fotografie"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Die Logik des Netzes",
+      "d": "Wer bietet was, wo – und wer übernimmt, wenn es eng wird? Das Konzept ordnet mehr als 15 Therapeut*innen, ihre Standorte und über 20 Leistungsbereiche zu einem System, das Patient*innen weiterhilft."
+    },
+    {
+      "t": "Logoaufbau",
+      "d": "Farbige Knoten, verbunden durch feine Linien: jede Praxis ein Punkt, das Netzwerk die Verbindung. Ein Zeichen, das den Gedanken ohne Worte erklärt."
+    },
+    {
+      "t": "Website",
+      "d": "Leistungsbereiche und Therapeut*innen-Profile mit Schwerpunkten, Standort und Kontakt – der kürzeste Weg von der Beschwerde zur passenden Person."
+    },
+    {
+      "t": "Drucksorten",
+      "d": "Visitenkarten in Schwarz mit leuchtendem Netz und QR-Code direkt zur Website – das Netzwerk zum Mitnehmen."
+    },
+    {
+      "t": "Fotografie",
+      "d": "Ein gemeinsames Teamfoto, das zeigt, worum es geht: viele Gesichter, ein Netzwerk."
+    }
+  ],
+  "demo": "network",
+  "screens": [
+    {
+      "image": "/images/cases/physionetzwerk/team.webp",
+      "device": "wide",
+      "caption": "Viele Einzelne, ein Netz: das Team des Physionetzwerks."
+    },
+    {
+      "image": "/images/cases/physionetzwerk/cards.webp",
+      "device": "image",
+      "caption": "Visitenkarte: Logo vorne, QR-Code zur Website hinten."
+    },
+    {
+      "image": "/images/cases/physionetzwerk/logo-board.webp",
+      "device": "image",
+      "caption": "Das Zeichen: jede Praxis ein Knoten, das Netzwerk die Verbindung."
+    }
+  ],
+  "loopTitle": "Vom Anliegen zur richtigen Person",
+  "loop": [
+    {
+      "t": "Anliegen",
+      "d": "Eine Überweisung, eine Beschwerde, ein Wunsch nach Hausbesuch."
+    },
+    {
+      "t": "Netz",
+      "d": "Das Netzwerk kennt Schwerpunkte, Standorte und freie Kapazitäten."
+    },
+    {
+      "t": "Vermittlung",
+      "d": "Wer passt, übernimmt – ohne lange Wartezeit."
+    },
+    {
+      "t": "Therapie",
+      "d": "Begleitet von einer Person, getragen vom ganzen Netz."
+    }
+  ],
+  "stackTitle": "Werkzeuge",
+  "stack": [
+    "WordPress",
+    "Elementor",
+    "InDesign",
+    "Photoshop",
+    "Fotografie & Retusche"
+  ],
+  "showcase": {
+    "desktop": "/images/cases/physionetzwerk/scroll-desktop.webp",
+    "mobile": "/images/cases/physionetzwerk/scroll-mobile.webp",
+    "label": "physio-netzwerk-almtal.at"
+  },
+  "hue": 170,
+  "format": "landscape",
+  "previews": [
+    "/images/cases/physionetzwerk/preview-web.webp",
+    "/images/cases/physionetzwerk/preview-cards.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 5
+}

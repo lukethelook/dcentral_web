@@ -59,6 +59,7 @@ const REVEAL = [
   ['.case-stack', ':scope > li'],
   ['.case-cta', false],
   ['.ssd', false],
+  ['.nf', false],
   ['.case-outlook-head', false],
   ['.case-outlook-grid', ':scope > article'],
   ['.legal h2, .legal h2 + p', false],

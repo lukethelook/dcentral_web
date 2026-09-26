@@ -83,6 +83,40 @@ html.motion-paused .cinema-slides img { animation-play-state: paused; }
 .case-shown li { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; }
 .case-shown li span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
 
+/* ── Network finder (Physionetzwerk): the logo as a working map ───────── */
+.nf { margin-top: clamp(80px, 10vw, 140px); display: grid; grid-template-columns: .9fr 1.4fr; gap: clamp(24px, 4vw, 56px); align-items: center; background: #050505; color: #f2f2ee; padding: clamp(28px, 4.5vw, 64px); }
+.nf h2 { font-size: clamp(34px, 3.6vw, 54px); letter-spacing: -.04em; color: #f2f2ee; }
+.nf h2 em { color: #bccc6a; }
+.nf-eyebrow { display: flex; gap: 10px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #8f8f89; margin-bottom: 16px; }
+.nf-eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: #4ea5a7; box-shadow: 0 0 10px #4ea5a7; }
+.nf-lead { color: #b9b9b2; margin-top: 16px; max-width: 46ch; }
+.nf-needs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; }
+.nf-needs button { border: 1px solid #2c2c2a; background: none; color: #d6d6cf; font-size: 13px; padding: 7px 12px; border-radius: 99px; cursor: pointer; transition: background 200ms ease, color 200ms ease, border-color 200ms ease; }
+.nf-needs button[aria-checked=true] { background: #f2f2ee; color: #050505; border-color: #f2f2ee; }
+@media (hover: hover) and (pointer: fine) { .nf-needs button:not([aria-checked=true]):hover { border-color: #6b6b66; color: #fff; } }
+.nf-needs button:focus-visible, .nf-node:focus-visible { outline: 2px solid #bccc6a; outline-offset: 3px; }
+.nf-result { margin-top: 24px; display: flex; align-items: baseline; gap: 12px; color: #d6d6cf; }
+.nf-result strong { font: 500 56px/1 Manrope, sans-serif; letter-spacing: -.04em; color: #f2f2ee; font-variant-numeric: tabular-nums; }
+.nf-note { font-size: 11px; color: #6f6f6a; margin-top: 14px; }
+.nf-stage svg { width: 100%; height: auto; display: block; overflow: visible; }
+.nf-river { fill: none; stroke: #1c3d3c; stroke-width: 26; stroke-linecap: round; opacity: .55; }
+.nf-links line { stroke: #d9d9d2; stroke-width: 1.2; opacity: .28; transition: opacity 400ms ease, stroke 400ms ease, stroke-width 400ms ease; }
+.nf.has-need .nf-links line { opacity: .06; }
+.nf.has-need .nf-links line.is-on { opacity: .75; stroke: #f2f2ee; stroke-width: 1.6; }
+.nf-towns text { font: 500 22px 'DM Sans', sans-serif; fill: #8f8f89; letter-spacing: .02em; }
+.nf-node { cursor: default; transform-box: fill-box; transform-origin: center; transition: opacity 420ms ease var(--stagger, 0ms), transform 520ms cubic-bezier(.34, 1.4, .64, 1) var(--stagger, 0ms); }
+.nf-dot { fill: var(--c); }
+.nf-halo { fill: var(--c); opacity: 0; transition: opacity 420ms ease var(--stagger, 0ms); }
+.nf.has-need .nf-node.is-on { transform: scale(1.18); }
+.nf.has-need .nf-node.is-on .nf-halo { opacity: .22; }
+.nf-node.is-off { opacity: .14; }
+@media (prefers-reduced-motion: no-preference) {
+  .nf-node .nf-dot { animation: nf-breathe 4.5s ease-in-out infinite; animation-delay: var(--d); transform-box: fill-box; transform-origin: center; }
+}
+@keyframes nf-breathe { 50% { transform: scale(1.08); } }
+html.motion-paused .nf-node .nf-dot { animation-play-state: paused; }
+@media (max-width: 760px) { .nf { grid-template-columns: 1fr; padding: 28px 20px; } .nf-stage { order: -1; } .nf-result strong { font-size: 44px; } }
+
 /* ── 360° tour ──────────────────────────────────────────────────────── */
 .pano { margin-top: clamp(80px, 10vw, 140px); }
 .pano-eyebrow { display: flex; gap: 10px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }

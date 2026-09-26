@@ -38,11 +38,14 @@ const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
   <div aria-describedby="gallery-note" aria-label="Projektgalerie" class="gallery" tabindex="0">
     {cases.map(({ id, data: d }, i) => {
       const previews = d.previews.slice(0, 2).map(src);
-      const cover = d.cover ? src(d.cover) : `/assets/project-lines-${i % 4}.svg`;
+      // The gallery stays calm and uniform: every card is the project name on the
+      // line graphic in rotating colours. Real material appears on hover (previews)
+      // and on the project page — `cover` is used there, not here.
+      const cover = `/assets/project-lines-${i % 4}.svg`;
       return (
         <article class="project" data-discipline={[d.discipline, ...d.also].join('|')} data-project={id}>
           <a aria-label={`${d.client} — ${d.title}`} href={`/arbeiten/${id}`}>
-            <div class={`project-cover cover-${i % 4}${d.cover ? ' has-photo' : ''}${d.coverTone === 'dark' ? ' tone-dark' : ''}`}>
+            <div class={`project-cover cover-${i % 4}`}>
               <img alt="" height="700" loading="lazy" src={cover} width="900" />
               <span class="cover-top">{[d.discipline, ...d.also].join(' · ')} <span>{d.year}</span></span>
               <span class="cover-client">{d.client}</span>

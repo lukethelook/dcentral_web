@@ -1,0 +1,206 @@
+{
+ "towns": {
+  "Steinbach am Ziehberg": [
+   870,
+   110
+  ],
+  "St. Konrad": [
+   150,
+   150
+  ],
+  "Scharnstein": [
+   520,
+   250
+  ],
+  "Mühldorf": [
+   800,
+   330
+  ],
+  "Grünau": [
+   400,
+   500
+  ]
+ },
+ "therapists": [
+  {
+   "town": "Grünau",
+   "areas": [
+    "Unfall & Traumatologie",
+    "Orthopädie",
+    "Skoliose",
+    "Lymphdrainage",
+    "Schwindel & Kopfschmerz"
+   ]
+  },
+  {
+   "town": "Grünau",
+   "areas": [
+    "Unfall & Traumatologie",
+    "Orthopädie",
+    "Baby & Kind",
+    "Schwindel & Kopfschmerz",
+    "Cranio Sacral",
+    "Osteopathie",
+    "Narbenbehandlung",
+    "Viszerale Therapie"
+   ]
+  },
+  {
+   "town": "Grünau",
+   "areas": [
+    "Hausbesuch",
+    "Neurologie",
+    "Orthopädie",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "Grünau",
+   "areas": [
+    "Cranio Sacral",
+    "Hausbesuch",
+    "Lymphdrainage",
+    "Narbenbehandlung",
+    "Orthopädie",
+    "Psychosomatik",
+    "Schwindel & Kopfschmerz",
+    "Sport",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "St. Konrad",
+   "areas": [
+    "Unfall & Traumatologie",
+    "Orthopädie",
+    "Lymphdrainage",
+    "Psychosomatik",
+    "Onkologie",
+    "Schwindel & Kopfschmerz",
+    "Prävention",
+    "Cranio Sacral",
+    "Frauengesundheit",
+    "Narbenbehandlung",
+    "Viszerale Therapie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Unfall & Traumatologie",
+    "Orthopädie",
+    "Skoliose",
+    "Baby & Kind",
+    "Schwindel & Kopfschmerz",
+    "Prävention",
+    "Frauengesundheit",
+    "Narbenbehandlung",
+    "Viszerale Therapie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Cranio Sacral",
+    "Orthopädie",
+    "Osteopathie",
+    "Schwindel & Kopfschmerz",
+    "Sport",
+    "Unfall & Traumatologie",
+    "Viszerale Therapie"
+   ]
+  },
+  {
+   "town": "Steinbach am Ziehberg",
+   "areas": [
+    "Baby & Kind",
+    "Cranio Sacral",
+    "Osteopathie",
+    "Viszerale Therapie",
+    "Sport",
+    "Orthopädie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Hausbesuch",
+    "Hippotherapie",
+    "Lymphdrainage",
+    "Onkologie",
+    "Orthopädie",
+    "Prävention",
+    "Sport",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Baby & Kind",
+    "Frauengesundheit",
+    "Hausbesuch"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Orthopädie",
+    "Prävention",
+    "Schwindel & Kopfschmerz",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "Mühldorf",
+   "areas": [
+    "Hausbesuch",
+    "Orthopädie",
+    "Prävention",
+    "Sport",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Orthopädie",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Hausbesuch",
+    "Narbenbehandlung",
+    "Orthopädie",
+    "Prävention",
+    "Schwindel & Kopfschmerz",
+    "Unfall & Traumatologie"
+   ]
+  },
+  {
+   "town": "Scharnstein",
+   "areas": [
+    "Osteopathie",
+    "Viszerale Therapie",
+    "Hausbesuch"
+   ]
+  }
+ ],
+ "needs": [
+  "Orthopädie",
+  "Unfall & Traumatologie",
+  "Schwindel & Kopfschmerz",
+  "Sport",
+  "Baby & Kind",
+  "Hausbesuch",
+  "Lymphdrainage",
+  "Frauengesundheit",
+  "Neurologie",
+  "Osteopathie",
+  "Onkologie",
+  "Skoliose",
+  "Hippotherapie"
+ ]
+}

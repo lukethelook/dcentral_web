@@ -1,0 +1,102 @@
+---
+// „Finde deinen Physio“ — the Physionetzwerk Almtal as its own logo:
+// coloured nodes (therapists) around the valley's towns, linked into one net.
+// Choosing a need lights up the matching nodes. Data is anonymised (town + areas).
+import data from '../data/physio-network.json';
+
+const palette = ['#8b4a5f', '#c46f7a', '#bccc6a', '#cfdcf2', '#4ea5a7', '#7b2f2c', '#3e67a0', '#a9c956'];
+const towns = data.towns as Record<string, [number, number]>;
+// Place each therapist on a small ring around the town centre (deterministic).
+const byTown: Record<string, number> = {};
+const nodes = data.therapists.map((t, i) => {
+  const k = (byTown[t.town] = (byTown[t.town] ?? -1) + 1);
+  const count = data.therapists.filter((x) => x.town === t.town).length;
+  const [cx, cy] = towns[t.town];
+  const r = count > 1 ? 48 + count * 10 : 0;
+  const a = (k / count) * Math.PI * 2 + i * 0.35;
+  return { ...t, i, x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r * 0.8, ring: r, r: 12 + Math.min(8, t.areas.length * 0.8), c: palette[i % palette.length] };
+});
+// Links: neighbours within a town + every town tied to the Scharnstein hub (the net).
+const links: [number, number][] = [];
+for (const n of nodes) {
+  for (const m of nodes) {
+    if (m.i <= n.i) continue;
+    const d = Math.hypot(n.x - m.x, n.y - m.y);
+    if ((n.town === m.town && d < 150) || (n.town !== m.town && d < 330 && (n.town === 'Scharnstein' || m.town === 'Scharnstein'))) links.push([n.i, m.i]);
+  }
+}
+const townLabels = Object.entries(towns);
+const ringOf = (name: string) => Math.max(0, ...nodes.filter((n) => n.town === name).map((n) => n.ring));
+const areasOf = (n: (typeof nodes)[number]) => n.areas.join(' · ');
+---
+
+<section class="nf" data-network-finder aria-labelledby="nf-title">
+  <div class="nf-copy">
+    <p class="nf-eyebrow"><span></span>Zum Ausprobieren</p>
+    <h2 id="nf-title">Finde deinen <em>Physio.</em></h2>
+    <p class="nf-lead">Das Netzwerk vermittelt weiter, wenn es Wartezeiten gibt oder eine Zusatzausbildung gefragt ist. Wähle ein Anliegen – das Netz zeigt, wer im Almtal dafür da ist.</p>
+    <div class="nf-needs" role="radiogroup" aria-label="Anliegen wählen">
+      <button type="button" role="radio" aria-checked="true" data-need="" tabindex="0">Alle</button>
+      {data.needs.map((n) => <button type="button" role="radio" aria-checked="false" data-need={n} tabindex="-1">{n}</button>)}
+    </div>
+    <p class="nf-result" aria-live="polite"><strong data-nf-count>{nodes.length}</strong> <span data-nf-label>Therapeut*innen an {townLabels.length} Orten</span></p>
+    <p class="nf-note">Daten anonymisiert nach dem öffentlichen Therapeut*innen-Verzeichnis des Netzwerks.</p>
+  </div>
+  <div class="nf-stage">
+    <svg viewBox="0 0 1000 620" role="img" aria-label="Netzwerk der Physiotherapeut*innen im Almtal">
+      <path class="nf-river" d="M420 640 C 450 560, 380 520, 430 440 S 560 330, 540 250 S 600 110, 660 -20" />
+      <g class="nf-links">
+        {links.map(([a, b]) => <line x1={nodes[a].x} y1={nodes[a].y} x2={nodes[b].x} y2={nodes[b].y} data-a={a} data-b={b} />)}
+      </g>
+      <g class="nf-towns">
+        {townLabels.map(([name, [x, y]]) => <text x={x} y={name === 'Grünau' ? y + ringOf(name) + 52 : y - ringOf(name) - 36} text-anchor="middle">{name}</text>)}
+      </g>
+      <g class="nf-nodes">
+        {nodes.map((n) => (
+          <g class="nf-node" data-i={n.i} data-town={n.town} data-areas={n.areas.join('|')} style={`--c:${n.c};--d:${(n.i * 0.37) % 3}s`} tabindex="0" role="img" aria-label={`Physiotherapie in ${n.town}: ${areasOf(n)}`}>
+            <circle class="nf-halo" cx={n.x} cy={n.y} r={n.r * 2.2} />
+            <circle class="nf-dot" cx={n.x} cy={n.y} r={n.r} />
+            <title>{`Praxis in ${n.town} · ${areasOf(n)}`}</title>
+          </g>
+        ))}
+      </g>
+    </svg>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector('[data-network-finder]');
+  if (root) {
+    const buttons = [...root.querySelectorAll('[data-need]')];
+    const nodes = [...root.querySelectorAll('.nf-node')];
+    const lines = [...root.querySelectorAll('.nf-links line')];
+    const count = root.querySelector('[data-nf-count]');
+    const label = root.querySelector('[data-nf-label]');
+    const pick = (need, focus) => {
+      buttons.forEach((b) => { const on = b.dataset.need === need; b.setAttribute('aria-checked', String(on)); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
+      const hits = new Set(), towns = new Set();
+      nodes.forEach((n, k) => {
+        const on = !need || n.dataset.areas.split('|').includes(need);
+        n.classList.toggle('is-on', on); n.classList.toggle('is-off', !on);
+        n.style.setProperty('--stagger', `${(k % 8) * 35}ms`);
+        if (on) { hits.add(n.dataset.i); towns.add(n.dataset.town); }
+      });
+      lines.forEach((l) => l.classList.toggle('is-on', !!need && hits.has(l.dataset.a) && hits.has(l.dataset.b)));
+      root.classList.toggle('has-need', !!need);
+      count.textContent = String(hits.size);
+      const who = hits.size === 1 ? 'Therapeut*in' : 'Therapeut*innen';
+      const where = `${towns.size} ${towns.size === 1 ? 'Ort' : 'Orten'}`;
+      label.textContent = need ? `${who} für ${need} · an ${where}` : `${who} an ${where}`;
+    };
+    buttons.forEach((b, i) => {
+      b.addEventListener('click', () => pick(b.dataset.need));
+      b.addEventListener('keydown', (e) => {
+        const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (!d) return;
+        e.preventDefault();
+        pick(buttons[(i + d + buttons.length) % buttons.length].dataset.need, true);
+      });
+    });
+    pick('');
+  }
+</script>
