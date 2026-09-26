@@ -12,6 +12,17 @@ const plain = (s: string) => s.replace(/\*/g, '');
   <div class="landscape hero-landscape" data-landscape="hero">
     <canvas aria-label="Interaktive Linienlandschaft des Traunsteins"></canvas>
   </div>
+  <!-- „Der Faden": drawn and plucked by src/scripts/home-motion.js -->
+  <svg class="hero-thread" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="hero-thread-fade" gradientUnits="userSpaceOnUse" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="var(--thread)" stop-opacity=".95"></stop>
+        <stop offset=".55" stop-color="var(--thread)" stop-opacity=".75"></stop>
+        <stop offset="1" stop-color="var(--thread)" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+    <path pathLength="1" stroke="url(#hero-thread-fade)"></path>
+  </svg>
   <div class="hero-copy">
     <p class="location">{h.location}</p>
     <p class="hero-intro">{h.intro}</p>

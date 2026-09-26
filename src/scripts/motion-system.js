@@ -4,7 +4,7 @@
  * text is never hidden before JS runs, nothing hijacks the wheel, the global
  * pause and prefers-reduced-motion switch everything to instant states.
  */
-import { animate, inView, stagger } from 'motion';
+import { animate, inView, scroll, stagger } from 'motion';
 
 // Codebase token: --ease / --ease-out = cubic-bezier(.23,1,.32,1).
 const EASE_OUT = [0.23, 1, 0.32, 1];
@@ -23,27 +23,32 @@ const clear = (el) => { el.style.opacity = ''; el.style.transform = ''; el.style
 
 /* ── 1 · Scroll reveals ──────────────────────────────────────────────────
    Marketing tier, seen once per visit. Elements already on screen at load stay
-   untouched; everything below is prepared by JS only (no JS = fully visible). */
+   untouched; everything below is prepared by JS only (no JS = fully visible).
+   Modes: false = the element · 'lines' = masked line-by-line headline ·
+   'clip' = image wipe · any other string = staggered children (selector). */
 const REVEAL = [
-  // [selector, mode]  mode: false = element itself · 'clip' = image wipe · else = staggered children
   ['.manifest-bottom > p', false],
-  ['.services .section-title', false],
+  ['.services .section-title h2', 'lines'],
   ['.discipline-stage', false],
-  ['.work-heading h2', false],
+  ['.work-heading h2', 'lines'],
   ['.gallery', '.project'],
   ['.studio-visual', 'clip'],
-  ['.studio-copy', ':scope > *'],
-  ['.impact-grid > div:first-child', false],
+  ['.studio-copy h2', 'lines'],
+  ['.studio-copy', ':scope > :not(h2)'],
+  ['.impact-grid h2', 'lines'],
+  ['.impact-grid > div:first-child', ':scope > :not(h2)'],
   ['.impact-offers', ':scope > *'],
   ['.impact-steps', ':scope > li'],
-  ['.region h2', false],
+  ['.region h2', 'lines'],
   ['.client-list', ':scope > span'],
   ['.stats', ':scope > div'],
-  ['.process h2', false],
+  ['.process h2', 'lines'],
   ['.steps', ':scope > li'],
-  ['.faq-heading', false],
+  ['.faq-heading h2', 'lines'],
+  ['.faq-heading', ':scope > :not(h2)'],
   ['.faq-list', ':scope > details'],
-  ['.contact h2, .contact-mail', false],
+  ['.contact h2', 'lines'],
+  ['.contact-mail', false],
   ['.contact-grid', ':scope > div'],
   // Subpages (.case-visual is deliberately absent: it enters via the shared-element transition)
   ['.case-body > div, .case-meta', false],
@@ -56,40 +61,71 @@ const onScreen = (el) => {
   const r = el.getBoundingClientRect();
   return r.top < innerHeight && r.bottom > 0;
 };
-const parts = (el, mode) => (mode && mode !== 'clip' ? [...el.querySelectorAll(mode)] : [el]);
+const parts = (el, mode) => {
+  if (mode === 'lines') return [...el.querySelectorAll(':scope > .line > .line-inner')];
+  if (mode && mode !== 'clip') return [...el.querySelectorAll(mode)];
+  return [el];
+};
+
+// Wrap each <br>-separated line of a headline in a mask: .line > .line-inner.
+function splitLines(h) {
+  if (h.querySelector(':scope > .line')) return;
+  const groups = [[]];
+  [...h.childNodes].forEach((n) => {
+    if (n.nodeName === 'BR') groups.push([]);
+    else groups[groups.length - 1].push(n);
+  });
+  h.replaceChildren(...groups
+    .filter((g) => g.some((n) => n.nodeType !== 3 || n.textContent.trim()))
+    .map((g) => {
+      const line = document.createElement('span');
+      const inner = document.createElement('span');
+      line.className = 'line'; inner.className = 'line-inner';
+      inner.append(...g);
+      line.append(inner);
+      return line;
+    }));
+}
 
 function prepare(el, mode) {
   if (mode === 'clip') {
     el.style.clipPath = 'inset(100% 0 0 0)';
-    const img = el.querySelector('img');
-    if (img) img.style.transform = 'scale(1.08)';
-  } else {
-    parts(el, mode).forEach((p) => setStyles(p, HIDDEN));
+    // A fully clipped lazy image would never load (the browser treats it as invisible).
+    el.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+    return;
   }
+  if (mode === 'lines') {
+    splitLines(el);
+    parts(el, mode).forEach((p) => { p.style.transform = 'translateY(108%)'; });
+    return;
+  }
+  parts(el, mode).forEach((p) => setStyles(p, HIDDEN));
 }
 
 function play(el, mode) {
   pending.delete(el);
   if (!canMove()) return finish(el, mode);
   if (mode === 'clip') {
-    animate(el, { clipPath: ['inset(100% 0 0 0)', 'inset(0% 0 0 0)'] }, { duration: 1.1, ease: EASE_OUT })
+    animate(el, { clipPath: ['inset(100% 0 0 0)', 'inset(0% 0 0 0)'] }, { duration: 1.2, ease: EASE_OUT })
       .then(() => { el.style.clipPath = ''; });
-    const img = el.querySelector('img');
-    if (img) animate(img, { transform: ['scale(1.08)', 'scale(1)'] }, { duration: 1.4, ease: EASE_OUT })
-      .then(() => { img.style.transform = ''; });
     return;
   }
   const targets = parts(el, mode); // queried now: includes gallery loop copies built meanwhile
+  if (mode === 'lines') {
+    animate(targets, { transform: ['translateY(108%)', 'translateY(0%)'] },
+      { duration: 1.05, ease: EASE_OUT, delay: stagger(0.09) })
+      .then(() => targets.forEach(clear));
+    return;
+  }
   animate(targets, { opacity: [0, 1], transform: ['translateY(22px)', 'translateY(0px)'] },
-    { duration: 0.8, ease: EASE_OUT, delay: stagger(mode ? 0.06 : 0) })
+    { duration: 0.8, ease: EASE_OUT, delay: stagger(mode ? 0.06 : 0, { startDelay: mode ? 0.12 : 0 }) })
     .then(() => targets.forEach(clear));
 }
 
 function finish(el, mode) {
   pending.delete(el);
   clear(el);
-  if (mode === 'clip') el.querySelectorAll('img').forEach((i) => { i.style.transform = ''; });
-  else parts(el, mode).forEach(clear);
+  if (mode !== 'clip') parts(el, mode).forEach(clear);
 }
 function revealAll() { [...pending].forEach(([el, mode]) => finish(el, mode)); }
 
@@ -99,7 +135,10 @@ if (canMove()) {
       if (onScreen(el)) return;
       prepare(el, mode);
       pending.set(el, mode);
-      inView(el, () => { play(el, mode); }, { amount: 0.15, margin: '0px 0px -8% 0px' });
+      // IntersectionObserver honours the target's own clip-path: a clipped element never
+      // "intersects", so clip reveals watch their (unclipped) parent instead.
+      const watch = mode === 'clip' ? el.parentElement : el;
+      inView(watch, () => { play(el, mode); }, { amount: 0.15, margin: '0px 0px -8% 0px' });
     });
   }
 }
@@ -166,7 +205,7 @@ document.querySelectorAll('.faq-list details').forEach((details) => {
       content.style.height = 'auto';
       const end = content.getBoundingClientRect().height;
       content.style.height = `${start}px`; // never hand Motion an inline `auto` as origin
-      run = animate(content, { height: [`${start}px`, `${end}px`], opacity: [start ? startOpacity : 0, 1] },
+      run = animate(content, { height: [`${start}px`, `${end}px`], opacity: [startOpacity, 1] },
         { duration: 0.32, ease: EASE_OUT });
     } else {
       details.dataset.state = 'closing';
@@ -216,3 +255,24 @@ document.addEventListener('click', (e) => {
   link.querySelector('.project-cover')?.style.setProperty('view-transition-name', 'case-hero');
 });
 addEventListener('pageshow', (e) => { if (e.persisted) unnameCovers(); });
+
+/* ── 6 · Footer curtain ──────────────────────────────────────────────────
+   On large screens the chartreuse footer sits beneath the page and is
+   uncovered as the content scrolls away (pure CSS sticky, see motion.css).
+   Only when the whole footer fits the viewport — otherwise it scrolls normally.
+   Its content settles from slightly above while being uncovered. */
+const footer = document.querySelector('footer.contact');
+const main = document.querySelector('main');
+if (footer && main) {
+  const wide = matchMedia('(min-width: 1024px)');
+  const fits = () => {
+    root.classList.toggle('footer-curtain', wide.matches && footer.offsetHeight < innerHeight - 24);
+  };
+  fits();
+  addEventListener('resize', fits);
+  if (!reduced.matches) {
+    const inner = footer.querySelector('.shell');
+    scroll(animate(inner, { transform: ['translateY(-12%)', 'translateY(0%)'], opacity: [0.35, 1] }, { ease: 'linear' }),
+      { target: main, offset: ['end end', 'end start'] });
+  }
+}

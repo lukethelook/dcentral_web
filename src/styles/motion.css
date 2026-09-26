@@ -23,6 +23,50 @@
 /* The plus turns back as soon as closing starts, not when it ends. */
 details[data-state=closing] summary svg { transform: none; }
 
+/* Masked headline lines (split by motion-system.js, only when a reveal is prepared).
+   The padding keeps serif descenders and italic overhang out of the mask. */
+.line { display: block; overflow: hidden; padding: 0 .08em .14em; margin: 0 -.08em -.14em; }
+.line-inner { display: inline-block; }
+
+/* „Der Faden" — hero thread (home-motion.js). */
+.hero { --thread: #d4ff3f; }
+html[data-hero-theme=light] .hero { --thread: #789f16; }
+.hero-thread { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.hero-thread path { fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* Discipline tabs: one travelling indicator replaces the per-tab underline. */
+.discipline-tabs { position: sticky; }
+.discipline-tabs.has-indicator button:before { display: none; }
+.tab-indicator { position: absolute; left: 0; top: 0; width: 1px; height: 2px; background: var(--ink); transform-origin: 0 0; pointer-events: none; }
+
+/* Studio image frame for the parallax drift. */
+.studio-frame { overflow: hidden; }
+.studio-frame img { will-change: transform; }
+
+/* Footer curtain (large screens, only when the footer fits — motion-system.js).
+   The page is lifted onto its own layer; the footer waits beneath it. */
+html.footer-curtain body > main {
+  position: relative; z-index: 1; background: var(--paper);
+  box-shadow: 0 0 0 100vmax var(--paper), 0 50px 90px rgba(8, 30, 24, .22);
+  clip-path: inset(0 -100vmax -140px);
+}
+html.footer-curtain footer.contact { position: sticky; bottom: 0; z-index: 0; }
+
+/* Arrow micro-interaction: the arrow leaves top-right and returns from bottom-left. */
+@keyframes arrow-cycle {
+  0% { transform: translate(0, 0); }
+  42% { transform: translate(20px, -20px); }
+  42.01% { transform: translate(-20px, 20px); }
+  100% { transform: translate(0, 0); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .action:hover svg, .contact-mail:hover svg { transform: none; }
+  .action:hover svg path, .text-link:hover svg path, .contact-mail:hover svg path,
+  .header-contact:hover svg path, .project a:hover .cover-open svg path {
+    animation: arrow-cycle 460ms cubic-bezier(.23, 1, .32, 1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),

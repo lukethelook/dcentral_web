@@ -8,7 +8,7 @@ const img = /^(https?:|\/)/.test(s.image) ? s.image : `/images/studio/${s.image}
 <section class="studio shell section" id="studio">
   <div class="studio-grid">
     <figure class="studio-visual">
-      <img alt={s.imageAlt} height="880" loading="lazy" src={img} width="1168" />
+      <div class="studio-frame"><img alt={s.imageAlt} height="880" loading="lazy" src={img} width="1168" /></div>
       {s.caption && <figcaption>{s.caption}</figcaption>}
     </figure>
     <div class="studio-copy">
