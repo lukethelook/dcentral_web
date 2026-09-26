@@ -61,7 +61,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
       {signalParts ? <>{signalParts[0]}<mark class="signal">{d.signal}</mark>{signalParts[1]}</> : d.title}
     </h1>
     <p class="case-client">
-      {d.client}
+      {d.clientLabel || d.client}
       {d.url && !study && <> · <a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></>}
       {study && <> · <span class="case-study">{d.statusLabel || 'Studie · nicht öffentlich'}</span></>}
     </p>
@@ -103,7 +103,9 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
         <div class="case-prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
       </div>
       <dl class="case-meta">
-        <div><dt>Leistung</dt><dd>{disciplines.join(' · ')}</dd></div>
+        {d.scope.length > 0
+          ? <div><dt>Umfang</dt><dd><ul class="case-scope">{d.scope.map((s) => <li>{s}</li>)}</ul></dd></div>
+          : <div><dt>Leistung</dt><dd>{disciplines.join(' · ')}</dd></div>}
         <div><dt>Jahr</dt><dd>{d.year}</dd></div>
         {study && <div><dt>Status</dt><dd class="case-study-meta">{d.statusLabel || 'Studie · nicht öffentlich'}</dd></div>}
         {d.url && !study && <div><dt>Live</dt><dd><a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></dd></div>}

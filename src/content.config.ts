@@ -43,6 +43,8 @@ const cases = defineCollection({
     demo: z.enum(['', 'soundscape']).nullable().optional(), // '' = Keystatic "Keine"
     status: z.enum(['', 'live', 'study']).nullable().optional(), // study = greyed note instead of a live link
     statusLabel: z.string().nullable().optional(),
+    clientLabel: z.string().nullable().optional(), // e.g. „Auftrag: Quantiflux" on the case page
+    scope: z.array(z.string()).default([]), // full scope, shown as „Umfang"
     coverTone: z.enum(['', 'light', 'dark']).nullable().optional(), // dark image → light card text
     outlookTitle: z.string().nullable().optional(),
     outlookIntro: z.string().nullable().optional(),

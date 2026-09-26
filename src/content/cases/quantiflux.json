@@ -1,58 +1,112 @@
 {
-  "title": "Ein Agenturauftritt, der auf Berührung reagiert",
+  "title": "Eine Marke, die auf Berührung reagiert",
   "signal": "auf Berührung reagiert",
   "client": "Quantiflux",
   "discipline": "Web",
   "also": [],
   "year": 2026,
   "status": "study",
-  "statusLabel": "Web-Studie · Demo-Inhalte, nicht öffentlich",
-  "summary": "Eine Web-Studie für eine befreundete Kreativagentur: Im Zentrum schwebt ein atomarer Kern aus Licht, der auf jede Bewegung antwortet – und beim Klick in ein Energiefeld zerbirst. Präzision, die man nicht behaupten muss, weil man sie spürt.",
-  "body": "„Precision meets Scale“ – dieses Versprechen sollte man nicht lesen müssen, sondern erleben. Also bekam der Auftritt einen Kern: ein Atom aus verschlungenen Energiebahnen, umkreist von Orbitalen und Teilchen, in Echtzeit im Browser gerendert.\n\nFährt man darüber, beginnt es zu glühen und schlägt Wellen um den Mauszeiger. Ein Klick lässt es in Fragmente zerspringen, Licht flutet das Bild, die Szene bebt – und setzt sich wieder zusammen. Energie, Kontrolle, Rückkehr: die Arbeitsweise einer Agentur als physikalisches Bild.\n\nDie Studie läuft mit Demo-Inhalten auf einem echten Headless-CMS und ist bewusst als Plattform gedacht, nicht als Kulisse.",
-  "tags": ["Web-Studie", "WebGL & VFX", "Creative Coding", "Headless CMS"],
+  "statusLabel": "Demo-Inhalte · noch nicht öffentlich",
+  "summary": "Ein Auftrag vom ersten Wort bis zur letzten Serverzeile: Name, Marke, Auftritt und Infrastruktur für Quantiflux. Im Zentrum schwebt ein atomarer Kern aus Licht, der auf jede Bewegung antwortet – und beim Klick in ein Energiefeld zerbirst. Präzision, die man nicht behaupten muss, weil man sie spürt.",
+  "body": "Am Anfang stand der Name. Quantiflux verbindet Quantum – das kleinste, präzise Maß – mit Flux, dem Fluss, der Energie, der Bewegung. Daraus wurden eine Wortmarke mit atomarem Zeichen, ein Farbsystem aus Signalrot auf Tiefschwarz und zwei Sätze, die die Haltung tragen: „Precision meets Scale“ und „Innovation without the hype“.\n\nAuf der Website wird das Zeichen lebendig: ein Atom aus verschlungenen Energiebahnen, umkreist von Orbitalen und Teilchen, in Echtzeit im Browser gerendert. Fährt man darüber, beginnt es zu glühen und schlägt Wellen um den Mauszeiger. Ein Klick lässt es in Fragmente zerspringen, Licht flutet das Bild, die Szene bebt – und setzt sich wieder zusammen.\n\nDarunter liegt ein echtes Fundament: Headless-CMS, Cloud-Umgebung, Domain und Deployment. Der Auftritt läuft derzeit mit Demo-Inhalten und ist bewusst als Plattform gebaut, nicht als Kulisse.",
+  "tags": [
+    "Naming & Branding",
+    "WebGL & VFX",
+    "Creative Coding",
+    "Cloud & Infrastruktur"
+  ],
   "highlightsTitle": "Was gebaut wurde",
   "highlights": [
     {
+      "t": "Namensfindung",
+      "d": "Aus Quantum und Flux wird Quantiflux: ein Name, der Präzision und Bewegung in einem Wort trägt – kurz, international und unverwechselbar."
+    },
+    {
+      "t": "Branding & Logo",
+      "d": "Wortmarke mit atomarem Zeichen, Farbsystem aus Signal Red und Flux Orange auf Deep Black, Typografie aus Space Grotesk und IBM Plex Mono."
+    },
+    {
+      "t": "Positionierung & Claims",
+      "d": "„Precision meets Scale“ und „Innovation without the hype“: klare Sätze statt Buzzwords, die sich durch jede Sektion des Auftritts ziehen."
+    },
+    {
       "t": "Ein Atom als Hero",
-      "d": "Zwei verschlungene Torusknoten als Kern, geometrische Hüllen, Orbitale und Partikel – live gerendert mit Three.js, kein Video, kein Loop."
+      "d": "Das Logozeichen als lebendige Szene: Torusknoten-Kern, geometrische Hüllen, Orbitale und Partikel – live mit Three.js gerendert, kein Video."
     },
     {
-      "t": "Eigene Shader",
-      "d": "Wellen, die dem Mauszeiger folgen, ein Glühen bei Annäherung und ein Shatter-Burst, der den Kern beim Klick in Fragmente zerlegt."
-    },
-    {
-      "t": "Kinoreife Nachbearbeitung",
-      "d": "Bloom, chromatische Aberration, Filmkorn und ein feines Beben: Die Effekte steigen mit der Energie der Szene und klingen wieder ab."
+      "t": "Eigene Shader & Nachbearbeitung",
+      "d": "Wellen, die dem Mauszeiger folgen, ein Shatter-Burst beim Klick, dazu Bloom, chromatische Aberration, Filmkorn und ein feines Beben."
     },
     {
       "t": "Motion mit Haltung",
       "d": "Magnetische Buttons, Parallaxe, weiche Reveals und ein Laufband, das auf das Scrolltempo reagiert – Bewegung, die Präzision spürbar macht."
     },
     {
-      "t": "Headless CMS von Anfang an",
-      "d": "Leistungen, Projekte, Team und FAQs im Payload CMS, mit Live-Vorschau beim Bearbeiten. Demo-Inhalte heute, echte Inhalte morgen – ohne Umbau."
+      "t": "Headless CMS & Seitenstruktur",
+      "d": "Leistungen, Projekte, Team und FAQs im Payload CMS mit Live-Vorschau; fünf Leistungsseiten, Portfolio, Agentur und Kontakt mit Formular."
     },
     {
-      "t": "Leistungen als Landingpages",
-      "d": "Fünf Leistungsbereiche mit eigenen Seiten, dazu Portfolio, Agentur und Kontakt mit FAQ und Formular."
+      "t": "Cloud & Infrastruktur",
+      "d": "Eigene Cloud-Umgebung, Domain und E-Mail, Deployment-Workflow für Vorschau und Livegang – die Basis, auf der Website, CMS und künftige Tools laufen."
+    },
+    {
+      "t": "Gebaut für Wachstum",
+      "d": "Next.js 16 und React 19 als Fundament: Neue Seiten, Kampagnen und KI-Funktionen lassen sich andocken, ohne den Auftritt neu zu bauen."
     }
   ],
   "screens": [
-    { "image": "/images/cases/quantiflux/services.webp", "device": "desktop", "caption": "Leistungen als aufklappbare Bühne – jede mit eigener Seite." },
-    { "image": "/images/cases/quantiflux/mobile-hero.webp", "device": "mobile", "caption": "Mobil: dieselbe Energie." },
-    { "image": "/images/cases/quantiflux/detail-hover.webp", "device": "image", "caption": "Annäherung: Das Gitter beginnt zu glühen …" },
-    { "image": "/images/cases/quantiflux/detail-burst.webp", "device": "image", "caption": "… Berührung: Der Kern zerbirst in Licht." },
-    { "image": "/images/cases/quantiflux/innovation.webp", "device": "wide", "caption": "Haltung statt Hype – die Markensprache zieht sich durch jede Sektion." }
+    {
+      "image": "/images/cases/quantiflux/brandboard.webp",
+      "device": "wide",
+      "caption": "Name, Wortmarke, Farben, Typografie und Claims – ein System aus einem Gedanken."
+    },
+    {
+      "image": "/images/cases/quantiflux/services.webp",
+      "device": "desktop",
+      "caption": "Leistungen als aufklappbare Bühne – jede mit eigener Seite."
+    },
+    {
+      "image": "/images/cases/quantiflux/mobile-hero.webp",
+      "device": "mobile",
+      "caption": "Mobil: dieselbe Energie."
+    },
+    {
+      "image": "/images/cases/quantiflux/detail-hover.webp",
+      "device": "image",
+      "caption": "Annäherung: Das Gitter beginnt zu glühen …"
+    },
+    {
+      "image": "/images/cases/quantiflux/detail-burst.webp",
+      "device": "image",
+      "caption": "… Berührung: Der Kern zerbirst in Licht."
+    },
+    {
+      "image": "/images/cases/quantiflux/innovation.webp",
+      "device": "wide",
+      "caption": "Haltung statt Hype – die Markensprache zieht sich durch jede Sektion."
+    }
   ],
   "loopTitle": "Vier Zustände eines Atoms",
   "loop": [
-    { "t": "Ruhe", "d": "Der Kern atmet, Orbitale kreisen, Teilchen driften – ruhig, aber nie still." },
-    { "t": "Annäherung", "d": "Der Mauszeiger schlägt Wellen ins Gitter, das Atom beginnt zu glühen." },
-    { "t": "Berührung", "d": "Ein Klick zerlegt den Kern in Fragmente, Licht flutet das Bild, die Szene bebt." },
-    { "t": "Rückkehr", "d": "Die Energie klingt ab, die Fragmente finden zurück – bereit für den nächsten Impuls." }
+    {
+      "t": "Ruhe",
+      "d": "Der Kern atmet, Orbitale kreisen, Teilchen driften – ruhig, aber nie still."
+    },
+    {
+      "t": "Annäherung",
+      "d": "Der Mauszeiger schlägt Wellen ins Gitter, das Atom beginnt zu glühen."
+    },
+    {
+      "t": "Berührung",
+      "d": "Ein Klick zerlegt den Kern in Fragmente, Licht flutet das Bild, die Szene bebt."
+    },
+    {
+      "t": "Rückkehr",
+      "d": "Die Energie klingt ab, die Fragmente finden zurück – bereit für den nächsten Impuls."
+    }
   ],
   "outlookTitle": "Was darauf aufbauen kann",
-  "outlookIntro": "Die Studie ist als Plattform gebaut, nicht als Kulisse. Ein paar Richtungen, in die sie wachsen kann:",
+  "outlookIntro": "Der Auftritt ist als Plattform gebaut, nicht als Kulisse. Ein paar Richtungen, in die er wachsen kann:",
   "outlook": [
     {
       "t": "Kampagnen-Kraftfeld",
@@ -100,8 +154,20 @@
   "format": "landscape",
   "cover": "/images/cases/quantiflux/cover.webp",
   "coverTone": "dark",
-  "previews": ["/images/cases/quantiflux/preview-burst.webp", "/images/cases/quantiflux/preview-services.webp"],
+  "previews": [
+    "/images/cases/quantiflux/preview-burst.webp",
+    "/images/cases/quantiflux/preview-services.webp"
+  ],
   "previewDummy": false,
   "featured": true,
-  "order": 2
+  "order": 2,
+  "clientLabel": "Auftrag: Quantiflux",
+  "scope": [
+    "Namensfindung",
+    "Branding & Logo",
+    "Positionierung & Claims",
+    "Web & visuelle Effekte",
+    "Headless CMS",
+    "Cloud & Infrastruktur"
+  ]
 }

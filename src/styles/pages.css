@@ -55,6 +55,9 @@ html:not(.js-loop) .case-loop li > span { background: var(--lime); border-color:
 /* Studies without a public URL: a greyed status instead of a live link. */
 .case-study { display: inline-flex; gap: 8px; align-items: center; color: var(--muted); }
 .case-study::before, .case-study-meta::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #9aa79c; flex: none; }
+.case-scope { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.case-scope li { font-size: 15px; }
+.case-scope li::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 10px; vertical-align: 2px; background: var(--lime); box-shadow: 0 0 0 .5px #8fae29; }
 .case-study-meta { display: flex; gap: 8px; align-items: center; color: var(--muted); }
 /* Gallery cards with a dark cover image keep their text light. */
 .project-cover.tone-dark { color: #f3f4ec; }

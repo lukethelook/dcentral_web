@@ -106,6 +106,8 @@ export default config({
           options: [{ label: '—', value: '' }, { label: 'Live (Link mit Signalpunkt)', value: 'live' }, { label: 'Studie / nicht öffentlich (ausgegraut)', value: 'study' }],
           defaultValue: '',
         }),
+        clientLabel: TEXT('Kunden-Zeile auf der Projektseite (optional, z.B. „Auftrag: Quantiflux")'),
+        scope: fields.array(fields.text({ label: 'Leistung' }), { label: 'Umfang (alle Leistungen im Projekt)', itemLabel: (p) => p.value }),
         statusLabel: TEXT('Status-Text (bei Studie, z.B. „Web-Studie · Demo-Inhalte")'),
         coverTone: fields.select({
           label: 'Titelbild-Helligkeit',
