@@ -1,0 +1,86 @@
+{
+  "title": "Ein Onlineshop, der sich selbst verbessert",
+  "client": "MapLove",
+  "discipline": "Web",
+  "also": ["KI"],
+  "year": 2026,
+  "url": "https://www.maplove.cc",
+  "summary": "Personalisierte Kartenposter, verkauft über einen Shop mit Live-Editor – und eine eigene KI, die Daten liest, Maßnahmen umsetzt und deren Wirkung prüft. Konzept, Design, Entwicklung und Automatisierung aus einer Hand.",
+  "body": "MapLove ist mein eigenes Produkt – und mein Labor für alles, was ich für Kund:innen baue. Die Idee: Jeder Ort der Welt wird zum Kartenposter, gestaltet in Echtzeit, gedruckt in der EU, ohne dass im Hintergrund jemand Pakete packt.\n\nDer eigentliche Hebel liegt hinter dem Shop. Kompass, eine eigene KI-Schicht, beobachtet Google, Besucherwege und Social-Reichweite, erkennt Chancen und setzt sie um: neue Seiten, bessere Texte, geplante Posts. Jede Änderung wird gemessen – was wirkt, bleibt, was nicht wirkt, wird zurückgenommen. So arbeitet der Shop jede Woche an sich selbst.",
+  "tags": ["E-Commerce", "KI-Automatisierung", "SEO & GEO", "Social Media"],
+  "highlightsTitle": "Was ich gebaut habe",
+  "highlights": [
+    {
+      "t": "Live-Editor mit echten Geodaten",
+      "d": "Jeder Ort der Welt aus OpenStreetMap-Daten, rund 60 Farbwelten, Vorschau in Echtzeit und AR-Ansicht an der eigenen Wand. Gestalten ist kostenlos, bezahlt wird erst beim Bestellen."
+    },
+    {
+      "t": "Shop & CMS auf dem neuesten Stand",
+      "d": "Next.js und Payload CMS auf Vercel: schnelle Seiten, zweisprachig, von der Anlass- bis zur Stadtseite im CMS pflegbar. Checkout über Stripe, Druck und Versand laufen automatisch über Print-on-Demand."
+    },
+    {
+      "t": "Eigene Analytics mit Intelligenz",
+      "d": "Search Console, eigenes Tracking und Social-Daten laufen in einem Cockpit zusammen. Die KI findet Lücken – nicht indexierte Seiten, fehlende Übersetzungen, schwache Suchtreffer – und macht daraus konkrete Maßnahmen."
+    },
+    {
+      "t": "Social Posting auf Autopilot",
+      "d": "Pins und Posts werden automatisch geplant, mit Motiven aus echten Poster-Renderings. Das System lernt aus der Reichweite, welche Aufhänger funktionieren, und richtet die nächsten Beiträge danach aus."
+    },
+    {
+      "t": "Sichtbar in Google und in KI-Antworten",
+      "d": "Die Indexierung überwacht sich selbst. Zusätzlich prüft Kompass regelmäßig, ob KI-Suchen wie Perplexity, GPT und Gemini die Marke nennen – und wo die Konkurrenz vorne liegt."
+    },
+    {
+      "t": "Leitplanken statt Blindflug",
+      "d": "Jede Änderung landet im Protokoll, wird gemessen und bei Bedarf automatisch zurückgerollt. Ein eigener Prüfer stoppt Texte mit unzulässigen Versprechen, bevor sie live gehen."
+    }
+  ],
+  "loopTitle": "So denkt Kompass",
+  "loop": [
+    { "t": "Messen", "d": "Suchanfragen, Besucherwege, Social-Reichweite und KI-Antworten laufen täglich ein." },
+    { "t": "Entscheiden", "d": "Ein Entscheidungsmodell bewertet Chancen nachvollziehbar – Sprachmodelle schreiben nur die Texte." },
+    { "t": "Umsetzen", "d": "Seiten, Texte und Posts entstehen automatisch, innerhalb klarer Regeln und eines festen Budgets." },
+    { "t": "Prüfen", "d": "Die Wirkung wird gemessen. Was hilft, bleibt – was nicht hilft, wird zurückgenommen." }
+  ],
+  "stack": [
+    "Next.js 15",
+    "React",
+    "TypeScript",
+    "Payload CMS 3",
+    "PostgreSQL · Neon",
+    "Vercel",
+    "Stripe",
+    "MapLibre GL",
+    "OpenStreetMap",
+    "PostHog",
+    "Google Search Console API",
+    "OpenRouter",
+    "Claude",
+    "Gelato Print-on-Demand",
+    "Resend"
+  ],
+  "showcase": {
+    "desktop": "/images/cases/maplove/scroll-desktop.webp",
+    "mobile": "/images/cases/maplove/scroll-mobile.webp",
+    "label": "maplove.cc"
+  },
+  "screens": [
+    {
+      "image": "/images/cases/maplove/screen-editor-desktop.webp",
+      "device": "desktop",
+      "caption": "Der Live-Editor: Ort, Farbwelt, Worte – das Poster entsteht in Echtzeit."
+    },
+    {
+      "image": "/images/cases/maplove/screen-editor-mobile.webp",
+      "device": "mobile",
+      "caption": "Mobil gestaltet, mobil bestellt."
+    }
+  ],
+  "hue": 330,
+  "format": "landscape",
+  "cover": "/images/cases/maplove/cover.webp",
+  "previews": ["/images/cases/maplove/preview-home.webp", "/images/cases/maplove/preview-editor.webp"],
+  "previewDummy": false,
+  "featured": true,
+  "order": 0
+}

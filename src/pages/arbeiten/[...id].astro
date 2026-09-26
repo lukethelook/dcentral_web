@@ -14,6 +14,7 @@ const d = entry.data;
 const paragraphs = (d.body ?? '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 // Keystatic image fields may store just a filename — tolerate both forms.
 const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
+const disciplines = [d.discipline, ...d.also];
 
 // neighbouring cases for prev/next navigation + gallery index for the cover colour
 const all = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
@@ -26,23 +27,44 @@ const visual = d.cover
   : d.previews[0]
     ? { src: src(d.previews[0]), dummy: d.previewDummy }
     : { src: `/assets/project-lines-${idx % 4}.svg`, dummy: false };
+const showcase = d.showcase?.desktop ? d.showcase : null;
+const screens = d.screens.filter((s) => s.image);
+const liveHost = d.url ? d.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null;
+const arrow = 'M6 18 18 6M6 6h12v12';
 ---
 
-<Layout title={`${d.title} — ${d.discipline} für ${d.client} · dcentral`} description={d.summary} heroTheme="light">
+<Layout title={`${d.title} — ${disciplines.join(' & ')} für ${d.client} · dcentral`} description={d.summary} heroTheme="light">
   <Nav />
   <main class="page shell" id="main">
     <a href="/#arbeiten" class="page-back">
       <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"></path></svg>
       Alle Arbeiten
     </a>
-    <p class="page-eyebrow">{d.discipline} · {d.year}</p>
+    <p class="page-eyebrow">{disciplines.join(' · ')} · {d.year}</p>
     <h1>{d.title}</h1>
-    <p class="case-client">{d.client}</p>
+    <p class="case-client">
+      {d.client}
+      {d.url && <> · <a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></>}
+    </p>
 
-    <div class={`case-visual cover-${idx % 4}`}>
-      <img src={visual.src} alt={visual.dummy ? '' : d.title} />
-      {visual.dummy && <span class="case-flag">Dummymotiv · Originale folgen</span>}
-    </div>
+    {showcase ? (
+      <div class={`case-visual case-showcase cover-${idx % 4}`} aria-label={`Animiertes Mockup: ${d.client} auf Desktop und Smartphone`} role="img">
+        <div class="sc-browser" aria-hidden="true">
+          <div class="sc-bar"><i></i><i></i><i></i><span>{showcase.label || liveHost || d.client}</span></div>
+          <div class="sc-screen"><img class="sc-scroll" src={src(showcase.desktop!)} alt="" decoding="async" /></div>
+        </div>
+        {showcase.mobile && (
+          <div class="sc-phone" aria-hidden="true">
+            <div class="sc-screen"><img class="sc-scroll sc-scroll--phone" src={src(showcase.mobile)} alt="" decoding="async" /></div>
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class={`case-visual cover-${idx % 4}`}>
+        <img src={visual.src} alt={visual.dummy ? '' : d.title} />
+        {visual.dummy && <span class="case-flag">Dummymotiv · Originale folgen</span>}
+      </div>
+    )}
 
     <div class="case-body">
       <div>
@@ -50,13 +72,82 @@ const visual = d.cover
         <div class="case-prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
       </div>
       <dl class="case-meta">
-        <div><dt>Leistung</dt><dd>{d.discipline}</dd></div>
+        <div><dt>Leistung</dt><dd>{disciplines.join(' · ')}</dd></div>
         <div><dt>Jahr</dt><dd>{d.year}</dd></div>
+        {d.url && <div><dt>Live</dt><dd><a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></dd></div>}
         {d.tags.length > 0 && (
           <div><dt>Themen</dt><dd><ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul></dd></div>
         )}
       </dl>
     </div>
+
+    {d.highlights.length > 0 && (
+      <section class="case-section" aria-labelledby="case-highlights">
+        <h2 id="case-highlights" class="case-h2">{d.highlightsTitle || 'Was ich gebaut habe'}</h2>
+        <div class="case-highlights">
+          {d.highlights.map((h, i) => (
+            <article>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <h3>{h.t}</h3>
+              <p>{h.d}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {screens.length > 0 && (
+      <section class="case-screens" aria-label="Screens">
+        {screens.map((s) => (
+          <figure class={`case-screen case-screen--${s.device}`}>
+            {s.device === 'desktop' ? (
+              <div class="sc-browser sc-browser--static">
+                <div class="sc-bar" aria-hidden="true"><i></i><i></i><i></i><span>{liveHost || d.client}</span></div>
+                <img src={src(s.image!)} alt={s.caption || `${d.client} – Desktop`} loading="lazy" decoding="async" />
+              </div>
+            ) : (
+              <div class="sc-phone sc-phone--static">
+                <div class="sc-screen"><img src={src(s.image!)} alt={s.caption || `${d.client} – Smartphone`} loading="lazy" decoding="async" /></div>
+              </div>
+            )}
+            {s.caption && <figcaption>{s.caption}</figcaption>}
+          </figure>
+        ))}
+      </section>
+    )}
+
+    {d.loop.length > 0 && (
+      <section class="case-section" aria-labelledby="case-loop">
+        <h2 id="case-loop" class="case-h2">{d.loopTitle || 'So funktioniert es'}</h2>
+        <ol class="steps case-loop">
+          {d.loop.map((s, i) => (
+            <li>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {d.stack.length > 0 && (
+      <section class="case-section case-section--stack" aria-labelledby="case-stack">
+        <h2 id="case-stack" class="case-h2">Techstack</h2>
+        <ul class="case-stack">{d.stack.map((t) => <li>{t}</li>)}</ul>
+      </section>
+    )}
+
+    <section class="case-cta" aria-labelledby="case-cta">
+      <div>
+        <h2 id="case-cta">Du hast etwas Ähnliches <em>vor?</em></h2>
+        <p>Vom Auftritt bis zur KI, die ihn weiterentwickelt: Ich baue Systeme, die für dich arbeiten – ein Ansprechpartner, ein Netzwerk dahinter.</p>
+      </div>
+      <a class="action magnetic" href="/#kontakt">
+        Projekt starten
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+      </a>
+    </section>
 
     <a href={`/arbeiten/${next.id}`} class="case-next">
       <span>Nächstes Projekt</span>

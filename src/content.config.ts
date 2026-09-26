@@ -4,12 +4,14 @@ import { glob } from 'astro/loaders';
 // "Arbeiten" — case studies as JSON data (managed by Keystatic at /keystatic,
 // or edit the .json files directly). Swap `cover` for a real image path when
 // material lands; the placeholder visual is replaced automatically.
+const Discipline = z.enum(['Foto', 'Film & Aerial', 'Web', 'KI']);
+
 const cases = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/cases' }),
   schema: z.object({
     title: z.string(),
     client: z.string(),
-    discipline: z.enum(['Foto', 'Film & Aerial', 'Web', 'KI']),
+    discipline: Discipline,
     year: z.number(),
     summary: z.string(),
     body: z.string().optional(),
@@ -19,6 +21,20 @@ const cases = defineCollection({
     cover: z.string().optional(),
     previews: z.array(z.string()).default([]),
     previewDummy: z.boolean().default(true),
+    // Optional case-study depth (real projects): shown on /arbeiten/[id] when present.
+    also: z.array(Discipline).default([]),
+    url: z.string().nullable().optional(),
+    stack: z.array(z.string()).default([]),
+    highlightsTitle: z.string().nullable().optional(),
+    highlights: z.array(z.object({ t: z.string(), d: z.string() })).default([]),
+    loopTitle: z.string().nullable().optional(),
+    loop: z.array(z.object({ t: z.string(), d: z.string() })).default([]),
+    showcase: z
+      .object({ desktop: z.string().nullable().optional(), mobile: z.string().nullable().optional(), label: z.string().nullable().optional() })
+      .optional(),
+    screens: z
+      .array(z.object({ image: z.string().nullable(), device: z.enum(['desktop', 'mobile']), caption: z.string().nullable().optional() }))
+      .default([]),
     featured: z.boolean().default(false),
     order: z.number().default(0),
   }),

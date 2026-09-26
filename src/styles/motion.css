@@ -39,10 +39,15 @@ details[data-state=closing] summary svg { transform: none; }
 
 /* Footer curtain (large screens, only when the footer fits — motion-system.js).
    The page is lifted onto its own layer; the footer waits beneath it. */
-html.footer-curtain body > main {
-  position: relative; z-index: 1; background: var(--paper);
-  box-shadow: 0 0 0 100vmax var(--paper), 0 50px 90px rgba(8, 30, 24, .22);
-  clip-path: inset(0 -100vmax -140px);
+html.footer-curtain body > main { position: relative; z-index: 1; }
+/* Paper layer spanning the full viewport width (subpage <main> is a centred shell),
+   with a soft edge shadow falling onto the footer as it is uncovered. */
+html.footer-curtain body > main::before {
+  content: ''; position: absolute; z-index: -1; top: 0; bottom: 0;
+  left: calc(50% - 50vw); right: calc(50% - 50vw);
+  background: var(--paper);
+  box-shadow: 0 34px 60px -30px rgba(8, 30, 24, .4);
+  pointer-events: none;
 }
 html.footer-curtain footer.contact { position: sticky; bottom: 0; z-index: 0; }
 

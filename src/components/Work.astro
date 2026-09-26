@@ -40,11 +40,11 @@ const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
       const previews = d.previews.slice(0, 2).map(src);
       const cover = d.cover ? src(d.cover) : `/assets/project-lines-${i % 4}.svg`;
       return (
-        <article class="project" data-discipline={d.discipline} data-project={id}>
+        <article class="project" data-discipline={[d.discipline, ...d.also].join('|')} data-project={id}>
           <a aria-label={`${d.client} — ${d.title}`} href={`/arbeiten/${id}`}>
             <div class={`project-cover cover-${i % 4}${d.cover ? ' has-photo' : ''}`}>
               <img alt="" height="700" loading="lazy" src={cover} width="900" />
-              <span class="cover-top">{d.discipline} <span>{d.year}</span></span>
+              <span class="cover-top">{[d.discipline, ...d.also].join(' · ')} <span>{d.year}</span></span>
               <span class="cover-client">{d.client}</span>
               <span class="cover-arrow"><svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></span>
               <span class="cover-open">Projekt ansehen <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></span>

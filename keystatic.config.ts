@@ -45,7 +45,18 @@ export default config({
           ],
           defaultValue: 'Foto',
         }),
+        also: fields.multiselect({
+          label: 'Weitere Disziplinen',
+          description: 'Projekt erscheint zusätzlich unter diesen Galerie-Filtern (z.B. Web + KI).',
+          options: [
+            { label: 'Foto', value: 'Foto' },
+            { label: 'Film & Aerial', value: 'Film & Aerial' },
+            { label: 'Web', value: 'Web' },
+            { label: 'KI', value: 'KI' },
+          ],
+        }),
         year: fields.integer({ label: 'Jahr', defaultValue: 2025 }),
+        url: TEXT('Live-Link (optional, z.B. https://…)'),
         summary: TEXT('Kurzbeschreibung (Listen-/Teaser-Text)', { multiline: true }),
         body: TEXT('Beschreibung (Detailseite)', { multiline: true }),
         tags: fields.array(fields.text({ label: 'Tag' }), {
@@ -79,6 +90,30 @@ export default config({
           description: 'Solange aktiv, steht „Dummymotiv" auf der Vorschau. Deaktivieren, sobald echte Projektbilder drin sind.',
           defaultValue: true,
         }),
+        showcase: fields.object({
+          desktop: fields.image({ label: 'Desktop-Screenshot (ganze Seite, scrollt im Browser-Mockup)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+          mobile: fields.image({ label: 'Mobil-Screenshot (ganze Seite, scrollt im Handy-Mockup)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+          label: TEXT('Adresszeile im Browser (z.B. maplove.cc)'),
+        }, { label: 'Animiertes Geräte-Mockup (ersetzt das Titelbild auf der Projektseite)' }),
+        highlightsTitle: TEXT('Überschrift Leistungen (z.B. „Was ich gebaut habe")'),
+        highlights: fields.array(
+          fields.object({ t: TEXT('Titel'), d: TEXT('Text', { multiline: true }) }),
+          { label: 'Leistungen / Highlights', itemLabel: (p) => p.fields.t.value },
+        ),
+        screens: fields.array(
+          fields.object({
+            image: fields.image({ label: 'Screenshot', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+            device: fields.select({ label: 'Gerät', options: [{ label: 'Desktop', value: 'desktop' }, { label: 'Mobil', value: 'mobile' }], defaultValue: 'desktop' }),
+            caption: TEXT('Bildunterschrift'),
+          }),
+          { label: 'Screens', itemLabel: (p) => p.fields.caption.value || p.fields.device.value },
+        ),
+        loopTitle: TEXT('Überschrift Ablauf (optional)'),
+        loop: fields.array(
+          fields.object({ t: TEXT('Schritt'), d: TEXT('Text', { multiline: true }) }),
+          { label: 'Ablauf / Wie es funktioniert', itemLabel: (p) => p.fields.t.value },
+        ),
+        stack: fields.array(fields.text({ label: 'Technologie' }), { label: 'Techstack', itemLabel: (p) => p.value }),
         featured: fields.checkbox({ label: 'Hervorgehoben', defaultValue: false }),
         order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
       },

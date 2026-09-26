@@ -52,6 +52,12 @@ const REVEAL = [
   ['.contact-grid', ':scope > div'],
   // Subpages (.case-visual is deliberately absent: it enters via the shared-element transition)
   ['.case-body > div, .case-meta', false],
+  ['.case-h2', 'lines'],
+  ['.case-highlights', ':scope > article'],
+  ['.case-screens', ':scope > figure'],
+  ['.case-loop', ':scope > li'],
+  ['.case-stack', ':scope > li'],
+  ['.case-cta', false],
   ['.legal h2, .legal h2 + p', false],
 ];
 const HIDDEN = { opacity: '0', transform: 'translateY(22px)' };
