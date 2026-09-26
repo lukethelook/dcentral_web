@@ -42,7 +42,7 @@ const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
       return (
         <article class="project" data-discipline={[d.discipline, ...d.also].join('|')} data-project={id}>
           <a aria-label={`${d.client} — ${d.title}`} href={`/arbeiten/${id}`}>
-            <div class={`project-cover cover-${i % 4}${d.cover ? ' has-photo' : ''}`}>
+            <div class={`project-cover cover-${i % 4}${d.cover ? ' has-photo' : ''}${d.coverTone === 'dark' ? ' tone-dark' : ''}`}>
               <img alt="" height="700" loading="lazy" src={cover} width="900" />
               <span class="cover-top">{[d.discipline, ...d.also].join(' · ')} <span>{d.year}</span></span>
               <span class="cover-client">{d.client}</span>

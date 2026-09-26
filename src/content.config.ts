@@ -36,9 +36,17 @@ const cases = defineCollection({
         mobile: z.string().nullable().optional(),
         label: z.string().nullable().optional(),
         phones: z.array(z.string().nullable()).optional(),
+        video: z.string().nullable().optional(),
+        poster: z.string().nullable().optional(),
       })
       .optional(),
     demo: z.enum(['', 'soundscape']).nullable().optional(), // '' = Keystatic "Keine"
+    status: z.enum(['', 'live', 'study']).nullable().optional(), // study = greyed note instead of a live link
+    statusLabel: z.string().nullable().optional(),
+    coverTone: z.enum(['', 'light', 'dark']).nullable().optional(), // dark image → light card text
+    outlookTitle: z.string().nullable().optional(),
+    outlookIntro: z.string().nullable().optional(),
+    outlook: z.array(z.object({ t: z.string(), d: z.string() })).default([]),
     screens: z
       .array(z.object({ image: z.string().nullable(), device: z.enum(['desktop', 'mobile', 'image', 'wide']), caption: z.string().nullable().optional() }))
       .default([]),

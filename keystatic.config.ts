@@ -98,7 +98,27 @@ export default config({
             fields.image({ label: 'App-Screen', directory: 'public/images/cases', publicPath: '/images/cases/' }),
             { label: 'App-Projekt: 3 Handy-Screens (statt Browser)', itemLabel: (p) => p.value?.filename ?? 'Screen' },
           ),
+          video: fields.file({ label: 'Video im Browser-Mockup (MP4, statt Desktop-Screenshot)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+          poster: fields.image({ label: 'Standbild zum Video', directory: 'public/images/cases', publicPath: '/images/cases/' }),
         }, { label: 'Animiertes Geräte-Mockup (ersetzt das Titelbild auf der Projektseite)' }),
+        status: fields.select({
+          label: 'Status',
+          options: [{ label: '—', value: '' }, { label: 'Live (Link mit Signalpunkt)', value: 'live' }, { label: 'Studie / nicht öffentlich (ausgegraut)', value: 'study' }],
+          defaultValue: '',
+        }),
+        statusLabel: TEXT('Status-Text (bei Studie, z.B. „Web-Studie · Demo-Inhalte")'),
+        coverTone: fields.select({
+          label: 'Titelbild-Helligkeit',
+          description: 'Dunkles Titelbild → helle Schrift auf der Galerie-Karte.',
+          options: [{ label: 'Automatisch', value: '' }, { label: 'Hell', value: 'light' }, { label: 'Dunkel', value: 'dark' }],
+          defaultValue: '',
+        }),
+        outlookTitle: TEXT('Ausblick: Überschrift (z.B. „Was darauf aufbauen kann")'),
+        outlookIntro: TEXT('Ausblick: Einleitung', { multiline: true }),
+        outlook: fields.array(
+          fields.object({ t: TEXT('Idee'), d: TEXT('Text', { multiline: true }) }),
+          { label: 'Ausblick / Ausbaustufen', itemLabel: (p) => p.fields.t.value },
+        ),
         demo: fields.select({
           label: 'Interaktive Demo',
           options: [{ label: 'Keine', value: '' }, { label: 'Neural Soundscape Player', value: 'soundscape' }],

@@ -28,7 +28,8 @@ const visual = d.cover
   : d.previews[0]
     ? { src: src(d.previews[0]), dummy: d.previewDummy }
     : { src: `/assets/project-lines-${idx % 4}.svg`, dummy: false };
-const showcase = d.showcase?.desktop ? d.showcase : null;
+const showcase = d.showcase?.desktop || d.showcase?.video ? d.showcase : null;
+const study = d.status === 'study';
 const phones = (d.showcase?.phones ?? []).filter((p): p is string => !!p).slice(0, 3);
 const screens = d.screens.filter((s) => s.image);
 // Group screens into rows: a desktop followed by a phone share a row ("combo"),
@@ -61,7 +62,8 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
     </h1>
     <p class="case-client">
       {d.client}
-      {d.url && <> · <a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></>}
+      {d.url && !study && <> · <a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></>}
+      {study && <> · <span class="case-study">{d.statusLabel || 'Studie · nicht öffentlich'}</span></>}
     </p>
 
     {phones.length > 0 ? (
@@ -76,7 +78,11 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
       <div class={`case-visual case-showcase cover-${idx % 4}`} aria-label={`Animiertes Mockup: ${d.client} auf Desktop und Smartphone`} role="img">
         <div class="sc-browser" aria-hidden="true">
           <div class="sc-bar"><i></i><i></i><i></i><span>{showcase.label || liveHost || d.client}</span></div>
-          <div class="sc-screen"><img class="sc-scroll" src={src(showcase.desktop!)} alt="" decoding="async" /></div>
+          <div class="sc-screen">
+            {showcase.video
+              ? <video class="sc-video" src={src(showcase.video)} poster={showcase.poster ? src(showcase.poster) : undefined} autoplay muted loop playsinline preload="metadata" data-motion-video></video>
+              : <img class="sc-scroll" src={src(showcase.desktop!)} alt="" decoding="async" />}
+          </div>
         </div>
         {showcase.mobile && (
           <div class="sc-phone" aria-hidden="true">
@@ -99,7 +105,8 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
       <dl class="case-meta">
         <div><dt>Leistung</dt><dd>{disciplines.join(' · ')}</dd></div>
         <div><dt>Jahr</dt><dd>{d.year}</dd></div>
-        {d.url && <div><dt>Live</dt><dd><a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></dd></div>}
+        {study && <div><dt>Status</dt><dd class="case-study-meta">{d.statusLabel || 'Studie · nicht öffentlich'}</dd></div>}
+        {d.url && !study && <div><dt>Live</dt><dd><a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></dd></div>}
         {d.tags.length > 0 && (
           <div><dt>Themen</dt><dd><ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul></dd></div>
         )}
@@ -158,6 +165,25 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
             </li>
           ))}
         </ol>
+      </section>
+    )}
+
+    {d.outlook.length > 0 && (
+      <section class="case-section case-outlook" aria-labelledby="case-outlook">
+        <div class="case-outlook-head">
+          <p class="case-outlook-kicker"><span></span>Ausblick</p>
+          <h2 id="case-outlook" class="case-h2">{d.outlookTitle || 'Was darauf aufbauen kann'}</h2>
+          {d.outlookIntro && <p class="case-outlook-intro">{d.outlookIntro}</p>}
+        </div>
+        <div class="case-outlook-grid">
+          {d.outlook.map((o, i) => (
+            <article>
+              <span>Idee {String(i + 1).padStart(2, '0')}</span>
+              <h3>{o.t}</h3>
+              <p>{o.d}</p>
+            </article>
+          ))}
+        </div>
       </section>
     )}
 

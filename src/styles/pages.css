@@ -52,6 +52,30 @@ html.motion-paused .case-live::before { animation: none; }
 html:not(.js-loop) .case-loop-signal { transform: scaleX(1); }
 html:not(.js-loop) .case-loop li > span { background: var(--lime); border-color: #8fae29; }
 
+/* Studies without a public URL: a greyed status instead of a live link. */
+.case-study { display: inline-flex; gap: 8px; align-items: center; color: var(--muted); }
+.case-study::before, .case-study-meta::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #9aa79c; flex: none; }
+.case-study-meta { display: flex; gap: 8px; align-items: center; color: var(--muted); }
+/* Gallery cards with a dark cover image keep their text light. */
+.project-cover.tone-dark { color: #f3f4ec; }
+/* Video inside the browser mockup. */
+.sc-video { display: block; width: 100%; height: 100%; object-fit: cover; background: #0a0606; }
+
+/* Outlook: ideas the project can grow into — deliberately set apart from what was built. */
+.case-outlook { background: #102f28; color: #eef1e6; padding: clamp(36px, 5vw, 72px); }
+.case-outlook .case-h2 { color: #eef1e6; margin-bottom: 18px; }
+.case-outlook-kicker { display: flex; gap: 10px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); margin-bottom: 18px; }
+.case-outlook-kicker span { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px rgba(212, 255, 63, .7); }
+.case-outlook-intro { color: #b7cbb9; max-width: 56ch; margin-bottom: clamp(32px, 4vw, 52px); }
+.case-outlook-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.case-outlook-grid article { border: 1px dashed rgba(212, 255, 63, .35); padding: 22px 22px 24px; transition: border-color 220ms ease, background 220ms ease; }
+.case-outlook-grid span { display: inline-block; font-size: 11px; letter-spacing: .06em; color: var(--lime); margin-bottom: 18px; }
+.case-outlook-grid h3 { font-size: 22px; letter-spacing: -.03em; color: #eef1e6; margin-bottom: 10px; }
+.case-outlook-grid p { font-size: 15px; color: #b7cbb9; }
+@media (hover: hover) and (pointer: fine) {
+  .case-outlook-grid article:hover { border-color: var(--lime); background: rgba(212, 255, 63, .04); }
+}
+
 .case-client a, .case-live { display: inline-flex; gap: 6px; align-items: center; border-bottom: 1px solid currentColor; }
 .case-live svg { width: 14px; height: 14px; }
 
@@ -215,6 +239,8 @@ html.motion-paused .sc-float { animation-play-state: paused; }
   .sc-bar span{display:none}
   .sc-phone{width:26%;right:5%;top:22%}
   .case-highlights{grid-template-columns:1fr;gap:32px}
+  .case-outlook-grid{grid-template-columns:1fr}
+  .case-outlook{padding:32px 22px}
   .case-screens--combo{grid-template-columns:1fr;justify-items:center}
   .case-screens--combo .case-screen--desktop{width:100%}
   .case-screens--combo .case-screen--mobile{width:62%}
@@ -234,4 +260,5 @@ html.motion-paused .sc-float { animation-play-state: paused; }
 }
 @media(min-width:761px) and (max-width:1100px){
   .case-highlights{grid-template-columns:1fr 1fr}
+  .case-outlook-grid{grid-template-columns:1fr 1fr}
 }

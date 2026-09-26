@@ -59,6 +59,8 @@ const REVEAL = [
   ['.case-stack', ':scope > li'],
   ['.case-cta', false],
   ['.ssd', false],
+  ['.case-outlook-head', false],
+  ['.case-outlook-grid', ':scope > article'],
   ['.legal h2, .legal h2 + p', false],
 ];
 const HIDDEN = { opacity: '0', transform: 'translateY(22px)' };
@@ -286,6 +288,21 @@ document.querySelectorAll('[data-signal-loop]').forEach((list) => {
       setTimeout(() => s.classList.add('is-lit'), (delay + timeAt(i / steps.length) * total + 0.06) * 1000);
     });
   }, { amount: 0.5 });
+});
+
+/* ── 8 · Showcase videos ─────────────────────────────────────────────────
+   Autoplay only while visible and while motion is allowed; otherwise the
+   poster frame stands still (reduced motion, global pause, offscreen). */
+document.querySelectorAll('video[data-motion-video]').forEach((video) => {
+  let visible = false;
+  const sync = () => {
+    if (visible && canMove()) video.play().catch(() => {});
+    else video.pause();
+  };
+  if (!canMove()) { video.removeAttribute('autoplay'); video.pause(); }
+  new IntersectionObserver((e) => { visible = e[0].isIntersecting; sync(); }, { threshold: 0.2 }).observe(video);
+  document.addEventListener('motion-state', sync);
+  reduced.addEventListener('change', sync);
 });
 
 /* ── 6 · Footer curtain ──────────────────────────────────────────────────
