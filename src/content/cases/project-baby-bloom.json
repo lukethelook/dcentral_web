@@ -2,12 +2,19 @@
   "title": "Eine App, die Babys beruhigt und Eltern entlastet",
   "client": "Project Baby Bloom",
   "discipline": "KI",
-  "also": ["Web"],
+  "also": [
+    "Web"
+  ],
   "year": 2025,
   "summary": "Im Kundenauftrag entstanden: eine Baby-App, die den Alltag per Sprache erfasst, mit einer eigenen Soundscape-Engine in Echtzeit beruhigende Klangwelten erzeugt und personalisierte Gute-Nacht-Geschichten schreibt, bebildert und vorliest – bis auf die Toniebox.",
   "body": "Frischgebackene Eltern haben selten eine Hand frei – und keine Nerven für komplizierte Apps. Project Baby Bloom setzt deshalb auf Sprache: einfach sagen, was passiert ist, den Rest erledigt die KI.\n\nDas Herzstück ist der Neural Soundscape Player. Er erzeugt Frequenzen in Echtzeit und mischt sie mit Naturklängen – abgestimmt auf den gewünschten Zustand, von Ruhe über Wachsein und Freude bis zum Einschlafen. Dazu kommen Geschichten, die mit dem Kind mitwachsen.\n\nEin Kundenprojekt in früher Phase, vom Konzept zum funktionsfähigen Prototyp. Marke und Details bleiben vertraulich; die Visualisierungen auf dieser Seite sind für die Präsentation gestaltet.",
-  "tags": ["App-Konzept", "KI-Sprachsteuerung", "Audio-Engine", "Generative Stories"],
-  "highlightsTitle": "Was ich gebaut habe",
+  "tags": [
+    "App-Konzept",
+    "KI-Sprachsteuerung",
+    "Audio-Engine",
+    "Generative Stories"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
   "highlights": [
     {
       "t": "Tracking per Sprache",
@@ -36,20 +43,60 @@
   ],
   "demo": "soundscape",
   "screens": [
-    { "image": "/images/cases/baby-bloom/today.webp", "device": "mobile", "caption": "Tracking per Sprache" },
-    { "image": "/images/cases/baby-bloom/sound.webp", "device": "mobile", "caption": "Neural Soundscape" },
-    { "image": "/images/cases/baby-bloom/story.webp", "device": "mobile", "caption": "Geschichten & Toniebox" },
-    { "image": "/images/cases/baby-bloom/week.webp", "device": "mobile", "caption": "Wochenrhythmus" },
-    { "image": "/images/cases/baby-bloom/story-bear.webp", "device": "image", "caption": "Illustrationen, generiert für die Geschichten: „Bruno und der Mondschein“ …" },
-    { "image": "/images/cases/baby-bloom/story-fox.webp", "device": "image", "caption": "… und „Fina & Olli teilen ihr Licht“." },
-    { "image": "/images/cases/baby-bloom/nursery.webp", "device": "wide", "caption": "Gemacht für die ruhigen Momente." }
+    {
+      "image": "/images/cases/baby-bloom/today.webp",
+      "device": "mobile",
+      "caption": "Tracking per Sprache"
+    },
+    {
+      "image": "/images/cases/baby-bloom/sound.webp",
+      "device": "mobile",
+      "caption": "Neural Soundscape"
+    },
+    {
+      "image": "/images/cases/baby-bloom/story.webp",
+      "device": "mobile",
+      "caption": "Geschichten & Toniebox"
+    },
+    {
+      "image": "/images/cases/baby-bloom/week.webp",
+      "device": "mobile",
+      "caption": "Wochenrhythmus"
+    },
+    {
+      "image": "/images/cases/baby-bloom/story-bear.webp",
+      "device": "image",
+      "caption": "Illustrationen, generiert für die Geschichten: „Bruno und der Mondschein“ …"
+    },
+    {
+      "image": "/images/cases/baby-bloom/story-fox.webp",
+      "device": "image",
+      "caption": "… und „Fina & Olli teilen ihr Licht“."
+    },
+    {
+      "image": "/images/cases/baby-bloom/nursery.webp",
+      "device": "wide",
+      "caption": "Gemacht für die ruhigen Momente."
+    }
   ],
   "loopTitle": "So entsteht eine Geschichte",
   "loop": [
-    { "t": "Profil", "d": "Alter, Entwicklungsstand und die Werte, die der Familie wichtig sind." },
-    { "t": "Geschichte", "d": "Die KI schreibt eine kurze, kindgerechte Geschichte mit klarer Botschaft." },
-    { "t": "Bilder", "d": "Passende Illustrationen im ruhigen Bilderbuch-Stil, abgestimmt aufs Alter." },
-    { "t": "Ausgabe", "d": "Zum Vorlesen, als Hörgeschichte oder direkt auf die Toniebox." }
+    {
+      "t": "Profil",
+      "d": "Alter, Entwicklungsstand und die Werte, die der Familie wichtig sind."
+    },
+    {
+      "t": "Geschichte",
+      "d": "Die KI schreibt eine kurze, kindgerechte Geschichte mit klarer Botschaft."
+    },
+    {
+      "t": "Bilder",
+      "d": "Passende Illustrationen im ruhigen Bilderbuch-Stil, abgestimmt aufs Alter."
+    },
+    {
+      "t": "Ausgabe",
+      "d": "Zum Vorlesen, als Hörgeschichte oder direkt auf die Toniebox."
+    }
   ],
   "stack": [
     "React",
@@ -74,8 +121,12 @@
   "hue": 265,
   "format": "landscape",
   "cover": "/images/cases/baby-bloom/cover.webp",
-  "previews": ["/images/cases/baby-bloom/preview-soundscape.webp", "/images/cases/baby-bloom/preview-nursery.webp"],
+  "previews": [
+    "/images/cases/baby-bloom/preview-soundscape.webp",
+    "/images/cases/baby-bloom/preview-nursery.webp"
+  ],
   "previewDummy": false,
   "featured": true,
-  "order": 1
+  "order": 1,
+  "signal": "Babys beruhigt"
 }

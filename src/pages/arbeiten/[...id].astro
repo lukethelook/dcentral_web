@@ -43,6 +43,9 @@ for (const s of screens) {
 }
 const liveHost = d.url ? d.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null;
 const arrow = 'M6 18 18 6M6 6h12v12';
+// Signal phrase: the part of the title that carries the promise gets the chartreuse marker.
+const signalAt = d.signal ? d.title.indexOf(d.signal) : -1;
+const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(signalAt + d.signal!.length)] : null;
 ---
 
 <Layout title={`${d.title} — ${disciplines.join(' & ')} für ${d.client} · dcentral`} description={d.summary} heroTheme="light">
@@ -53,7 +56,9 @@ const arrow = 'M6 18 18 6M6 6h12v12';
       Alle Arbeiten
     </a>
     <p class="page-eyebrow">{disciplines.join(' · ')} · {d.year}</p>
-    <h1>{d.title}</h1>
+    <h1 class="case-title">
+      {signalParts ? <>{signalParts[0]}<mark class="signal">{d.signal}</mark>{signalParts[1]}</> : d.title}
+    </h1>
     <p class="case-client">
       {d.client}
       {d.url && <> · <a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></>}
@@ -103,7 +108,7 @@ const arrow = 'M6 18 18 6M6 6h12v12';
 
     {d.highlights.length > 0 && (
       <section class="case-section" aria-labelledby="case-highlights">
-        <h2 id="case-highlights" class="case-h2">{d.highlightsTitle || 'Was ich gebaut habe'}</h2>
+        <h2 id="case-highlights" class="case-h2">{d.highlightsTitle || 'Was gebaut wurde'}</h2>
         <div class="case-highlights">
           {d.highlights.map((h, i) => (
             <article>
@@ -143,7 +148,8 @@ const arrow = 'M6 18 18 6M6 6h12v12';
     {d.loop.length > 0 && (
       <section class="case-section" aria-labelledby="case-loop">
         <h2 id="case-loop" class="case-h2">{d.loopTitle || 'So funktioniert es'}</h2>
-        <ol class="steps case-loop">
+        <ol class="steps case-loop" data-signal-loop>
+          <span class="case-loop-signal" aria-hidden="true"></span>
           {d.loop.map((s, i) => (
             <li>
               <span>{String(i + 1).padStart(2, '0')}</span>

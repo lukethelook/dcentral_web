@@ -26,6 +26,7 @@ const cases = defineCollection({
     url: z.string().nullable().optional(),
     stack: z.array(z.string()).default([]),
     highlightsTitle: z.string().nullable().optional(),
+    signal: z.string().nullable().optional(), // phrase in the title marked with the signal colour
     highlights: z.array(z.object({ t: z.string(), d: z.string() })).default([]),
     loopTitle: z.string().nullable().optional(),
     loop: z.array(z.object({ t: z.string(), d: z.string() })).default([]),

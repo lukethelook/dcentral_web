@@ -2,13 +2,20 @@
   "title": "Ein Onlineshop, der sich selbst verbessert",
   "client": "MapLove",
   "discipline": "Web",
-  "also": ["KI"],
+  "also": [
+    "KI"
+  ],
   "year": 2026,
   "url": "https://www.maplove.cc",
   "summary": "Personalisierte Kartenposter, verkauft über einen Shop mit Live-Editor – und eine eigene KI, die Daten liest, Maßnahmen umsetzt und deren Wirkung prüft. Konzept, Design, Entwicklung und Automatisierung aus einer Hand.",
   "body": "MapLove ist mein eigenes Produkt – und mein Labor für alles, was ich für Kund:innen baue. Die Idee: Jeder Ort der Welt wird zum Kartenposter, gestaltet in Echtzeit, gedruckt in der EU, ohne dass im Hintergrund jemand Pakete packt.\n\nDer eigentliche Hebel liegt hinter dem Shop. Kompass, eine eigene KI-Schicht, beobachtet Google, Besucherwege und Social-Reichweite, erkennt Chancen und setzt sie um: neue Seiten, bessere Texte, geplante Posts. Jede Änderung wird gemessen – was wirkt, bleibt, was nicht wirkt, wird zurückgenommen. So arbeitet der Shop jede Woche an sich selbst.",
-  "tags": ["E-Commerce", "KI-Automatisierung", "SEO & GEO", "Social Media"],
-  "highlightsTitle": "Was ich gebaut habe",
+  "tags": [
+    "E-Commerce",
+    "KI-Automatisierung",
+    "SEO & GEO",
+    "Social Media"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
   "highlights": [
     {
       "t": "Live-Editor mit echten Geodaten",
@@ -37,10 +44,22 @@
   ],
   "loopTitle": "So denkt Kompass",
   "loop": [
-    { "t": "Messen", "d": "Suchanfragen, Besucherwege, Social-Reichweite und KI-Antworten laufen täglich ein." },
-    { "t": "Entscheiden", "d": "Ein Entscheidungsmodell bewertet Chancen nachvollziehbar – Sprachmodelle schreiben nur die Texte." },
-    { "t": "Umsetzen", "d": "Seiten, Texte und Posts entstehen automatisch, innerhalb klarer Regeln und eines festen Budgets." },
-    { "t": "Prüfen", "d": "Die Wirkung wird gemessen. Was hilft, bleibt – was nicht hilft, wird zurückgenommen." }
+    {
+      "t": "Messen",
+      "d": "Suchanfragen, Besucherwege, Social-Reichweite und KI-Antworten laufen täglich ein."
+    },
+    {
+      "t": "Entscheiden",
+      "d": "Ein Entscheidungsmodell bewertet Chancen nachvollziehbar – Sprachmodelle schreiben nur die Texte."
+    },
+    {
+      "t": "Umsetzen",
+      "d": "Seiten, Texte und Posts entstehen automatisch, innerhalb klarer Regeln und eines festen Budgets."
+    },
+    {
+      "t": "Prüfen",
+      "d": "Die Wirkung wird gemessen. Was hilft, bleibt – was nicht hilft, wird zurückgenommen."
+    }
   ],
   "stack": [
     "Next.js 15",
@@ -79,8 +98,12 @@
   "hue": 330,
   "format": "landscape",
   "cover": "/images/cases/maplove/cover.webp",
-  "previews": ["/images/cases/maplove/preview-home.webp", "/images/cases/maplove/preview-editor.webp"],
+  "previews": [
+    "/images/cases/maplove/preview-home.webp",
+    "/images/cases/maplove/preview-editor.webp"
+  ],
   "previewDummy": false,
   "featured": true,
-  "order": 0
+  "order": 0,
+  "signal": "selbst verbessert"
 }

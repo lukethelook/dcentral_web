@@ -1,8 +1,13 @@
 /**
  * Project Baby Bloom — Neural Soundscape demo.
- * A calm canvas visual (breathing core, frequency rings, heartbeat ripples,
- * rain drift) plus a small Web Audio engine: a binaural frequency layer,
- * filtered-noise rain and ocean, and a soft heartbeat. Sound only after click.
+ *
+ * Sound (Web Audio, only after a click): a binaural beat (carrier left,
+ * carrier + beat right), pink noise, an ocean swell whose LFO runs at the
+ * breathing rate, and a heartbeat scheduled on the audio clock.
+ * Picture (canvas): an interference field of two wave families whose moiré
+ * drifts with the beat, a glass core that breathes with the swell, heartbeat
+ * ripples fired on the very beats you hear, drifting motes and a live
+ * waveform ring from an AnalyserNode. Sound and picture share one clock.
  */
 import { animate } from 'motion';
 
@@ -12,78 +17,106 @@ if (demoRoot) init(demoRoot);
 function init(root) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let paused = document.documentElement.classList.contains('motion-paused');
-
-  // Each state: colours, breathing period (s), frequency profile, default mix.
-  const STATES = {
-    ruhe: { label: 'Entspannen', profile: 'Alpha · 10 Hz', carrier: 200, beat: 10, breath: 7, hue: ['#8b6cf0', '#7fd8c6'], mix: { freq: 55, rain: 45, ocean: 40, heart: 15 } },
-    wach: { label: 'Aufmerksam', profile: 'Beta · 14 Hz', carrier: 220, beat: 14, breath: 4.5, hue: ['#7fd8c6', '#f7c3cd'], mix: { freq: 60, rain: 20, ocean: 25, heart: 0 } },
-    froh: { label: 'Fröhlich', profile: 'Alpha/Beta · 12 Hz', carrier: 240, beat: 12, breath: 5.5, hue: ['#f7c3cd', '#9d86ff'], mix: { freq: 50, rain: 15, ocean: 45, heart: 10 } },
-    schlaf: { label: 'Einschlafen', profile: 'Delta · 2 Hz', carrier: 150, beat: 2, breath: 9, hue: ['#6d4ae0', '#7fd8c6'], mix: { freq: 62, rain: 48, ocean: 30, heart: 25 } },
-  };
   const EASE_OUT = [0.23, 1, 0.32, 1];
   const SESSION = 30 * 60;
-  let state = 'schlaf';
-  const mix = { ...STATES.schlaf.mix }; // 0–100
-  const hueNow = { a: STATES.schlaf.hue[0], b: STATES.schlaf.hue[1] };
+  const TAU = Math.PI * 2;
+
+  // Research-based presets (sources in the component): EEG band → beat,
+  // 0.1 Hz breathing for calm states, heartbeat after Salk, pink noise after Spencer.
+  const STATES = {
+    schlaf: { label: 'Einschlafen', band: 'delta', bandText: 'Delta · 0,5–4 Hz', beat: 2, carrier: 180, breath: 0.1, bpm: 60,
+      science: 'Delta-Wellen prägen den Tiefschlaf – das Ziel beim Einschlafen.', hue: ['#5b3fd6', '#7fd8c6'], mix: { freq: 55, noise: 62, ocean: 32, heart: 38 } },
+    ruhe: { label: 'Entspannen', band: 'theta', bandText: 'Theta · 4–8 Hz', beat: 6, carrier: 200, breath: 0.1, bpm: 72,
+      science: 'Theta-Wellen treten beim Dösen und in tiefer Entspannung auf.', hue: ['#8b6cf0', '#9fe6d6'], mix: { freq: 50, noise: 42, ocean: 52, heart: 26 } },
+    wach: { label: 'Ruhig wach', band: 'alpha', bandText: 'Alpha · 8–13 Hz', beat: 10, carrier: 220, breath: 0.14, bpm: 0,
+      science: 'Alpha-Wellen stehen für entspannte, aufmerksame Wachheit.', hue: ['#4fc4b0', '#b3a2ff'], mix: { freq: 56, noise: 18, ocean: 38, heart: 0 } },
+    froh: { label: 'Spielzeit', band: 'beta', bandText: 'Beta · 13–30 Hz', beat: 14, carrier: 240, breath: 0.2, bpm: 0,
+      science: 'Niedrige Beta-Wellen um 14 Hz begleiten aktive, fröhliche Aufmerksamkeit.', hue: ['#f39bb8', '#9d86ff'], mix: { freq: 46, noise: 10, ocean: 46, heart: 0 } },
+  };
 
   const $ = (s) => root.querySelector(s);
   const pills = [...root.querySelectorAll('[data-state]')];
+  const pillInd = $('.ssd-states-ind');
   const sliders = [...root.querySelectorAll('[data-layer]')];
+  const heartHint = $('[data-hint="heart"]');
+  const oceanHint = $('[data-hint="ocean"]');
+  const bandEl = $('[data-band]');
+  const scienceEl = $('[data-science]');
   const playBtn = $('.ssd-play');
+  const ringCircle = $('.ssd-ring circle');
   const readProfile = $('[data-readout-profile]');
   const readStatus = $('[data-readout-status]');
-  const live = $('[data-ssd-live]');
+  const eqBars = [...root.querySelectorAll('.ssd-eq i')];
   const timerEl = $('[data-timer]');
   const centerLabel = $('[data-center-label]');
+  const marker = $('[data-marker]');
+  const markerLabel = $('[data-marker-label]');
+  const bandSegs = [...root.querySelectorAll('[data-band-seg]')];
   const canvas = $('canvas');
   const ctx = canvas.getContext('2d');
+  const fx = document.createElement('canvas');
+  const fxc = fx.getContext('2d');
 
-  // Render state
-  let W = 0, H = 0, raf = 0, visible = false, elapsed = 0;
-  const ripples = [];
-  const drops = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: 0.4 + Math.random() * 0.8 }));
-  // Audio state
-  let ac = null, nodes = null, playing = false, heartTimer = 0, startedAt = 0, lastBeat = 0;
-
+  let state = 'schlaf';
+  const mix = { ...STATES.schlaf.mix };
+  // Smoothed render parameters — everything eases toward the chosen state.
+  const P = { beat: 2, breath: 0.1, a: hex(STATES.schlaf.hue[0]), b: hex(STATES.schlaf.hue[1]), energy: 0.4, level: 0 };
   const still = () => reduced.matches || paused;
   document.addEventListener('motion-state', (e) => { paused = e.detail.paused; wake(); });
 
-  /* ── Colour helpers ───────────────────────────────────────────────────── */
-  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-  const toHex = (c) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
-  const rgba = (h, a) => { const [r, g, b] = hex(h); return `rgba(${r},${g},${b},${a})`; };
-  function blendHue([a, b], instant) {
-    if (instant) { hueNow.a = a; hueNow.b = b; return; }
-    const fa = hex(hueNow.a), fb = hex(hueNow.b), ta = hex(a), tb = hex(b);
-    animate(0, 1, { duration: 0.9, ease: EASE_OUT, onUpdate: (t) => {
-      hueNow.a = toHex(fa.map((v, i) => v + (ta[i] - v) * t));
-      hueNow.b = toHex(fb.map((v, i) => v + (tb[i] - v) * t));
-      if (still()) draw(performance.now());
-    } });
-  }
+  function hex(h) { return [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); }
+  const rgba = (c, a) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const mixC = (c, d, k) => c.map((v, i) => lerp(v, d[i], k));
 
-  /* ── State selection (roving radio group) ─────────────────────────────── */
+  /* ── States (roving radio group with a travelling indicator) ─────────── */
+  function placeIndicator(glide) {
+    const on = pills.find((p) => p.dataset.state === state);
+    const box = on.parentElement.getBoundingClientRect(), r = on.getBoundingClientRect();
+    const to = { transform: `translateX(${(r.left - box.left).toFixed(1)}px)`, width: `${r.width.toFixed(1)}px` };
+    if (glide && !still()) animate(pillInd, to, { type: 'spring', duration: 0.5, bounce: 0.18 });
+    else Object.assign(pillInd.style, to);
+  }
+  function placeMarker(glide) {
+    const s = STATES[state];
+    const LO = Math.log(0.5), HI = Math.log(30);
+    const left = ((Math.log(s.beat) - LO) / (HI - LO)) * 100;
+    markerLabel.textContent = `${s.beat} Hz`;
+    bandSegs.forEach((b) => b.classList.toggle('is-on', b.dataset.bandSeg === s.band));
+    if (glide && !still()) animate(marker, { left: `${left}%` }, { type: 'spring', duration: 0.8, bounce: 0.2 });
+    else marker.style.left = `${left}%`;
+  }
+  function swapText(el, text, glide) {
+    if (!glide || still()) { el.textContent = text; return; }
+    animate(el, { opacity: [1, 0], transform: ['translateY(0px)', 'translateY(-6px)'] }, { duration: 0.14, ease: EASE_OUT }).then(() => {
+      el.textContent = text;
+      animate(el, { opacity: [0, 1], transform: ['translateY(6px)', 'translateY(0px)'] }, { duration: 0.32, ease: EASE_OUT });
+    });
+  }
   function paint(el) { if (el) el.style.setProperty('--v', `${el.value}%`); }
-  function select(id, { focus = false, instant = false } = {}) {
+  function select(id, { focus = false, glide = true } = {}) {
     state = id;
+    const s = STATES[id];
     pills.forEach((p) => {
       const on = p.dataset.state === id;
       p.setAttribute('aria-checked', String(on));
       p.tabIndex = on ? 0 : -1;
       if (on && focus) p.focus();
     });
-    const s = STATES[id];
-    readProfile.textContent = s.profile;
-    centerLabel.textContent = s.label;
-    if (!instant) live.textContent = `Zustand ${s.label}, ${s.profile}`;
-    // The mix glides to the state's preset; sliders follow.
+    placeIndicator(glide);
+    placeMarker(glide);
+    swapText(bandEl, s.bandText, glide);
+    swapText(scienceEl, s.science, glide);
+    swapText(centerLabel, s.label, glide);
+    readProfile.textContent = `${s.beat} Hz Schwebung · ${s.carrier} Hz Träger`;
+    heartHint.textContent = s.bpm ? `${s.bpm} bpm` : 'aus in diesem Zustand';
+    oceanHint.textContent = `Welle alle ${Math.round(1 / s.breath)} s`;
     for (const k of Object.keys(mix)) {
       const el = sliders.find((x) => x.dataset.layer === k);
       const setV = (v) => { mix[k] = v; if (el) { el.value = String(Math.round(v)); paint(el); } applyGains(); };
-      if (instant || still()) setV(s.mix[k]);
-      else animate(mix[k], s.mix[k], { duration: 0.9, ease: EASE_OUT, onUpdate: setV });
+      if (!glide || still()) setV(s.mix[k]);
+      else animate(mix[k], s.mix[k], { duration: 1.1, ease: EASE_OUT, onUpdate: setV });
     }
-    blendHue(s.hue, instant || still());
     retune();
     wake();
   }
@@ -100,178 +133,278 @@ function init(root) {
     el.addEventListener('input', () => { mix[el.dataset.layer] = Number(el.value); paint(el); applyGains(); wake(); });
   });
 
-  /* ── Audio engine (created on first play) ─────────────────────────────── */
-  function noiseBuffer(brown) {
-    const len = ac.sampleRate * 4, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
-    let last = 0;
-    for (let i = 0; i < len; i++) {
-      const w = Math.random() * 2 - 1;
-      if (brown) { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.2; } else d[i] = w;
+  /* ── Audio engine ─────────────────────────────────────────────────────── */
+  let ac = null, nodes = null, playing = false, sched = 0, nextBeat = 0, startedAt = 0, elapsed = 0;
+  const beats = []; // visual heartbeat events (performance.now times)
+  let timeData = null, freqData = null;
+
+  function pinkNoise(seconds) {
+    // Paul Kellet's refined pink-noise filter over white noise (−3 dB/octave).
+    const len = ac.sampleRate * seconds, buf = ac.createBuffer(2, len, ac.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = buf.getChannelData(ch);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < len; i++) {
+        const w = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+        b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+        d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
+      }
     }
+    return buf;
+  }
+  function brownNoise(seconds) {
+    const len = ac.sampleRate * seconds, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.2; }
     return buf;
   }
   function build() {
     ac = new (window.AudioContext || window.webkitAudioContext)();
-    const master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
-    // Binaural frequency layer: carrier left, carrier + beat right.
+    const analyser = ac.createAnalyser(); analyser.fftSize = 1024; analyser.smoothingTimeConstant = 0.82;
+    const master = ac.createGain(); master.gain.value = 0;
+    master.connect(analyser); analyser.connect(ac.destination);
+    // Binaural beat: pure sines, hard left / hard right.
     const freqGain = ac.createGain(); freqGain.connect(master);
     const osc = (pan) => { const o = ac.createOscillator(); o.type = 'sine'; const p = ac.createStereoPanner(); p.pan.value = pan; o.connect(p); p.connect(freqGain); o.start(); return o; };
     const oscL = osc(-1), oscR = osc(1);
-    // Rain: white noise through a gentle band-pass.
-    const rainSrc = ac.createBufferSource(); rainSrc.buffer = noiseBuffer(false); rainSrc.loop = true;
-    const rainF = ac.createBiquadFilter(); rainF.type = 'bandpass'; rainF.frequency.value = 2400; rainF.Q.value = 0.6;
-    const rainGain = ac.createGain(); rainSrc.connect(rainF); rainF.connect(rainGain); rainGain.connect(master); rainSrc.start();
-    // Ocean: brown noise, low-pass, swelling with a slow LFO.
-    const oceanSrc = ac.createBufferSource(); oceanSrc.buffer = noiseBuffer(true); oceanSrc.loop = true;
-    const oceanF = ac.createBiquadFilter(); oceanF.type = 'lowpass'; oceanF.frequency.value = 520;
-    const swell = ac.createGain(); swell.gain.value = 0.6;
-    const lfo = ac.createOscillator(); lfo.frequency.value = 0.09;
-    const lfoAmt = ac.createGain(); lfoAmt.gain.value = 0.4; lfo.connect(lfoAmt); lfoAmt.connect(swell.gain); lfo.start();
-    const oceanGain = ac.createGain(); oceanSrc.connect(oceanF); oceanF.connect(swell); swell.connect(oceanGain); oceanGain.connect(master); oceanSrc.start();
-    // Heartbeat: short, low sine thumps (scheduled while playing).
-    const heartGain = ac.createGain(); heartGain.connect(master);
-    nodes = { master, freqGain, oscL, oscR, rainGain, oceanGain, heartGain };
+    // Pink noise, softened at the top.
+    const noise = ac.createBufferSource(); noise.buffer = pinkNoise(6); noise.loop = true;
+    const noiseLP = ac.createBiquadFilter(); noiseLP.type = 'lowpass'; noiseLP.frequency.value = 5200;
+    const noiseGain = ac.createGain(); noise.connect(noiseLP); noiseLP.connect(noiseGain); noiseGain.connect(master); noise.start();
+    // Ocean: brown noise swelling at the breathing rate (shared with the visual breath).
+    const ocean = ac.createBufferSource(); ocean.buffer = brownNoise(8); ocean.loop = true;
+    const oceanLP = ac.createBiquadFilter(); oceanLP.type = 'lowpass'; oceanLP.frequency.value = 600;
+    const swell = ac.createGain(); swell.gain.value = 0.55;
+    const lfo = ac.createOscillator(); lfo.frequency.value = STATES[state].breath;
+    const lfoAmt = ac.createGain(); lfoAmt.gain.value = 0.45; lfo.connect(lfoAmt); lfoAmt.connect(swell.gain); lfo.start();
+    const oceanGain = ac.createGain(); ocean.connect(oceanLP); oceanLP.connect(swell); swell.connect(oceanGain); oceanGain.connect(master); ocean.start();
+    // Heartbeat bus.
+    const heartGain = ac.createGain(); const heartLP = ac.createBiquadFilter(); heartLP.type = 'lowpass'; heartLP.frequency.value = 140;
+    heartGain.connect(heartLP); heartLP.connect(master);
+    nodes = { master, analyser, freqGain, oscL, oscR, noiseGain, oceanGain, heartGain, lfo };
+    timeData = new Uint8Array(analyser.fftSize);
+    freqData = new Uint8Array(analyser.frequencyBinCount);
     retune(); applyGains();
   }
   function retune() {
     if (!nodes) return;
     const s = STATES[state], t = ac.currentTime;
-    nodes.oscL.frequency.setTargetAtTime(s.carrier, t, 0.4);
-    nodes.oscR.frequency.setTargetAtTime(s.carrier + s.beat, t, 0.4);
+    nodes.oscL.frequency.setTargetAtTime(s.carrier, t, 0.6);
+    nodes.oscR.frequency.setTargetAtTime(s.carrier + s.beat, t, 0.6);
+    nodes.lfo.frequency.setTargetAtTime(s.breath, t, 1.5);
   }
   function applyGains() {
     if (!nodes) return;
     const t = ac.currentTime, v = (k, max) => (mix[k] / 100) * max;
-    nodes.freqGain.gain.setTargetAtTime(v('freq', 0.05), t, 0.15);
-    nodes.rainGain.gain.setTargetAtTime(v('rain', 0.07), t, 0.15);
-    nodes.oceanGain.gain.setTargetAtTime(v('ocean', 0.35), t, 0.15);
-    nodes.heartGain.gain.setTargetAtTime(v('heart', 0.9), t, 0.15);
+    nodes.freqGain.gain.setTargetAtTime(v('freq', 0.045), t, 0.2);
+    nodes.noiseGain.gain.setTargetAtTime(v('noise', 0.16), t, 0.2);
+    nodes.oceanGain.gain.setTargetAtTime(v('ocean', 0.32), t, 0.2);
+    nodes.heartGain.gain.setTargetAtTime(v('heart', 1.1), t, 0.2);
   }
   function thump(at, strength) {
     const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sine'; o.frequency.setValueAtTime(62, at); o.frequency.exponentialRampToValueAtTime(40, at + 0.18);
-    g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(strength, at + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.22);
-    o.connect(g); g.connect(nodes.heartGain); o.start(at); o.stop(at + 0.25);
+    o.type = 'sine'; o.frequency.setValueAtTime(58, at); o.frequency.exponentialRampToValueAtTime(38, at + 0.2);
+    g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(strength, at + 0.018); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.24);
+    o.connect(g); g.connect(nodes.heartGain); o.start(at); o.stop(at + 0.26);
   }
-  function scheduleHeart() {
-    const bpm = state === 'schlaf' ? 58 : state === 'ruhe' ? 64 : 72;
-    const now = ac.currentTime;
-    if (now - lastBeat > 60 / bpm - 0.02) {
-      thump(now + 0.05, 0.35); thump(now + 0.33, 0.18);
-      lastBeat = now; ripples.push({ t: performance.now() });
+  // Look-ahead scheduler on the audio clock; the visual ripple gets the same moment.
+  function scheduler() {
+    const s = STATES[state];
+    if (!s.bpm || mix.heart < 1) { nextBeat = ac.currentTime + 0.2; return; }
+    const period = 60 / s.bpm;
+    while (nextBeat < ac.currentTime + 0.25) {
+      if (nextBeat < ac.currentTime) nextBeat = ac.currentTime + 0.05;
+      thump(nextBeat, 0.42); thump(nextBeat + 0.28, 0.2); // lub-dub
+      const at = performance.now() + (nextBeat - ac.currentTime) * 1000;
+      beats.push(at);
+      nextBeat += period;
     }
   }
   async function play() {
     if (!ac) build();
     await ac.resume();
     playing = true; startedAt = performance.now() - elapsed * 1000;
+    nextBeat = ac.currentTime + 0.4;
     nodes.master.gain.cancelScheduledValues(ac.currentTime);
-    nodes.master.gain.setTargetAtTime(1, ac.currentTime, 0.6); // soft fade-in
-    heartTimer = setInterval(() => { if (mix.heart > 1) scheduleHeart(); }, 60);
+    nodes.master.gain.setTargetAtTime(1, ac.currentTime, 0.8); // gentle fade-in
+    sched = setInterval(scheduler, 50);
     playBtn.setAttribute('aria-pressed', 'true'); playBtn.setAttribute('aria-label', 'Soundscape pausieren');
     root.classList.add('is-playing');
     readStatus.textContent = 'Läuft · live im Browser erzeugt';
-    live.textContent = 'Soundscape läuft';
     wake();
   }
   function stop() {
-    playing = false; clearInterval(heartTimer);
-    if (ac) nodes.master.gain.setTargetAtTime(0, ac.currentTime, 0.2);
-    setTimeout(() => { if (!playing && ac) ac.suspend(); }, 900);
+    playing = false; clearInterval(sched);
+    if (ac) nodes.master.gain.setTargetAtTime(0, ac.currentTime, 0.25);
+    setTimeout(() => { if (!playing && ac) ac.suspend(); }, 1100);
     playBtn.setAttribute('aria-pressed', 'false'); playBtn.setAttribute('aria-label', 'Soundscape abspielen');
     root.classList.remove('is-playing');
     readStatus.textContent = 'Pausiert';
-    live.textContent = 'Soundscape pausiert';
   }
   playBtn.addEventListener('click', () => (playing ? stop() : play()));
-  // Hiding the tab or leaving the page always stops the sound.
   document.addEventListener('visibilitychange', () => { if (document.hidden && playing) stop(); });
   addEventListener('pagehide', () => { if (playing) stop(); });
 
   /* ── Visual ───────────────────────────────────────────────────────────── */
+  let W = 0, H = 0, dpr = 1, raf = 0, visible = false, last = 0;
+  let breathPhase = Math.PI, phaseL = 0, phaseR = 0;
+  const motes = Array.from({ length: 120 }, () => ({
+    a: Math.random() * TAU, r: 0.35 + Math.random() * 0.95, s: 0.4 + Math.random() * 1.2,
+    w: (Math.random() < 0.5 ? -1 : 1) * (0.015 + Math.random() * 0.035), tw: Math.random() * TAU, fall: Math.random(),
+  }));
+
   function size() {
     const r = canvas.getBoundingClientRect();
-    const dpr = Math.min(2, devicePixelRatio || 1);
-    W = r.width; H = r.height;
-    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw(performance.now());
+    dpr = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height;
+    for (const c of [canvas, fx]) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); fxc.setTransform(dpr, 0, 0, dpr, 0, 0);
+    placeIndicator(false);
+    draw(performance.now(), 0);
   }
   function wake() {
-    if (still()) { draw(performance.now()); return; }
-    if (!raf && visible) raf = requestAnimationFrame(loop);
+    if (still()) { draw(performance.now(), 0); return; }
+    if (!raf && visible) { last = performance.now(); raf = requestAnimationFrame(loop); }
   }
   function loop(now) {
     raf = 0;
-    draw(now);
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    draw(now, dt);
     if (visible && !still()) raf = requestAnimationFrame(loop);
   }
-  function draw(now) {
+  const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+
+  function draw(now, dt) {
     if (!W || !H) return;
     const s = STATES[state];
+    // Ease every render parameter toward the state (≈ 0.5 s time constant).
+    const k = dt ? 1 - Math.exp(-dt * 2.2) : 1;
+    P.beat = lerp(P.beat, s.beat, k); P.breath = lerp(P.breath, s.breath, k);
+    P.a = mixC(P.a, hex(s.hue[0]), k); P.b = mixC(P.b, hex(s.hue[1]), k);
+    P.energy = lerp(P.energy, playing ? 1 : 0.38, dt ? 1 - Math.exp(-dt * 1.5) : 1);
+
+    // Audio level (RMS) for reactivity.
+    let level = 0;
+    if (playing && nodes) {
+      nodes.analyser.getByteTimeDomainData(timeData);
+      let sum = 0; for (let i = 0; i < timeData.length; i += 4) { const v = (timeData[i] - 128) / 128; sum += v * v; }
+      level = Math.min(1, Math.sqrt(sum / (timeData.length / 4)) * 5);
+      nodes.analyser.getByteFrequencyData(freqData);
+      eqBars.forEach((b, i) => { const v = freqData[2 + i * 3] / 255; b.style.transform = `scaleY(${(0.12 + v * 0.88).toFixed(3)})`; });
+    } else if (!dt) {
+      eqBars.forEach((b) => { b.style.transform = 'scaleY(0.12)'; });
+    }
+    P.level = lerp(P.level, level, dt ? 1 - Math.exp(-dt * 6) : 1);
+
     if (playing) elapsed = (now - startedAt) / 1000;
     const left = Math.max(0, SESSION - elapsed);
     timerEl.textContent = `${String(Math.floor(left / 60)).padStart(2, '0')}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
-    const t = still() ? 0 : now / 1000;
-    const energy = playing ? 1 : 0.45;
+    ringCircle.style.strokeDashoffset = String(1 - Math.min(1, elapsed / SESSION));
+
     const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.34;
+    breathPhase += dt * P.breath * TAU;
+    const breath = 0.5 - 0.5 * Math.cos(breathPhase); // 0 → 1 → 0, one cycle per 1/breath s
+    const E = P.energy;
+
     ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
 
-    // Background glow
-    // Fades out fully inside the canvas so no square edge shows against the panel.
-    const bg = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, Math.min(W, H) * 0.5);
-    bg.addColorStop(0, rgba(hueNow.a, 0.28 * energy + 0.1)); bg.addColorStop(1, 'rgba(20,15,51,0)');
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    // 1 · Aura — breathes with the swell.
+    const aura = ctx.createRadialGradient(cx, cy, R * 0.25, cx, cy, Math.min(W, H) * 0.5);
+    aura.addColorStop(0, rgba(P.a, 0.22 + 0.18 * E * (0.6 + 0.4 * breath)));
+    aura.addColorStop(0.55, rgba(P.b, 0.05 + 0.05 * E));
+    aura.addColorStop(1, rgba(P.a, 0));
+    ctx.fillStyle = aura; ctx.fillRect(0, 0, W, H);
 
-    // Rain drift
-    const rain = mix.rain / 100;
-    if (rain > 0.02) {
-      ctx.strokeStyle = rgba('#cfc8f5', 0.18 * rain * (0.5 + energy / 2)); ctx.lineWidth = 1;
-      drops.forEach((d, i) => {
-        if (i / drops.length > rain) return;
-        const y = ((d.y + t * 0.05 * d.s * (0.6 + energy)) % 1) * H, x = d.x * W;
-        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 2, y + 10 * d.s); ctx.stroke();
-      });
-    }
-
-    // Heartbeat ripples
-    for (let i = ripples.length - 1; i >= 0; i--) {
-      const age = (now - ripples[i].t) / 1600;
-      if (age > 1) { ripples.splice(i, 1); continue; }
-      ctx.strokeStyle = rgba('#fde8ec', (1 - age) * 0.35 * (mix.heart / 100 + 0.2)); ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.arc(cx, cy, R * (0.55 + age * 0.9), 0, Math.PI * 2); ctx.stroke();
-    }
-
-    // Frequency rings: organic outlines driven by the beat, the ocean swell and the breath.
-    const breath = 1 + Math.sin((t / s.breath) * Math.PI * 2) * 0.045 * (0.6 + energy);
-    const swell = 1 + Math.sin(t * 0.55) * 0.03 * (mix.ocean / 100);
-    const fAmp = (mix.freq / 100) * (0.5 + energy * 0.7);
-    for (let k = 0; k < 4; k++) {
-      const rr = R * (1.02 - k * 0.1) * breath * swell;
-      ctx.beginPath();
-      for (let a = 0; a <= 360; a += 2) {
-        const th = (a * Math.PI) / 180;
-        const wob = Math.sin(th * (5 + k) + t * (0.35 + s.beat * 0.04) * (k % 2 ? -1 : 1)) * 6 * fAmp
-          + Math.sin(th * (11 + k * 2) - t * 0.6) * 2.4 * fAmp;
-        const x = cx + (rr + wob) * Math.cos(th), y = cy + (rr + wob) * Math.sin(th);
-        if (a) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+    // 2 · Interference field — two wave families (left/right ear); the moiré drifts with the beat.
+    const speed = 7 + 5 * E;
+    phaseL += dt * speed;
+    phaseR += dt * speed * (1 + P.beat / 26);
+    const sp = R * 0.075, dx = R * 0.2 * (0.9 + 0.1 * breath), fAmt = mix.freq / 100;
+    fxc.globalCompositeOperation = 'source-over';
+    fxc.clearRect(0, 0, W, H);
+    fxc.lineWidth = 1;
+    for (const [ox, ph, col] of [[-dx, phaseL, P.a], [dx, phaseR, P.b]]) {
+      fxc.strokeStyle = rgba(col, 0.55);
+      for (let r = (ph % sp); r < R * 1.5; r += sp) {
+        fxc.globalAlpha = Math.max(0, 1 - r / (R * 1.5));
+        fxc.beginPath(); fxc.arc(cx + ox, cy, r, 0, TAU); fxc.stroke();
       }
-      ctx.closePath();
-      ctx.strokeStyle = rgba(k % 2 ? hueNow.a : hueNow.b, 0.55 - k * 0.1);
-      ctx.lineWidth = k === 0 ? 1.6 : 1.1;
-      ctx.stroke();
+    }
+    fxc.globalAlpha = 1;
+    fxc.globalCompositeOperation = 'destination-in';
+    const mask = fxc.createRadialGradient(cx, cy, R * 0.45, cx, cy, R * 1.42);
+    mask.addColorStop(0, 'rgba(0,0,0,1)'); mask.addColorStop(1, 'rgba(0,0,0,0)');
+    fxc.fillStyle = mask; fxc.fillRect(0, 0, W, H);
+    ctx.globalAlpha = (0.18 + 0.5 * fAmt) * (0.55 + 0.45 * E);
+    ctx.drawImage(fx, 0, 0, W, H);
+    ctx.globalAlpha = 1;
+
+    // 3 · Motes — slow orbit, a little rain when the noise layer is up.
+    const nAmt = mix.noise / 100;
+    for (const m of motes) {
+      m.a += dt * m.w * (0.6 + E); m.tw += dt * 1.3;
+      m.fall = (m.fall + dt * 0.02 * nAmt * m.s) % 1;
+      const rr = R * m.r * (1 + 0.04 * breath);
+      const x = cx + Math.cos(m.a) * rr, y = cy + Math.sin(m.a) * rr * 0.92 + (m.fall - 0.5) * R * 0.25 * nAmt;
+      const al = (0.15 + 0.35 * (0.5 + 0.5 * Math.sin(m.tw))) * (0.4 + 0.6 * E);
+      ctx.fillStyle = rgba(m.s > 1 ? P.b : [236, 232, 255], al);
+      ctx.beginPath(); ctx.arc(x, y, 0.5 + m.s * 0.7, 0, TAU); ctx.fill();
     }
 
-    // Core
-    const cr = R * 0.5 * breath;
-    const core = ctx.createRadialGradient(cx - cr * 0.3, cy - cr * 0.35, cr * 0.1, cx, cy, cr);
-    core.addColorStop(0, '#e7fbf6'); core.addColorStop(0.35, hueNow.b); core.addColorStop(1, hueNow.a);
-    ctx.shadowColor = rgba(hueNow.a, 0.8); ctx.shadowBlur = 50 * (0.6 + energy * 0.6);
-    ctx.fillStyle = core; ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI * 2); ctx.fill();
-    ctx.shadowBlur = 0;
+    // 4 · Heartbeat ripples, fired on the scheduled beats.
+    let pulse = 0;
+    for (let i = beats.length - 1; i >= 0; i--) {
+      const age = (now - beats[i]) / 1500;
+      if (age < 0) continue;
+      if (age > 1) { beats.splice(i, 1); continue; }
+      pulse = Math.max(pulse, Math.exp(-age * 9));
+      const hr = R * (0.46 + easeOut(age) * 0.95);
+      ctx.strokeStyle = rgba([253, 222, 230], (1 - age) * (1 - age) * 0.55 * (0.25 + mix.heart / 100));
+      ctx.lineWidth = 2.2 * (1 - age) + 0.4;
+      ctx.beginPath(); ctx.arc(cx, cy, hr, 0, TAU); ctx.stroke();
+    }
+
+    // 5 · Live waveform ring (real audio when playing, a calm sine otherwise).
+    const Ro = R * 0.42 * (0.94 + 0.08 * breath) * (1 + 0.035 * pulse) * (1 + 0.05 * P.level);
+    const wr = Ro * 1.28;
+    ctx.beginPath();
+    const N = 180;
+    for (let i = 0; i <= N; i++) {
+      const th = (i / N) * TAU;
+      let amp;
+      if (playing && timeData) amp = ((timeData[Math.floor((i / N) * (timeData.length - 1))] - 128) / 128) * R * 0.22;
+      else amp = Math.sin(th * 6 + now / 900) * R * 0.012;
+      const rr = wr + amp;
+      const x = cx + Math.cos(th - Math.PI / 2) * rr, y = cy + Math.sin(th - Math.PI / 2) * rr;
+      if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+    }
+    ctx.strokeStyle = rgba(P.b, 0.35 + 0.35 * E); ctx.lineWidth = 1.2; ctx.stroke();
+
+    // 6 · Glass core.
+    ctx.globalCompositeOperation = 'source-over';
+    const halo = ctx.createRadialGradient(cx, cy, Ro * 0.6, cx, cy, Ro * 1.9);
+    halo.addColorStop(0, rgba(P.b, 0.35 * (0.5 + 0.5 * E))); halo.addColorStop(1, rgba(P.a, 0));
+    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, Ro * 1.9, 0, TAU); ctx.fill();
+    const body = ctx.createRadialGradient(cx - Ro * 0.35, cy - Ro * 0.4, Ro * 0.05, cx, cy, Ro);
+    body.addColorStop(0, 'rgba(255,255,255,0.95)');
+    body.addColorStop(0.22, rgba(mixC(P.b, [255, 255, 255], 0.35), 0.95));
+    body.addColorStop(0.7, rgba(P.a, 0.92));
+    body.addColorStop(1, rgba(mixC(P.a, [20, 12, 60], 0.35), 0.95));
+    ctx.fillStyle = body; ctx.beginPath(); ctx.arc(cx, cy, Ro, 0, TAU); ctx.fill();
+    // Slow caustic highlight turning inside the glass.
+    ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, Ro, 0, TAU); ctx.clip();
+    ctx.translate(cx, cy); ctx.rotate(now / 7000);
+    const caustic = ctx.createRadialGradient(Ro * 0.35, Ro * 0.2, 0, Ro * 0.35, Ro * 0.2, Ro * 0.8);
+    caustic.addColorStop(0, rgba(P.b, 0.45)); caustic.addColorStop(1, rgba(P.b, 0));
+    ctx.fillStyle = caustic; ctx.fillRect(-Ro, -Ro, Ro * 2, Ro * 2);
+    ctx.restore();
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, Ro - 0.5, 0, TAU); ctx.stroke();
   }
 
   new ResizeObserver(size).observe(canvas);
   new IntersectionObserver((e) => { visible = e[0].isIntersecting; wake(); }, { threshold: 0.05 }).observe(root);
-  select('schlaf', { instant: true });
+  addEventListener('resize', () => placeIndicator(false));
+  select('schlaf', { glide: false });
 }

@@ -104,7 +104,8 @@ export default config({
           options: [{ label: 'Keine', value: '' }, { label: 'Neural Soundscape Player', value: 'soundscape' }],
           defaultValue: '',
         }),
-        highlightsTitle: TEXT('Überschrift Leistungen (z.B. „Was ich gebaut habe")'),
+        signal: TEXT('Signal im Titel (optional)', { description: 'Wortgruppe aus dem Titel, die mit dem Signal-Marker hervorgehoben wird, z.B. „selbst verbessert".' }),
+        highlightsTitle: TEXT('Überschrift Leistungen (z.B. „Was gebaut wurde")'),
         highlights: fields.array(
           fields.object({ t: TEXT('Titel'), d: TEXT('Text', { multiline: true }) }),
           { label: 'Leistungen / Highlights', itemLabel: (p) => p.fields.t.value },

@@ -4,7 +4,7 @@
  * text is never hidden before JS runs, nothing hijacks the wheel, the global
  * pause and prefers-reduced-motion switch everything to instant states.
  */
-import { animate, inView, scroll, stagger } from 'motion';
+import { animate, cubicBezier, inView, scroll, stagger } from 'motion';
 
 // Codebase token: --ease / --ease-out = cubic-bezier(.23,1,.32,1).
 const EASE_OUT = [0.23, 1, 0.32, 1];
@@ -262,6 +262,31 @@ document.addEventListener('click', (e) => {
   link.querySelector('.project-cover')?.style.setProperty('view-transition-name', 'case-hero');
 });
 addEventListener('pageshow', (e) => { if (e.persisted) unnameCovers(); });
+
+/* ── 7 · Signal loop (case pages) ────────────────────────────────────────
+   State indication: when a process list comes into view, a chartreuse signal
+   runs through it once and lights each step as it arrives. Without JS or with
+   reduced motion every step is simply lit (see pages.css). */
+document.querySelectorAll('[data-signal-loop]').forEach((list) => {
+  const line = list.querySelector('.case-loop-signal');
+  const steps = [...list.querySelectorAll(':scope > li')];
+  if (!line || !steps.length || reduced.matches) return;
+  root.classList.add('js-loop');
+  const lightAll = () => { line.style.transform = 'scaleX(1)'; steps.forEach((s) => s.classList.add('is-lit')); };
+  if (paused) return lightAll();
+  inView(list, () => {
+    if (!canMove()) return lightAll();
+    const total = 0.55 * steps.length + 0.4, delay = 0.25;
+    const curve = [0.65, 0, 0.35, 1];
+    animate(line, { transform: ['scaleX(0)', 'scaleX(1)'] }, { duration: total, ease: curve, delay });
+    // Step i lights when the eased line reaches i/n — invert the curve to find that moment.
+    const ease = cubicBezier(...curve);
+    const timeAt = (p) => { let lo = 0, hi = 1; for (let k = 0; k < 20; k++) { const m = (lo + hi) / 2; if (ease(m) < p) lo = m; else hi = m; } return hi; };
+    steps.forEach((s, i) => {
+      setTimeout(() => s.classList.add('is-lit'), (delay + timeAt(i / steps.length) * total + 0.06) * 1000);
+    });
+  }, { amount: 0.5 });
+});
 
 /* ── 6 · Footer curtain ──────────────────────────────────────────────────
    On large screens the chartreuse footer sits beneath the page and is
