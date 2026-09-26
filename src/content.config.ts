@@ -38,6 +38,8 @@ const cases = defineCollection({
         phones: z.array(z.string().nullable()).optional(),
         video: z.string().nullable().optional(),
         vimeo: z.string().nullable().optional(), // Vimeo ID → cinema stage with click-to-load player
+        youtube: z.string().nullable().optional(), // YouTube ID (loaded via youtube-nocookie on click)
+        loop: z.string().nullable().optional(), // muted background film for the cinema stage
         vimeoLabel: z.string().nullable().optional(),
         slides: z.array(z.string().nullable()).optional(),
         poster: z.string().nullable().optional(),
@@ -50,6 +52,8 @@ const cases = defineCollection({
     scope: z.array(z.string()).default([]), // full scope, shown as „Umfang"
     shown: z.array(z.object({ place: z.string(), year: z.string() })).default([]), // exhibitions
     stackTitle: z.string().nullable().optional(),
+    panoramaTitle: z.string().nullable().optional(),
+    panoramas: z.array(z.object({ image: z.string().nullable(), title: z.string() })).default([]),
     coverTone: z.enum(['', 'light', 'dark']).nullable().optional(), // dark image → light card text
     outlookTitle: z.string().nullable().optional(),
     outlookIntro: z.string().nullable().optional(),

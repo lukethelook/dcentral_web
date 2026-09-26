@@ -311,7 +311,10 @@ document.querySelectorAll('[data-cinema]').forEach((stage) => {
   btn?.addEventListener('click', () => {
     const id = encodeURIComponent(stage.dataset.cinema);
     const frame = document.createElement('iframe');
-    frame.src = `https://player.vimeo.com/video/${id}?dnt=1&autoplay=1&title=0&byline=0&portrait=0&color=d4ff3f`;
+    frame.src = stage.dataset.provider === 'youtube'
+      ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`
+      : `https://player.vimeo.com/video/${id}?dnt=1&autoplay=1&title=0&byline=0&portrait=0&color=d4ff3f`;
+    stage.querySelector('.cinema-loop')?.pause();
     frame.allow = 'autoplay; fullscreen; picture-in-picture';
     frame.allowFullscreen = true;
     frame.title = btn.getAttribute('aria-label') || 'Film';

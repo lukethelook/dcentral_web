@@ -100,6 +100,8 @@ export default config({
           ),
           video: fields.file({ label: 'Video im Browser-Mockup (MP4, statt Desktop-Screenshot)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           vimeo: TEXT('Vimeo-ID (Kino-Bühne mit Film auf Klick)'),
+          youtube: TEXT('YouTube-ID (Kino-Bühne, lädt youtube-nocookie auf Klick)'),
+          loop: fields.file({ label: 'Hintergrundfilm der Kino-Bühne (MP4, stumm)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           vimeoLabel: TEXT('Beschriftung Film-Button (z.B. „Film ansehen · 3:07")'),
           slides: fields.array(
             fields.image({ label: 'Bild', directory: 'public/images/cases', publicPath: '/images/cases/' }),
@@ -117,6 +119,14 @@ export default config({
         shown: fields.array(
           fields.object({ place: TEXT('Ort / Anlass'), year: TEXT('Jahr') }),
           { label: 'Ausgestellt / Stationen', itemLabel: (p) => `${p.fields.place.value} ${p.fields.year.value}` },
+        ),
+        panoramaTitle: TEXT('360°-Rundgang: Überschrift'),
+        panoramas: fields.array(
+          fields.object({
+            image: fields.image({ label: 'Kugelpanorama (equirectangular, 2:1)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+            title: TEXT('Szenenname'),
+          }),
+          { label: '360°-Rundgang (Szenen)', itemLabel: (p) => p.fields.title.value },
         ),
         stackTitle: TEXT('Überschrift Technik (Standard: Techstack)'),
         statusLabel: TEXT('Status-Text (bei Studie, z.B. „Web-Studie · Demo-Inhalte")'),

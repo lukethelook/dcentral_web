@@ -1,0 +1,171 @@
+{
+  "title": "350 Jahre Hartholz, neu ins Bild gesetzt",
+  "signal": "neu ins Bild gesetzt",
+  "client": "Sägewerk Grafinger",
+  "clientLabel": "Sägewerk Grafinger · Grünau im Almtal",
+  "discipline": "Foto",
+  "also": [
+    "Film & Aerial",
+    "Web"
+  ],
+  "year": 2021,
+  "url": "https://www.grafinger.co.at",
+  "summary": "Ein Sägewerk mit 350 Jahren Geschichte, ein Tal voller Holz – und die Frage, wie man das zeigt. Für Grafinger entstanden Fotografie, Imagefilm, Drohnenflüge und ein 360°-Rundgang, zusammengeführt auf einer neuen Website mit SEO-Grundlage.",
+  "body": "Grafinger verarbeitet Hartholz seit 1671 – Verpackungsholz, Sonderpaletten, technische Anwendungen, Brennholz. Ein Betrieb mit Tradition, direkt bei uns in Grünau im Almtal. 2021, im 350. Jahr, bekam er eine Bildwelt, die dieser Geschichte gerecht wird.\n\nVom Wald bis zur fertigen Palette: Fotografie für Menschen, Maschinen und Material, ein Imagefilm vom Fällen bis zur Wasserkraft, Luftaufnahmen über Werk und Tal – und ein 360°-Rundgang, mit dem Kund:innen das Gelände von oben erkunden können.\n\nZusammengeführt wurde alles auf einer neuen Website mit sauberer SEO-Grundlage, damit Einkäufer:innen aus Industrie und Gewerbe den Hartholzspezialisten auch finden.",
+  "tags": [
+    "Fotografie",
+    "Imagefilm",
+    "Aerial & 360°",
+    "Website & SEO"
+  ],
+  "scope": [
+    "Fotografie",
+    "Imagefilm & Videografie",
+    "Aerial & Drohne",
+    "360°-Rundgang",
+    "Website",
+    "SEO-Grundlage"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Fotografie mit Charakter",
+      "d": "Menschen, Maschinen, Material: eine Bildserie vom Rundholzplatz bis ins holzvertäfelte Büro – ehrlich, warm, ohne Hochglanz-Inszenierung."
+    },
+    {
+      "t": "Imagefilm",
+      "d": "Vom Fällen im Wald über den Rundholzplatz bis zur Wasserkraft, mit der das Werk Energie gewinnt: ein Film über Handwerk und Herkunft."
+    },
+    {
+      "t": "Aerial & Drohne",
+      "d": "Luftaufnahmen über Werksgelände, Holzlager und Almtal zeigen, was vom Boden aus nicht zu sehen ist: Größe, Lage, Zusammenhang."
+    },
+    {
+      "t": "360°-Rundgang",
+      "d": "Kugelpanoramen aus der Luft, zu einer virtuellen Tour verbunden – Kund:innen erkunden das Werk, ohne anzureisen. Unten kannst du es ausprobieren."
+    },
+    {
+      "t": "Website",
+      "d": "Ein klarer Auftritt für Produkte, Einkauf und Kontakt, auf dem Film, Fotos und Rundgang zusammenkommen."
+    },
+    {
+      "t": "SEO-Grundlage",
+      "d": "Saubere Seitenstruktur, Texte und Metadaten für Hartholz-Anfragen aus Industrie und Gewerbe – regional verankert."
+    }
+  ],
+  "panoramaTitle": "Das Werk von oben – in 360°",
+  "panoramas": [
+    {
+      "image": "/images/cases/grafinger/pano-werk.webp",
+      "title": "Sägewerk Grafinger"
+    },
+    {
+      "image": "/images/cases/grafinger/pano-wasserkraft.webp",
+      "title": "Wasserkraftwerk"
+    },
+    {
+      "image": "/images/cases/grafinger/pano-almtal.webp",
+      "title": "Herrliches Almtal"
+    }
+  ],
+  "screens": [
+    {
+      "image": "/images/cases/grafinger/photo-logs.webp",
+      "device": "image",
+      "caption": "Rundholz, frisch vom Platz."
+    },
+    {
+      "image": "/images/cases/grafinger/photo-stairs.webp",
+      "device": "image",
+      "caption": "Holz, wohin man schaut – auch im eigenen Haus."
+    },
+    {
+      "image": "/images/cases/grafinger/photo-office.webp",
+      "device": "image",
+      "caption": "Arbeitsplätze mit Blick ins Tal."
+    },
+    {
+      "image": "/images/cases/grafinger/aerial-yard.webp",
+      "device": "wide",
+      "caption": "Aus der Luft: Holzlager, Werk und Straße in einem Bild."
+    },
+    {
+      "image": "/images/cases/grafinger/still-forest.webp",
+      "device": "image",
+      "caption": "Aus dem Imagefilm: der Wald als Anfang …"
+    },
+    {
+      "image": "/images/cases/grafinger/still-felling.webp",
+      "device": "image",
+      "caption": "… das Fällen …"
+    },
+    {
+      "image": "/images/cases/grafinger/still-water.webp",
+      "device": "image",
+      "caption": "… und die Wasserkraft am Werk."
+    }
+  ],
+  "loopTitle": "Vom Wald zur Website",
+  "loop": [
+    {
+      "t": "Wald",
+      "d": "Drehtage beim Holzfällen – dort, wo das Holz herkommt."
+    },
+    {
+      "t": "Werk",
+      "d": "Fotografie und Film am Rundholzplatz, in der Halle und im Büro."
+    },
+    {
+      "t": "Luft",
+      "d": "Drohnenflüge und Kugelpanoramen über Werk, Wasserkraft und Tal."
+    },
+    {
+      "t": "Web",
+      "d": "Alles zusammen auf der Website – auffindbar für die, die Hartholz suchen."
+    }
+  ],
+  "outlookTitle": "Was ich heute daraus machen würde",
+  "outlookIntro": "Das Material trägt weit über die Website hinaus. Ein paar Schritte, die sich heute anbieten:",
+  "outlook": [
+    {
+      "t": "Kurzclips für Social",
+      "d": "Aus dem vorhandenen Filmmaterial eine Serie kurzer Clips für LinkedIn und Instagram – Handwerk, das man in Sekunden versteht."
+    },
+    {
+      "t": "Relaunch auf modernem Fundament",
+      "d": "Schneller, leichter zu pflegen, mit Film und 360°-Rundgang direkt eingebunden – so wie auf dieser Seite."
+    },
+    {
+      "t": "Produktfinder mit KI",
+      "d": "Anfragen in Alltagssprache („Palette für 800 kg, feuchtigkeitsbeständig“) führen direkt zum passenden Holz und zur Anfrage."
+    }
+  ],
+  "stackTitle": "Ausrüstung & Technik",
+  "stack": [
+    "Kamera für Foto & Film",
+    "DJI-Drohne",
+    "360°-Kugelpanoramen",
+    "Schnitt & Color Grading",
+    "WordPress",
+    "Divi",
+    "Pannellum (360°-Viewer)",
+    "SEO"
+  ],
+  "showcase": {
+    "youtube": "0UP930i5lvg",
+    "vimeoLabel": "Imagefilm ansehen",
+    "loop": "/images/cases/grafinger/film-loop.mp4",
+    "poster": "/images/cases/grafinger/film-poster.webp"
+  },
+  "hue": 30,
+  "format": "landscape",
+  "cover": "/images/cases/grafinger/cover.webp",
+  "coverTone": "dark",
+  "previews": [
+    "/images/cases/grafinger/preview-forest.webp",
+    "/images/cases/grafinger/preview-river.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 4
+}
