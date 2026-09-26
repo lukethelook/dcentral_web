@@ -94,7 +94,16 @@ export default config({
           desktop: fields.image({ label: 'Desktop-Screenshot (ganze Seite, scrollt im Browser-Mockup)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           mobile: fields.image({ label: 'Mobil-Screenshot (ganze Seite, scrollt im Handy-Mockup)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           label: TEXT('Adresszeile im Browser (z.B. maplove.cc)'),
+          phones: fields.array(
+            fields.image({ label: 'App-Screen', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+            { label: 'App-Projekt: 3 Handy-Screens (statt Browser)', itemLabel: (p) => p.value?.filename ?? 'Screen' },
+          ),
         }, { label: 'Animiertes Geräte-Mockup (ersetzt das Titelbild auf der Projektseite)' }),
+        demo: fields.select({
+          label: 'Interaktive Demo',
+          options: [{ label: 'Keine', value: '' }, { label: 'Neural Soundscape Player', value: 'soundscape' }],
+          defaultValue: '',
+        }),
         highlightsTitle: TEXT('Überschrift Leistungen (z.B. „Was ich gebaut habe")'),
         highlights: fields.array(
           fields.object({ t: TEXT('Titel'), d: TEXT('Text', { multiline: true }) }),
@@ -103,7 +112,7 @@ export default config({
         screens: fields.array(
           fields.object({
             image: fields.image({ label: 'Screenshot', directory: 'public/images/cases', publicPath: '/images/cases/' }),
-            device: fields.select({ label: 'Gerät', options: [{ label: 'Desktop', value: 'desktop' }, { label: 'Mobil', value: 'mobile' }], defaultValue: 'desktop' }),
+            device: fields.select({ label: 'Gerät', options: [{ label: 'Desktop (Browser)', value: 'desktop' }, { label: 'Mobil (Handy)', value: 'mobile' }, { label: 'Bild', value: 'image' }, { label: 'Bild, volle Breite', value: 'wide' }], defaultValue: 'desktop' }),
             caption: TEXT('Bildunterschrift'),
           }),
           { label: 'Screens', itemLabel: (p) => p.fields.caption.value || p.fields.device.value },

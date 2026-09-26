@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
+import SoundscapeDemo from '../../components/SoundscapeDemo.astro';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -28,7 +29,18 @@ const visual = d.cover
     ? { src: src(d.previews[0]), dummy: d.previewDummy }
     : { src: `/assets/project-lines-${idx % 4}.svg`, dummy: false };
 const showcase = d.showcase?.desktop ? d.showcase : null;
+const phones = (d.showcase?.phones ?? []).filter((p): p is string => !!p).slice(0, 3);
 const screens = d.screens.filter((s) => s.image);
+// Group screens into rows: a desktop followed by a phone share a row ("combo"),
+// consecutive phones or images sit side by side, "wide" images get a row each.
+type Screen = (typeof screens)[number];
+const rows: { kind: string; items: Screen[] }[] = [];
+for (const s of screens) {
+  const last = rows.at(-1);
+  if (last && last.kind === 'desktop' && s.device === 'mobile' && last.items.length === 1) { last.kind = 'combo'; last.items.push(s); }
+  else if (last && last.kind === s.device && s.device !== 'wide' && s.device !== 'desktop' && last.items.length < 4) last.items.push(s);
+  else rows.push({ kind: s.device, items: [s] });
+}
 const liveHost = d.url ? d.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null;
 const arrow = 'M6 18 18 6M6 6h12v12';
 ---
@@ -47,7 +59,15 @@ const arrow = 'M6 18 18 6M6 6h12v12';
       {d.url && <> · <a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></>}
     </p>
 
-    {showcase ? (
+    {phones.length > 0 ? (
+      <div class={`case-visual case-showcase case-showcase--phones cover-${idx % 4}`} aria-label={`Mockup: ${d.client} auf dem Smartphone`} role="img">
+        {phones.map((p, i) => (
+          <div class={`sc-phone sc-float sc-float--${i}`} aria-hidden="true">
+            <div class="sc-screen"><img src={src(p)} alt="" decoding="async" /></div>
+          </div>
+        ))}
+      </div>
+    ) : showcase ? (
       <div class={`case-visual case-showcase cover-${idx % 4}`} aria-label={`Animiertes Mockup: ${d.client} auf Desktop und Smartphone`} role="img">
         <div class="sc-browser" aria-hidden="true">
           <div class="sc-bar"><i></i><i></i><i></i><span>{showcase.label || liveHost || d.client}</span></div>
@@ -96,25 +116,29 @@ const arrow = 'M6 18 18 6M6 6h12v12';
       </section>
     )}
 
-    {screens.length > 0 && (
-      <section class="case-screens" aria-label="Screens">
-        {screens.map((s) => (
+    {d.demo === 'soundscape' && <SoundscapeDemo />}
+
+    {rows.map((row) => (
+      <section class={`case-screens case-screens--${row.kind}`} style={`--n:${row.items.length}`} aria-label="Screens">
+        {row.items.map((s) => (
           <figure class={`case-screen case-screen--${s.device}`}>
             {s.device === 'desktop' ? (
               <div class="sc-browser sc-browser--static">
                 <div class="sc-bar" aria-hidden="true"><i></i><i></i><i></i><span>{liveHost || d.client}</span></div>
                 <img src={src(s.image!)} alt={s.caption || `${d.client} – Desktop`} loading="lazy" decoding="async" />
               </div>
-            ) : (
+            ) : s.device === 'mobile' ? (
               <div class="sc-phone sc-phone--static">
                 <div class="sc-screen"><img src={src(s.image!)} alt={s.caption || `${d.client} – Smartphone`} loading="lazy" decoding="async" /></div>
               </div>
+            ) : (
+              <img class="case-image" src={src(s.image!)} alt={s.caption || d.client} loading="lazy" decoding="async" />
             )}
             {s.caption && <figcaption>{s.caption}</figcaption>}
           </figure>
         ))}
       </section>
-    )}
+    ))}
 
     {d.loop.length > 0 && (
       <section class="case-section" aria-labelledby="case-loop">

@@ -30,10 +30,16 @@ const cases = defineCollection({
     loopTitle: z.string().nullable().optional(),
     loop: z.array(z.object({ t: z.string(), d: z.string() })).default([]),
     showcase: z
-      .object({ desktop: z.string().nullable().optional(), mobile: z.string().nullable().optional(), label: z.string().nullable().optional() })
+      .object({
+        desktop: z.string().nullable().optional(),
+        mobile: z.string().nullable().optional(),
+        label: z.string().nullable().optional(),
+        phones: z.array(z.string().nullable()).optional(),
+      })
       .optional(),
+    demo: z.enum(['', 'soundscape']).nullable().optional(), // '' = Keystatic "Keine"
     screens: z
-      .array(z.object({ image: z.string().nullable(), device: z.enum(['desktop', 'mobile']), caption: z.string().nullable().optional() }))
+      .array(z.object({ image: z.string().nullable(), device: z.enum(['desktop', 'mobile', 'image', 'wide']), caption: z.string().nullable().optional() }))
       .default([]),
     featured: z.boolean().default(false),
     order: z.number().default(0),

@@ -58,6 +58,7 @@ const REVEAL = [
   ['.case-loop', ':scope > li'],
   ['.case-stack', ':scope > li'],
   ['.case-cta', false],
+  ['.ssd', false],
   ['.legal h2, .legal h2 + p', false],
 ];
 const HIDDEN = { opacity: '0', transform: 'translateY(22px)' };

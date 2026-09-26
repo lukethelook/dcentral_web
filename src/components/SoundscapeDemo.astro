@@ -1,0 +1,65 @@
+---
+// Interactive demo of the Project Baby Bloom „Neural Soundscape" player.
+// Visuals: canvas (soundscape-demo.js). Sound: generated live with Web Audio,
+// only after an explicit click — never autoplay (docs/brand/DESIGN.md).
+const states = [
+  { id: 'ruhe', label: 'Ruhe' },
+  { id: 'wach', label: 'Wach' },
+  { id: 'froh', label: 'Fröhlich' },
+  { id: 'schlaf', label: 'Schlaf' },
+];
+const layers = [
+  { id: 'freq', label: 'Frequenzschicht', hint: 'in Echtzeit erzeugt' },
+  { id: 'rain', label: 'Sanfter Regen', hint: 'Natur' },
+  { id: 'ocean', label: 'Meeresrauschen', hint: 'Natur' },
+  { id: 'heart', label: 'Herzschlag', hint: 'Geborgenheit' },
+];
+---
+
+<section class="ssd" data-soundscape-demo aria-labelledby="ssd-title">
+  <div class="ssd-copy">
+    <p class="ssd-eyebrow"><span></span>Live-Demo</p>
+    <h2 id="ssd-title">Neural Soundscape <em>zum Ausprobieren.</em></h2>
+    <p class="ssd-lead">Wähle einen Zustand und drück auf Play: Frequenzen entstehen in Echtzeit und mischen sich mit Naturklängen. Mit Kopfhörern am schönsten.</p>
+
+    <div class="ssd-states" role="radiogroup" aria-label="Gewünschter Zustand">
+      {states.map((s) => (
+        <button type="button" role="radio" aria-checked={s.id === 'schlaf' ? 'true' : 'false'} data-state={s.id} tabindex={s.id === 'schlaf' ? 0 : -1}>{s.label}</button>
+      ))}
+    </div>
+
+    <div class="ssd-layers">
+      {layers.map((l) => (
+        <label class="ssd-layer">
+          <span class="ssd-layer-name">{l.label}<small>{l.hint}</small></span>
+          <input type="range" min="0" max="100" value="50" data-layer={l.id} aria-label={`${l.label}: Lautstärke`} />
+        </label>
+      ))}
+    </div>
+
+    <div class="ssd-transport">
+      <button type="button" class="ssd-play" aria-pressed="false" aria-label="Soundscape abspielen">
+        <svg class="i-play" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5-13-7.5Z"></path></svg>
+        <svg class="i-pause" aria-hidden="true" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg>
+      </button>
+      <div class="ssd-readout">
+        <strong data-readout-profile>Delta · 2 Hz</strong>
+        <span data-readout-status>Bereit · Ton startet erst auf Klick</span>
+      </div>
+    </div>
+    <p class="ssd-note">Demo: vereinfachte Nachbildung der Klang-Engine im Browser.</p>
+    <p class="sr-only" aria-live="polite" data-ssd-live></p>
+  </div>
+
+  <div class="ssd-stage" aria-hidden="true">
+    <canvas></canvas>
+    <div class="ssd-center">
+      <strong data-timer>30:00</strong>
+      <span data-center-label>Einschlafen</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/soundscape-demo.js';
+</script>
