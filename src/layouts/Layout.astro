@@ -5,11 +5,14 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** Homepage opens on the dark forest hero; subpages sit on paper. */
+  heroTheme?: 'dark' | 'light';
 }
 const {
   title = seo.defaultTitle,
   description = seo.defaultDescription,
-  ogImage = '/og.svg',
+  ogImage = '/og.jpg',
+  heroTheme = 'dark',
 } = Astro.props;
 
 const origin = (Astro.site ?? new URL('https://www.dcentral.at')).origin;
@@ -51,16 +54,16 @@ const websiteLd = {
   inLanguage: 'de-AT',
 };
 
-// Self-hosted fonts (DSGVO-konform). Archivo (display, mit Breitenachse) + Space Grotesk.
-import '@fontsource-variable/archivo';
-import '@fontsource-variable/space-grotesk';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/500.css';
-import '../styles/global.css';
+// „Von hier. Weiter." — self-hosted fonts (DSGVO-konform) + design system.
+// Details: docs/brand/BRAND-CONCEPT.md, docs/brand/DESIGN.md
+import '../styles/fonts.css';
+import '../styles/redesign.css';
+import '../styles/concept.css';
+import '../styles/pages.css';
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang="de" data-hero-theme={heroTheme}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -72,7 +75,9 @@ import '../styles/global.css';
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#0E0E0E" />
+    <link rel="preload" href="/fonts/manrope-600.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/instrument-serif-italic.ttf" as="font" type="font/ttf" crossorigin />
+    <meta name="theme-color" content={heroTheme === 'dark' ? '#102f28' : '#f3f4ec'} />
     <meta name="geo.region" content="AT-4" />
     <meta name="geo.placename" content={b.city} />
 
@@ -95,46 +100,13 @@ import '../styles/global.css';
     <slot name="head" />
   </head>
   <body>
-    <div class="curtain" id="curtain" aria-hidden="true">
-      <span class="curtain__mark">dcentral</span>
-    </div>
-    <div class="scroll-progress" data-progress aria-hidden="true"></div>
-    <div class="cursor" id="cursor" aria-hidden="true"></div>
+    <div aria-hidden="true" class="reading-progress"></div>
+    <a class="skip" href="#main">Zum Inhalt</a>
 
     <slot />
 
     <script>
-      import { initSmoothScroll, initScrollSkew, initScrollProgress, prefersReducedMotion } from '../lib/motion';
-      import { initTransitions } from '../lib/transitions';
-
-      initSmoothScroll();
-      initTransitions();
-      initScrollProgress();
-      initScrollSkew();
-
-      /* ── Custom cursor ── */
-      const dot = document.getElementById('cursor');
-      const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-      if (dot && fine && !prefersReducedMotion) {
-        const pos = { x: innerWidth / 2, y: innerHeight / 2 };
-        const tgt = { ...pos };
-        addEventListener('pointermove', (e) => {
-          tgt.x = e.clientX; tgt.y = e.clientY; dot.classList.add('is-active');
-        }, { passive: true });
-        const loop = () => {
-          pos.x += (tgt.x - pos.x) * 0.2; pos.y += (tgt.y - pos.y) * 0.2;
-          dot.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
-          requestAnimationFrame(loop);
-        };
-        loop();
-        const bind = () => {
-          document.querySelectorAll('a, button, [data-magnetic], .filter, summary, .idx__row').forEach((el) => {
-            el.addEventListener('pointerenter', () => dot.classList.add('is-hover'));
-            el.addEventListener('pointerleave', () => dot.classList.remove('is-hover'));
-          });
-        };
-        bind();
-      }
+      import '../scripts/redesign.js';
     </script>
   </body>
 </html>

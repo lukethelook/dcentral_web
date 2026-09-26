@@ -5,9 +5,18 @@
   "year": 2025,
   "summary": "Kampagnenmotive für eine Regionalmarke — KI-gestützt entwickelt, handwerklich finalisiert. Schneller zum Konzept, ohne in die Stockfoto-Falle zu tappen.",
   "body": "Platzhalter-Case. Echtes Material folgt.",
-  "tags": ["KI-Bildwelt", "Kampagne", "Branding"],
+  "tags": [
+    "KI-Bildwelt",
+    "Kampagne",
+    "Branding"
+  ],
   "hue": 40,
   "format": "portrait",
   "featured": false,
-  "order": 4
+  "order": 4,
+  "previews": [
+    "/images/cases/materialstudie.webp",
+    "/images/cases/dummy-architecture.webp"
+  ],
+  "previewDummy": true
 }

@@ -5,9 +5,18 @@
   "year": 2025,
   "summary": "Food- und Ambiente-Strecke für ein Haubenlokal — Teller, Hände, Dampf, Seeblick. Bilder für Speisekarte, Social und Presse, in einem Tag fotografiert.",
   "body": "Platzhalter-Case. Echte Strecke folgt.",
-  "tags": ["Food", "Gastronomie", "Editorial"],
+  "tags": [
+    "Food",
+    "Gastronomie",
+    "Editorial"
+  ],
   "hue": 18,
   "format": "square",
   "featured": false,
-  "order": 7
+  "order": 7,
+  "previews": [
+    "/images/cases/dummy-restaurant.webp",
+    "/images/cases/dummy-interior.webp"
+  ],
+  "previewDummy": true
 }

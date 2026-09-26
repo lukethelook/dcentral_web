@@ -1,0 +1,43 @@
+/* Subpages (Projekt, Impressum, Datenschutz, Bildnachweis) in the
+   „Von hier. Weiter." language: paper ground, Manrope + Instrument Serif. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.page{padding-top:clamp(140px,16vw,190px);padding-bottom:110px}
+.page-back{position:relative;display:inline-flex;gap:14px;align-items:center;font-size:13px;padding-bottom:6px;border-bottom:1px solid var(--ink);margin-bottom:56px}
+.page-back svg{width:16px}
+.page-eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);margin-bottom:22px}
+.page h1{font-size:clamp(48px,6.4vw,104px);line-height:1.02;letter-spacing:-.05em;max-width:18ch}
+.page h1 em{color:#5c8010}
+
+/* Case detail */
+.case-client{margin-top:22px;font-size:17px;color:var(--ink)}
+.case-visual{position:relative;margin-block:64px;aspect-ratio:16/9;overflow:hidden;isolation:isolate}
+.case-visual>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.case-visual .case-flag{position:absolute;top:22px;left:22px;font-size:11px;color:#fff;text-shadow:0 1px 6px #0008}
+.case-body{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(40px,7vw,110px)}
+.case-lead{font:400 clamp(24px,2.3vw,34px)/1.35 Manrope,sans-serif;letter-spacing:-.03em;color:var(--ink);margin-bottom:28px}
+.case-prose p{margin-bottom:18px;max-width:64ch}
+.case-meta{display:flex;flex-direction:column;gap:26px;border-top:1px solid var(--line);padding-top:26px;margin:0}
+.case-meta>div{display:flex;flex-direction:column;gap:8px;font-size:15px}
+.case-meta dt{font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.case-meta dd{margin:0}
+.case-meta .tags{margin:0}
+.case-next{display:block;margin-top:100px;padding-top:26px;border-top:1px solid var(--line)}
+.case-next span{font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.case-next strong{display:block;margin-top:10px;font:500 clamp(30px,3.6vw,56px)/1.1 Manrope,sans-serif;letter-spacing:-.045em;transition:color 180ms ease}
+@media(hover:hover) and (pointer:fine){.case-next:hover strong{color:#5c8010}}
+
+/* Legal / credits */
+.legal{max-width:880px}
+.legal-note{margin-top:26px;font-size:15px}
+.legal h2{font-size:clamp(24px,2.4vw,32px);letter-spacing:-.035em;margin:56px 0 14px;padding-top:22px;border-top:1px solid var(--line)}
+.legal p{font-size:17px;max-width:70ch}
+.legal a{text-decoration:underline;text-underline-offset:3px}
+
+@media(max-width:760px){
+  .page{padding-top:130px;padding-bottom:70px}
+  .page-back{margin-bottom:36px}
+  .case-visual{margin-block:40px;aspect-ratio:4/3}
+  .case-body{grid-template-columns:1fr}
+  .case-next{margin-top:64px}
+}

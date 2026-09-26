@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -12,84 +13,55 @@ const { entry } = Astro.props;
 const d = entry.data;
 const paragraphs = (d.body ?? '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 // Keystatic image fields may store just a filename — tolerate both forms.
-const coverSrc = d.cover
-  ? (/^(https?:|\/)/.test(d.cover) ? d.cover : `/images/cases/${d.cover}`)
-  : null;
+const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
 
-// neighbouring cases for prev/next navigation
+// neighbouring cases for prev/next navigation + gallery index for the cover colour
 const all = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
 const idx = all.findIndex((c) => c.id === entry.id);
 const next = all[(idx + 1) % all.length];
+
+// Real cover first; otherwise the first preview (flagged while it is a dummy); else the line cover.
+const visual = d.cover
+  ? { src: src(d.cover), dummy: false }
+  : d.previews[0]
+    ? { src: src(d.previews[0]), dummy: d.previewDummy }
+    : { src: `/assets/project-lines-${idx % 4}.svg`, dummy: false };
 ---
 
-<Layout title={`${d.title} — ${d.discipline} für ${d.client} · dcentral`} description={d.summary}>
+<Layout title={`${d.title} — ${d.discipline} für ${d.client} · dcentral`} description={d.summary} heroTheme="light">
   <Nav />
-  <main class="case">
-    <article class="shell">
-      <a href="/#arbeiten" class="case__back link-underline">← Alle Arbeiten</a>
+  <main class="page shell" id="main">
+    <a href="/#arbeiten" class="page-back">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"></path></svg>
+      Alle Arbeiten
+    </a>
+    <p class="page-eyebrow">{d.discipline} · {d.year}</p>
+    <h1>{d.title}</h1>
+    <p class="case-client">{d.client}</p>
 
-      <header class="case__head">
-        <p class="eyebrow">{d.discipline} · {d.year}</p>
-        <h1 class="case__title">{d.title}</h1>
-        <p class="case__client">{d.client}</p>
-      </header>
+    <div class={`case-visual cover-${idx % 4}`}>
+      <img src={visual.src} alt={visual.dummy ? '' : d.title} />
+      {visual.dummy && <span class="case-flag">Dummymotiv · Originale folgen</span>}
+    </div>
 
-      <div class="case__hero" style={`--hue:${d.hue}`}>
-        {coverSrc ? <img src={coverSrc} alt={d.title} /> : <span class="case__ph" aria-hidden="true"></span>}
+    <div class="case-body">
+      <div>
+        <p class="case-lead">{d.summary}</p>
+        <div class="case-prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
       </div>
+      <dl class="case-meta">
+        <div><dt>Leistung</dt><dd>{d.discipline}</dd></div>
+        <div><dt>Jahr</dt><dd>{d.year}</dd></div>
+        {d.tags.length > 0 && (
+          <div><dt>Themen</dt><dd><ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul></dd></div>
+        )}
+      </dl>
+    </div>
 
-      <div class="case__body">
-        <div class="case__lead">
-          <p>{d.summary}</p>
-          <div class="case__prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
-        </div>
-        <aside class="case__meta">
-          <div><span class="case__k">Leistung</span><span>{d.discipline}</span></div>
-          <div><span class="case__k">Jahr</span><span>{d.year}</span></div>
-          {d.tags.length > 0 && (
-            <div><span class="case__k">Themen</span>
-              <ul class="case__tags">{d.tags.map((t) => <li>{t}</li>)}</ul>
-            </div>
-          )}
-        </aside>
-      </div>
-
-      <a href={`/arbeiten/${next.id}`} class="case__next">
-        <span class="case__k">Nächstes Projekt</span>
-        <span class="case__next-t">{next.data.client} — {next.data.title} →</span>
-      </a>
-    </article>
+    <a href={`/arbeiten/${next.id}`} class="case-next">
+      <span>Nächstes Projekt</span>
+      <strong>{next.data.client} — {next.data.title}</strong>
+    </a>
   </main>
+  <Footer />
 </Layout>
-
-<style>
-  .case { padding-top: clamp(7rem, 13vw, 10rem); padding-bottom: var(--section-y); }
-  .case__back { display: inline-block; font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-ash); text-decoration: none; margin-bottom: clamp(2rem, 5vw, 3rem); }
-  .case__head { max-width: 26ch; margin-bottom: clamp(2rem, 4vw, 3rem); }
-  .case__title { font-size: var(--step-4); margin: 0.8rem 0 0.6rem; }
-  .case__client { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-ash); margin: 0; }
-
-  .case__hero { overflow: hidden; aspect-ratio: 16 / 9; margin-bottom: clamp(2.4rem, 5vw, 4rem); border: 1px solid var(--color-line); }
-  .case__hero img { width: 100%; height: 100%; object-fit: cover; }
-  .case__ph {
-    display: block; width: 100%; height: 100%;
-    background:
-      radial-gradient(110% 90% at 80% 12%, color-mix(in srgb, var(--color-signal) 14%, transparent), transparent 55%),
-      linear-gradient(155deg, var(--color-surface), var(--color-void));
-  }
-
-  .case__body { display: grid; grid-template-columns: 1.6fr 1fr; gap: clamp(2rem, 5vw, 4rem); }
-  .case__lead p { font-size: var(--step-1); line-height: 1.6; color: var(--color-paper); margin: 0 0 1.2rem; }
-  .case__prose { color: var(--color-ash); }
-  .case__meta { display: flex; flex-direction: column; gap: 1.4rem; border-top: 1px solid var(--color-line); padding-top: 1.4rem; }
-  .case__meta > div { display: flex; flex-direction: column; gap: 0.4rem; }
-  .case__k { font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ash); }
-  .case__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .case__tags li { font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid var(--color-line); color: var(--color-ash); }
-
-  .case__next { display: block; margin-top: clamp(3rem, 7vw, 5rem); padding-top: 1.6rem; border-top: 1px solid var(--color-line); text-decoration: none; color: var(--color-paper); }
-  .case__next-t { display: block; font-family: var(--font-display); text-transform: uppercase; font-variation-settings: "wght" 640, "wdth" 110; font-size: var(--step-2); margin-top: 0.4rem; transition: color 0.3s ease; }
-  .case__next:hover .case__next-t { color: var(--color-signal); }
-
-  @media (max-width: 760px) { .case__body { grid-template-columns: 1fr; } }
-</style>

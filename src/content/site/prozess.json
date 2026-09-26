@@ -1,10 +1,26 @@
 {
   "eyebrow": "So läuft's",
-  "title": "Vom Gespräch zum Projekt — *vier Schritte.*",
+  "title": "Vom Gespräch zum Projekt —\n*vier Schritte.*",
   "steps": [
-    { "no": "01", "t": "Gespräch", "d": "Ein lockeres Erstgespräch — vor Ort, per Call oder beim Kaffee. Unverbindlich und kostenlos." },
-    { "no": "02", "t": "Konzept", "d": "Ich stelle das passende Team zusammen und lege einen klaren Plan vor: Umfang, Zeit, Fixpreis." },
-    { "no": "03", "t": "Umsetzung", "d": "Wir produzieren — Foto, Film, Web oder KI. Du hast einen Ansprechpartner und Zwischenstände." },
-    { "no": "04", "t": "Übergabe", "d": "Fertige Dateien, gepflegte Website oder laufende Kampagne. Auf Wunsch kümmere ich mich weiter." }
+    {
+      "no": "01",
+      "t": "Gespräch",
+      "d": "Ein lockeres Erstgespräch — vor Ort, per Call oder beim Kaffee. Unverbindlich und kostenlos."
+    },
+    {
+      "no": "02",
+      "t": "Konzept",
+      "d": "Ich stelle das passende Team zusammen und lege einen klaren Plan vor: Umfang, Zeit, Fixpreis."
+    },
+    {
+      "no": "03",
+      "t": "Umsetzung",
+      "d": "Wir produzieren — Foto, Film, Web oder KI. Du hast einen Ansprechpartner und Zwischenstände."
+    },
+    {
+      "no": "04",
+      "t": "Übergabe",
+      "d": "Fertige Dateien, gepflegte Website oder laufende Kampagne. Auf Wunsch kümmere ich mich weiter."
+    }
   ]
 }

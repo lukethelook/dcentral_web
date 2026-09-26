@@ -1,0 +1,75 @@
+{
+  "purpose": "Vom Nutzer ausdrücklich erlaubte Dummymotive. Keine Aufnahmen der bezeichneten Kundenprojekte.",
+  "photos": [
+    {
+      "name": "hotel",
+      "source": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-hotel.webp",
+      "size": [
+        1000,
+        667
+      ]
+    },
+    {
+      "name": "mountain",
+      "source": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-mountain.webp",
+      "size": [
+        1000,
+        667
+      ]
+    },
+    {
+      "name": "interior",
+      "source": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-interior.webp",
+      "size": [
+        1000,
+        750
+      ]
+    },
+    {
+      "name": "concert",
+      "source": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-concert.webp",
+      "size": [
+        1000,
+        667
+      ]
+    },
+    {
+      "name": "restaurant",
+      "source": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-restaurant.webp",
+      "size": [
+        1000,
+        750
+      ]
+    },
+    {
+      "name": "architecture",
+      "source": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-architecture.webp",
+      "size": [
+        1000,
+        667
+      ]
+    },
+    {
+      "name": "lake",
+      "source": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=85",
+      "license": "https://unsplash.com/license",
+      "file": "assets/dummy-lake.webp",
+      "size": [
+        1000,
+        667
+      ]
+    }
+  ]
+}

@@ -1,53 +1,11 @@
 ---
-// Manifest — XXL editorial statement, line-by-line reveal, Signal highlights.
-import data from '../content/site/manifest.json';
-import { hl } from '../lib/text';
+import m from '../content/site/manifest.json';
+import { hlInline } from '../lib/text';
 ---
 
-<section class="manifest" id="manifest">
-  <div class="shell shell--wide">
-    <div class="manifest__top">
-      <p class="eyebrow" data-fade>[ 00 ] {data.eyebrow}</p>
-      <p class="manifest__meta meta" data-fade>Manifest</p>
-    </div>
-
-    <h2 class="manifest__text display">
-      {data.lines.map((l) => (
-        <span class:list={['ln', { dim: l.dim }]} set:html={hl(l.text)} />
-      ))}
-    </h2>
-
-    <div class="manifest__foot" data-fade>
-      <p set:html={hl(data.foot)} />
-    </div>
+<section class="manifest shell section" id="manifest">
+  <h2 data-reading set:html={hlInline(m.headline)} />
+  <div class="manifest-bottom">
+    <p>{m.foot}</p>
   </div>
 </section>
-
-<style>
-  .manifest { padding-block: var(--section-y); }
-  .manifest__top { display: flex; justify-content: space-between; margin-bottom: clamp(2rem, 5vw, 3.4rem); }
-  .manifest__text { font-size: var(--step-5); line-height: 0.94; }
-  .manifest__text .ln { display: block; }
-  .manifest__text .ln.dim { color: var(--color-ash); }
-  .manifest__text em { font-style: normal; color: var(--color-signal); }
-
-  .manifest__foot { margin-top: clamp(2.6rem, 6vw, 4.5rem); margin-left: auto; max-width: 52ch; }
-  .manifest__foot p {
-    margin: 0; color: var(--color-paper); font-size: var(--step-1); line-height: 1.55;
-    border-left: 2px solid var(--color-signal); padding-left: 1.4rem;
-  }
-  .manifest__foot strong { color: var(--color-signal); font-weight: 700; }
-</style>
-
-<script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { prefersReducedMotion, registerGsap } from '../lib/motion';
-
-  if (!prefersReducedMotion) {
-    registerGsap();
-    const s = document.getElementById('manifest')!;
-    gsap.from(s.querySelectorAll('.ln'), { yPercent: 100, opacity: 0, duration: 1, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: s, start: 'top 72%' } });
-    gsap.from(s.querySelectorAll('[data-fade]'), { y: 20, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: s, start: 'top 62%' } });
-  }
-</script>

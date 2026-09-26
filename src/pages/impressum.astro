@@ -1,21 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
+import LegalPage from '../components/LegalPage.astro';
 import data from '../content/site/impressum.json';
-import { hl } from '../lib/text';
 ---
 
-<Layout title={`${data.title} · dcentral`} description="Impressum und Offenlegung gemäß § 5 ECG, § 14 UGB, § 25 MedienG.">
-  <Nav />
-  <main class="legal shell">
-    <a href="/" class="legal__back link-underline">← Startseite</a>
-    <h1>{data.title}</h1>
-    {data.note && <p class="legal__note">{data.note}</p>}
-    {data.blocks.map((b) => (
-      <>
-        <h2>{b.heading}</h2>
-        <p set:html={hl(b.body)} />
-      </>
-    ))}
-  </main>
-</Layout>
+<LegalPage data={data} description="Impressum und Offenlegung gemäß § 5 ECG, § 14 UGB, § 25 MedienG." />

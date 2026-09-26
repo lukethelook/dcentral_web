@@ -1,49 +1,15 @@
 {
   "eyebrow": "Studio",
-  "title": "Einer für alles?\n*Einer, der fühlt, entscheidet und sich interessiert und dann gekonnt realisiert.*",
+  "title": "Ein Gegenüber.\n*Viele Möglichkeiten.*",
+  "subtitle": "Einer, der fühlt, entscheidet und sich interessiert und dann gekonnt realisiert.",
   "lead": "dcentral ist kein Apparat — das bin ich, Lukas, als feste Konstante. Für jedes Projekt setze ich aus einem gewachsenen Netzwerk genau die Leute zusammen, die es braucht. Du koordinierst nichts. Das mache ich. Und dann entstehen großartige Dinge. Für dich, deine Marke oder deinen Traum.",
   "points": [
     "Ein Ansprechpartner, von Briefing bis Übergabe.",
     "Das Team wird pro Projekt passend gewählt — nicht verwaltet.",
     "Regionale Nähe, wo es zählt. Remote, wo es Sinn macht."
   ],
-  "cta": "Team zusammenstellen →",
-  "nodes": [
-    {
-      "label": "Foto",
-      "kind": "disc"
-    },
-    {
-      "label": "Film",
-      "kind": "disc"
-    },
-    {
-      "label": "Aerial",
-      "kind": "disc"
-    },
-    {
-      "label": "Web",
-      "kind": "disc"
-    },
-    {
-      "label": "KI",
-      "kind": "disc"
-    },
-    {
-      "label": "Ton",
-      "kind": "partner"
-    },
-    {
-      "label": "Text",
-      "kind": "partner"
-    },
-    {
-      "label": "Print",
-      "kind": "partner"
-    },
-    {
-      "label": "Grafik",
-      "kind": "partner"
-    }
-  ]
+  "cta": "Team zusammenstellen",
+  "image": "/images/studio/materialstudie.webp",
+  "imageAlt": "Künstlerische Materialstudie aus Kalkstein, transparentem Wasser und einer feinen Lichtkante",
+  "caption": "Ein anderer Blick verändert, was möglich ist."
 }

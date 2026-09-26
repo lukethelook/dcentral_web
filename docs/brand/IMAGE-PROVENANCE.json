@@ -1,0 +1,50 @@
+[
+  {
+    "index": 1,
+    "name": "dcentral-hero",
+    "params": {
+      "model": "gpt_image_2_5",
+      "aspect_ratio": "16:9",
+      "count": 1,
+      "prompt": "Use case: stylized-concept. Asset type: premium creative-studio website hero art, one fullbleed cinematic horizontal image. Scene: an imagined Austrian alpine lake landscape inspired by the material atmosphere of Salzkammergut, artistic fiction rather than factual geography. Huge sculptural pale limestone folds rise from a still, dark emerald glassy lake, the stone almost architectural yet convincingly geological. Delicate ultra-fine luminous contour lines trace the limestone folds and refract beneath the clear water. Quiet morning mist and airy clear daylight, rich deep fir green #102f28, warm ivory stone, tiny acid-chartreuse #d4ff3f light accents. Outstanding editorial art direction, restrained surrealism, believable tactile limestone and water, precise light and natural film grain. Composition: dominant asymmetrical sculptural rock on the right half, dark open water across the left half with ample clean negative space; distant low mountain silhouette, pale misty sky occupying only the top quarter. Refined, light-filled and tranquil rather than gloomy. Camera at water level, wide scene, premium architectural photography. Absolutely no text, lettering, logos, watermark, UI, graphic icons, frames, collage, or humans."
+    },
+    "job_id": "f2829993-3803-42ac-a3a5-62b7bc02d65b",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_32Yfe9ovPy7IA8vxZFFb7uGkJ1v/hf_20260925_202801_f2829993-3803-42ac-a3a5-62b7bc02d65b.png",
+    "saved_path": "/Users/lukas/Documents/Codex/2026-09-24/ich-x20/work/concept-art/dcentral-hero.png",
+    "adjustments": {}
+  },
+  {
+    "index": 2,
+    "name": "dcentral-material",
+    "params": {
+      "model": "gpt_image_2_5",
+      "aspect_ratio": "4:3",
+      "count": 1,
+      "prompt": "Use case: stylized-concept. Asset type: premium editorial material still-life photograph for the creative studio dcentral, image only. A translucent emerald water sheet arcs gracefully over a single tactile warm-white limestone slab, a captured impossible fluid moment with physically convincing surface tension, microscopic air bubbles suspended in the water and a single hair-thin acid-chartreuse light seam following the curve. Union of the analogue and digital expressed purely through material, exquisite tactile limestone pores, thick glasslike emerald refraction, little ripples and fine caustics. Palette is deep fir green #102f28, warm ivory and a restrained acid chartreuse #d4ff3f accent. Sparse high-end luxury editorial photography, medium-format macro sensibility, directional soft daylight, airy and crisp, generous breathing space, understated sculptural art direction, quiet film grain. Fullbleed 4:3 composition, fluid arc slightly right of centre, clean dark green background, believable photographic surfaces, natural imperfections. No text, letters, logos, watermark, UI, graphic icons, frames, or human figures."
+    },
+    "job_id": "ce0138ce-2542-4c4e-b457-a67ab32de430",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_32Yfe9ovPy7IA8vxZFFb7uGkJ1v/hf_20260925_202803_ce0138ce-2542-4c4e-b457-a67ab32de430.png",
+    "saved_path": "/Users/lukas/Documents/Codex/2026-09-24/ich-x20/work/concept-art/dcentral-material.png",
+    "adjustments": {}
+  },
+  {
+    "index": 3,
+    "name": "dcentral-brandboard",
+    "params": {
+      "model": "gpt_image_2_5",
+      "aspect_ratio": "16:10",
+      "count": 1,
+      "prompt": "Use case: logo-brand. Create one exceptionally refined premium visual identity presentation board for the Austrian creative studio 'dcentral.' Concept and only tagline: 'Von hier. Weiter.' Exact wordmark: 'dcentral.' in simple distinctive lowercase geometric sans, close to Manrope, with the period preserved. An expertly art-directed 2-row by 3-column grid with hairline boundaries and precise generous spacing, 16:10 landscape format. Cohesive deep fir green #102f28, warm ivory #f4f1e7 and acid chartreuse #d4ff3f. Expressive elegant italic serif used sparingly with the sans to give cultural sophistication. Six sparse panels: top left large ivory dcentral. wordmark on deep green; top middle premium photograph of embossed ivory paper stationery with tiny dcentral. letterpress and a fine contour-line impression, natural raking light; top right poetic imaginary alpine limestone sculpture emerging from emerald lake with fine contour lines and airy mist; lower left large typography 'Von hier.' in sans and 'Weiter.' in expressive italic serif on warm ivory, strong typographic scale and immaculate alignment; lower middle three elegant pure color fields in green, ivory, chartreuse with no small labels; lower right minimal chartreuse contour-line landscape pattern on deep green with a small ivory dcentral. wordmark. True luxury brand-deck quality, Swiss editorial restraint, asymmetric compositions within a disciplined 2x3 grid. No fake UI, no website chrome, no tiny illegible explanatory copy, no invented brand names, no mockup devices, no generic symbols, no gradients. Wordmark and tagline must be correctly spelled and crisp. Flat board seen straight on, no outer perspective or decorative frame."
+    },
+    "job_id": "80cb0168-4fa4-4a11-bc64-66588b1c0d4f",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_32Yfe9ovPy7IA8vxZFFb7uGkJ1v/hf_20260925_202804_80cb0168-4fa4-4a11-bc64-66588b1c0d4f.png",
+    "saved_path": "/Users/lukas/Documents/Codex/2026-09-24/ich-x20/work/concept-art/dcentral-brandboard.png",
+    "adjustments": {
+      "aspect_ratio": {
+        "requested": "16:10",
+        "used": "27:16",
+        "reason": "closest supported aspect ratio"
+      }
+    }
+  }
+]

@@ -17,6 +17,8 @@ const cases = defineCollection({
     hue: z.number().default(200),
     format: z.enum(['portrait', 'landscape', 'square']).default('portrait'),
     cover: z.string().optional(),
+    previews: z.array(z.string()).default([]),
+    previewDummy: z.boolean().default(true),
     featured: z.boolean().default(false),
     order: z.number().default(0),
   }),

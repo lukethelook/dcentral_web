@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import keystatic from '@keystatic/astro';
 import sitemap from '@astrojs/sitemap';
@@ -19,7 +18,4 @@ export default defineConfig({
     keystatic(),
     sitemap({ filter: (page) => !page.includes('/keystatic') && !page.includes('/api/') }),
   ],
-  vite: {
-    plugins: [tailwindcss()],
-  },
 });

@@ -5,9 +5,18 @@
   "year": 2025,
   "summary": "Saisonale Landingpage mit Kartenintegration, Veranstaltungen und Bildwelt — gebaut, dass sie auch zur Hochsaison nicht in die Knie geht. Aus Foto, Film und Web in einem Aufwasch.",
   "body": "Platzhalter-Case. Echtes Material folgt.",
-  "tags": ["Landingpage", "Tourismus", "Performance"],
+  "tags": [
+    "Landingpage",
+    "Tourismus",
+    "Performance"
+  ],
   "hue": 196,
   "format": "landscape",
   "featured": false,
-  "order": 8
+  "order": 8,
+  "previews": [
+    "/images/cases/dummy-lake.webp",
+    "/images/cases/dummy-mountain.webp"
+  ],
+  "previewDummy": true
 }

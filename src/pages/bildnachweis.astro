@@ -1,0 +1,35 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+
+// Licence and provenance notes (from the „Von hier. Weiter." handoff, docs/brand/).
+const data = {
+  title: 'Bildnachweis',
+  blocks: [
+    {
+      heading: 'Traunstein-Silhouette',
+      body: 'Die Linienlandschaft im Hero ist nach der WSW-Ansicht des Traunsteins von C.Stadler/Bwag nachgezeichnet (CC BY-SA 4.0). Räumliche Tiefe, seitliche Fortsetzung und Linienbewegung sind gestalterische Interpretationen. Die darauf basierende Landschaftsbearbeitung steht unter derselben Lizenz.',
+    },
+    {
+      heading: 'Projekt-Cover & Vorschauen',
+      body: 'Die grafischen Projekt-Cover sind abstrakte Gestaltungen und keine Fotografien der genannten Projekte. Mit „Dummymotiv" gekennzeichnete Vorschauen stammen von Unsplash (Unsplash-Lizenz) und zeigen nicht die benannten Kundenprojekte. Originalbilder werden ergänzt.',
+    },
+    {
+      heading: 'Materialstudie',
+      body: 'Die Bildwelt aus Kalkstein, Wasser und Lichtlinien wurde mit GPT Image 2.5 als künstlerisches Markenkonzept erzeugt. Sie zeigt kein reales Kundenprojekt und keinen geografisch dokumentierten Ort.',
+    },
+    {
+      heading: 'Software & Schriften',
+      body: 'Three.js (MIT). Interaktionskomponenten nach Motion Primitives von Julien Thibeaut (MIT). Schriften: Manrope, DM Sans und Instrument Serif (SIL Open Font License), lokal ausgeliefert.',
+    },
+  ],
+};
+---
+
+<LegalPage data={data} description="Bild-, Lizenz- und Quellennachweise der Website dcentral.">
+  <p style="margin-top:40px">
+    Lizenztexte:
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" rel="noopener" target="_blank">CC BY-SA 4.0</a> ·
+    <a href="https://unsplash.com/license" rel="noopener" target="_blank">Unsplash-Lizenz</a> ·
+    <a href="https://openfontlicense.org" rel="noopener" target="_blank">SIL OFL</a>
+  </p>
+</LegalPage>

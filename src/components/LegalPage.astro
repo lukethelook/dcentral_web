@@ -1,0 +1,33 @@
+---
+// Shared shell for Impressum / Datenschutz / Bildnachweis (content from Keystatic).
+import Layout from '../layouts/Layout.astro';
+import Nav from './Nav.astro';
+import Footer from './Footer.astro';
+import { hl } from '../lib/text';
+
+interface Props {
+  data: { title: string; note?: string; blocks: { heading: string; body: string }[] };
+  description: string;
+}
+const { data, description } = Astro.props;
+---
+
+<Layout title={`${data.title} · dcentral`} description={description} heroTheme="light">
+  <Nav />
+  <main class="page legal shell" id="main">
+    <a href="/" class="page-back">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"></path></svg>
+      Startseite
+    </a>
+    <h1>{data.title}</h1>
+    {data.note && <p class="legal-note">{data.note}</p>}
+    {data.blocks.map((b) => (
+      <>
+        <h2>{b.heading}</h2>
+        <p set:html={hl(b.body)} />
+      </>
+    ))}
+    <slot />
+  </main>
+  <Footer />
+</Layout>

@@ -1,16 +1,18 @@
-# dcentral — „Der zentrale Knoten"
+# dcentral. — „Von hier. Weiter."
 
 Portfolio-Site für ein Salzkammergut-EPU: **ein Ansprechpartner, ein Netzwerk
 dahinter.** Foto · Film & Aerial · Web · KI.
 
-**Stack:** Astro 5 · Tailwind v4 · GSAP (+ScrollTrigger) · Lenis · **OGL**
-(WebGL-Shader) · selbst gehostete Fonts (@fontsource) · **Keystatic CMS** ·
+**Stack:** Astro 5 · Vanilla-CSS + ES-Module · **Three.js** (lokal gebündelt,
+`src/scripts/vendor`) · selbst gehostete Fonts (`public/fonts`) · **Keystatic CMS** ·
 Deploy auf **Vercel**.
 
-Designkonzept: **„Mono + Signal"** — Brutalist-Tech. Carbon `#0E0E0E`, Paper
-`#F4F4F0`, ein elektrischer Lime-„Signal" `#C2F23D`. XXL-Grotesk (Archivo),
-Hairline-Raster, Mono-Metadaten. WebGL-Signature: Hero-Flowmap + Studio-
-Knotennetz mit zentralem Flowmap-Logo. Alles mit `prefers-reduced-motion`-Fallback.
+Designkonzept: **„Von hier. Weiter."** (Sept. 2026). Tannengrün `#102f28`, Papier
+`#f1f2e8`, Chartreuse `#d4ff3f`, Schrift `#153e35`. Manrope · Instrument Serif ·
+DM Sans. Signature: interaktive Traunstein-Linienlandschaft im Hero (146 Fäden,
+Einstieg einmal pro Tab-Sitzung), vier Disziplin-Muster, endlos laufende
+Projektgalerie. Globale Bewegungspause + `prefers-reduced-motion`. Marke, Voice,
+Motion-Regeln und Bildherkunft: **`docs/brand/`** (zuerst `BRAND-CONCEPT.md`).
 
 ## Loslegen
 
@@ -27,18 +29,21 @@ die Dateien. **Live (nach Deploy):** `https://DEINE-DOMAIN/keystatic` → Login 
 GitHub → Änderungen werden committet → Vercel veröffentlicht automatisch neu.
 
 Editierbar im UI:
-- **Arbeiten / Projekte** — Cases anlegen/ändern, inkl. Titelbild-Upload.
-- **Seiteninhalte** — Hero, Manifest, Leistungen, Studio, Region, Prozess, FAQ,
-  Kontakt (alle Texte, Listen, Kennzahlen, Social-Links).
+- **Arbeiten / Projekte** — Cases anlegen/ändern, inkl. Titelbild und zwei
+  Galerie-Vorschaubildern (Hover). Häkchen „Vorschau ist Dummymotiv" entfernen,
+  sobald echte Projektbilder drin sind.
+- **Seiteninhalte** — Hero, Manifest, Leistungen, Arbeiten (Sektion), Studio,
+  Impact, Region, Prozess, FAQ, Kontakt (Texte, Listen, Kennzahlen, Bilder).
 
-Konvention in Textfeldern: `*Wort*` = Akzentfarbe (Signal), Zeilenumbruch = neue
-Zeile.
+Konvention in Textfeldern: `*Wort*` = Serif-Akzent (Instrument Serif kursiv),
+Zeilenumbruch = neue Zeile.
 
 **Wo liegen die Inhalte?**
-- Projekte: `src/content/cases/*.json`
+- Projekte: `src/content/cases/*.json` · Bilder: `public/images/cases/`
 - Sektionen: `src/content/site/*.json`
-- Design (Farben/Fonts/Signal): `src/styles/global.css` → `@theme`
-- Recht: `src/pages/impressum.astro`, `datenschutz.astro`
+- Design: `src/styles/redesign.css` (Basis) + `concept.css` (Konzept-Ebene) +
+  `pages.css` (Unterseiten) · Interaktion: `src/scripts/*.js`
+- Recht: `src/pages/impressum.astro`, `datenschutz.astro`, `bildnachweis.astro`
 
 ## Deploy & „von überall editieren" — Einrichtungs-Checkliste
 

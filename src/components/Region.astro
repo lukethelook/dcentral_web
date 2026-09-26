@@ -1,74 +1,17 @@
 ---
-import data from '../content/site/region.json';
+import r from '../content/site/region.json';
 import { hl } from '../lib/text';
-const { clients, stats } = data;
 ---
 
-<section class="region" id="region">
-  <div class="shell shell--wide region__intro">
-    <p class="eyebrow" data-st>[ 04 ] {data.eyebrow}</p>
-    <h2 class="region__title display" data-st set:html={hl(data.title)}></h2>
-  </div>
-
-  <div class="region__marquee" data-skew aria-label="Auswahl an Kund:innen">
-    <div class="region__track" data-track>
-      {clients.map((c) => (<span class="region__logo">{c}<i aria-hidden="true">✳</i></span>))}
-    </div>
-  </div>
-
-  <div class="shell shell--wide region__stats">
-    {stats.map((s) => (
-      <div class="stat" data-st>
-        <span class="stat__n display">{s.n}</span>
-        <span class="stat__l meta">{s.l}</span>
+<section class="region shell section" id="region">
+  <h2 set:html={hl(r.title)} />
+  <div class="client-list">{r.clients.map((c) => <span>{c}</span>)}</div>
+  <div class="stats">
+    {r.stats.map((s) => (
+      <div>
+        <strong>{s.n}</strong>
+        <span>{s.l}</span>
       </div>
     ))}
   </div>
 </section>
-
-<style>
-  .region { padding-block: var(--section-y); }
-  .region__intro { margin-bottom: clamp(2.6rem, 6vw, 4rem); }
-  .region__title { font-size: var(--step-4); margin-top: 1rem; overflow-wrap: anywhere; }
-  .region__title em { font-style: normal; color: var(--color-signal); }
-
-  .region__marquee { border-block: 1px solid var(--color-line); overflow: hidden; padding-block: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: clamp(3rem, 6vw, 4.5rem); }
-  .region__track { display: flex; width: max-content; will-change: transform; }
-  .region__logo {
-    display: inline-flex; align-items: center; gap: 1.4rem; padding-inline: 1.4rem;
-    font-family: var(--font-display); font-variation-settings: "wght" 640, "wdth" 110;
-    text-transform: uppercase; font-size: clamp(1.6rem, 4vw, 3rem); letter-spacing: -0.02em;
-    color: var(--color-ash); white-space: nowrap; transition: color 0.3s ease;
-  }
-  .region__logo:hover { color: var(--color-paper); }
-  .region__logo i { color: var(--color-signal); font-style: normal; }
-
-  .region__stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1.4rem, 3vw, 2.4rem); }
-  .stat { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--color-line); padding-top: 1.2rem; }
-  .stat__n { font-size: var(--step-5); color: var(--color-signal); line-height: 0.9; }
-  .stat__l { color: var(--color-ash); }
-  @media (max-width: 720px) {
-    .region__stats { grid-template-columns: repeat(2, 1fr); }
-    .region__title { font-size: clamp(1.6rem, 8vw, 2.4rem); }
-  }
-</style>
-
-<script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { prefersReducedMotion, registerGsap, marquee } from '../lib/motion';
-
-  const track = document.querySelector<HTMLElement>('#region [data-track]');
-  if (track && !prefersReducedMotion) (document.fonts?.ready ?? Promise.resolve()).then(() => marquee(track, 70));
-
-  if (!prefersReducedMotion) {
-    registerGsap();
-    gsap.from('#region [data-st]', { y: 28, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: '#region', start: 'top 74%' } });
-    gsap.utils.toArray<HTMLElement>('#region .stat__n').forEach((el) => {
-      const raw = el.textContent || '', num = parseInt(raw, 10);
-      if (isNaN(num)) return;
-      const suffix = raw.replace(/[0-9]/g, ''), obj = { v: 0 };
-      gsap.to(obj, { v: num, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' }, onUpdate: () => { el.textContent = Math.round(obj.v) + suffix; } });
-    });
-  }
-</script>

@@ -5,9 +5,18 @@
   "year": 2025,
   "summary": "Komplette Fotostrecke für ein Vier-Sterne-Haus am Traunsee — Zimmer, Kulinarik, Seezugang. Bilder, die buchen lassen, ohne kitschig zu werden.",
   "body": "Platzhalter-Case. Echte Strecke folgt.",
-  "tags": ["Hotellerie", "Interior", "Kulinarik"],
+  "tags": [
+    "Hotellerie",
+    "Interior",
+    "Kulinarik"
+  ],
   "hue": 28,
   "format": "portrait",
   "featured": true,
-  "order": 1
+  "order": 1,
+  "previews": [
+    "/images/cases/dummy-hotel.webp",
+    "/images/cases/dummy-interior.webp"
+  ],
+  "previewDummy": true
 }

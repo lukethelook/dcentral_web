@@ -14,8 +14,8 @@ import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
-  <Nav />
-  <main>
+  <Nav home />
+  <main id="main">
     <Hero />
     <Manifest />
     <Leistungen />
@@ -26,5 +26,13 @@ import Footer from '../components/Footer.astro';
     <Prozess />
     <Faq />
   </main>
-  <Footer />
+  <Footer home />
 </Layout>
+
+<script>
+  // Homepage-only systems of „Von hier. Weiter." (see docs/brand/DESIGN.md).
+  import '../scripts/landscapes.js';
+  import '../scripts/discipline-patterns.js';
+  import '../scripts/concept.js';
+  import '../scripts/project-gallery.js';
+</script>

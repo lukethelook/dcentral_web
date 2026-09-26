@@ -1,15 +1,33 @@
 {
   "eyebrow": "Region & Vertrauen",
-  "title": "Verwurzelt im Salzkammergut.\n*Zuhause in jedem Projekt.*",
+  "title": "Von hier.\n*Für dein Vorhaben.*",
   "clients": [
-    "WKO Oberösterreich", "Seehotel Traunblick", "Bergbahnen Höhenrausch",
-    "Salzgut Manufaktur", "Alpenlachs", "Festival am See", "Atelier Seeblick",
-    "Tourismusverband", "Grafinger"
+    "WKO Oberösterreich",
+    "Seehotel Traunblick",
+    "Bergbahnen Höhenrausch",
+    "Salzgut Manufaktur",
+    "Alpenlachs",
+    "Festival am See",
+    "Atelier Seeblick",
+    "Tourismusverband",
+    "Grafinger"
   ],
   "stats": [
-    { "n": "10+", "l": "Jahre vor Ort" },
-    { "n": "40+", "l": "Projekte realisiert" },
-    { "n": "15", "l": "Spezialist:innen im Netz" },
-    { "n": "1", "l": "Ansprechpartner" }
+    {
+      "n": "10+",
+      "l": "Jahre vor Ort"
+    },
+    {
+      "n": "40+",
+      "l": "Projekte realisiert"
+    },
+    {
+      "n": "15",
+      "l": "Spezialist:innen im Netz"
+    },
+    {
+      "n": "1",
+      "l": "Ansprechpartner"
+    }
   ]
 }

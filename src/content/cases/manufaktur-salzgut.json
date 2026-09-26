@@ -5,9 +5,18 @@
   "year": 2024,
   "summary": "Vom Logo-Refresh zur schnellen, mehrsprachigen Website mit Produktwelt. Ladezeit unter einer Sekunde, Pflege in Minuten — Handwerk, das man auch online spürt.",
   "body": "Platzhalter-Case. Echtes Material folgt.",
-  "tags": ["Markenwebsite", "E-Commerce", "SEO"],
+  "tags": [
+    "Markenwebsite",
+    "E-Commerce",
+    "SEO"
+  ],
   "hue": 204,
   "format": "landscape",
   "featured": false,
-  "order": 3
+  "order": 3,
+  "previews": [
+    "/images/cases/materialstudie.webp",
+    "/images/cases/dummy-interior.webp"
+  ],
+  "previewDummy": true
 }

@@ -9,7 +9,7 @@ const repo = 'lukethelook/dcentral_web';
 const TEXT = (label: string, opts: { multiline?: boolean; description?: string } = {}) =>
   fields.text({ label, multiline: opts.multiline, description: opts.description });
 
-const RICH = '„*Wort*" = Akzentfarbe (Signal), Zeilenumbruch = neue Zeile';
+const RICH = '„*Wort*" = Serif-Akzent (kursiv), Zeilenumbruch = neue Zeile';
 
 export default config({
   storage:
@@ -20,7 +20,7 @@ export default config({
     brand: { name: 'dcentral' },
     navigation: {
       Arbeiten: ['cases'],
-      Seiteninhalte: ['hero', 'manifest', 'leistungen', 'studio', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
+      Seiteninhalte: ['hero', 'manifest', 'leistungen', 'work', 'studio', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
       Rechtliches: ['impressum', 'datenschutz'],
       'SEO & Firma': ['seo'],
     },
@@ -66,6 +66,19 @@ export default config({
           directory: 'public/images/cases',
           publicPath: '/images/cases/',
         }),
+        previews: fields.array(
+          fields.image({
+            label: 'Vorschaubild',
+            directory: 'public/images/cases',
+            publicPath: '/images/cases/',
+          }),
+          { label: 'Galerie-Vorschau (Hover, 2 Bilder)', itemLabel: (p) => p.value?.filename ?? 'Bild' },
+        ),
+        previewDummy: fields.checkbox({
+          label: 'Vorschau ist Dummymotiv',
+          description: 'Solange aktiv, steht „Dummymotiv" auf der Vorschau. Deaktivieren, sobald echte Projektbilder drin sind.',
+          defaultValue: true,
+        }),
         featured: fields.checkbox({ label: 'Hervorgehoben', defaultValue: false }),
         order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
       },
@@ -76,13 +89,12 @@ export default config({
     hero: singleton({
       label: 'Hero', path: 'src/content/site/hero', format: { data: 'json' },
       schema: {
-        locatorLeft: TEXT('Standort (links)'),
-        locatorRight: TEXT('Zusatz (rechts)'),
-        wordmark: TEXT('Wortmarke (Riesenschrift)'),
-        claim: TEXT('Claim', { multiline: true, description: RICH }),
-        ctaPrimary: TEXT('Button 1'),
-        ctaSecondary: TEXT('Button 2'),
-        ticker: fields.array(fields.text({ label: 'Wort' }), { label: 'Laufband', itemLabel: (p) => p.value }),
+        location: TEXT('Standort'),
+        intro: TEXT('Einleitung über der Headline'),
+        headline: TEXT('Headline', { multiline: true, description: RICH }),
+        network: TEXT('Netzwerk-Satz', { multiline: true }),
+        ctaPrimary: TEXT('Button'),
+        ticker: fields.array(fields.text({ label: 'Wort' }), { label: 'Disziplinen (Leiste unten)', itemLabel: (p) => p.value }),
       },
     }),
 
@@ -90,11 +102,8 @@ export default config({
       label: 'Manifest', path: 'src/content/site/manifest', format: { data: 'json' },
       schema: {
         eyebrow: TEXT('Label'),
-        lines: fields.array(
-          fields.object({ text: TEXT('Zeile', { description: RICH }), dim: fields.checkbox({ label: 'Gedimmt', defaultValue: false }) }),
-          { label: 'Zeilen', itemLabel: (p) => p.fields.text.value },
-        ),
-        foot: TEXT('Fließtext', { multiline: true, description: RICH }),
+        headline: TEXT('Aussage (liest sich beim Scrollen ein)', { multiline: true, description: RICH }),
+        foot: TEXT('Fließtext', { multiline: true }),
       },
     }),
 
@@ -107,6 +116,7 @@ export default config({
           fields.object({
             no: TEXT('Nummer'),
             title: TEXT('Titel'),
+            short: TEXT('Kurzname (Tab)', { description: 'Optional, z.B. „Web" statt „Web & Entwicklung"' }),
             tag: TEXT('Schlagzeile'),
             body: TEXT('Beschreibung', { multiline: true }),
             entry: TEXT('Einstieg-Zeile'),
@@ -122,16 +132,13 @@ export default config({
       schema: {
         eyebrow: TEXT('Label'),
         title: TEXT('Überschrift', { multiline: true, description: RICH }),
+        subtitle: TEXT('Unterzeile', { multiline: true }),
         lead: TEXT('Fließtext', { multiline: true }),
         points: fields.array(fields.text({ label: 'Punkt' }), { label: 'Punkte', itemLabel: (p) => p.value }),
         cta: TEXT('Link-Text'),
-        nodes: fields.array(
-          fields.object({
-            label: TEXT('Label'),
-            kind: fields.select({ label: 'Typ', options: [{ label: 'Disziplin', value: 'disc' }, { label: 'Partner', value: 'partner' }], defaultValue: 'disc' }),
-          }),
-          { label: 'Netzwerk-Knoten', itemLabel: (p) => p.fields.label.value },
-        ),
+        image: fields.image({ label: 'Bild', directory: 'public/images/studio', publicPath: '/images/studio/' }),
+        imageAlt: TEXT('Bild-Beschreibung (Alt-Text)'),
+        caption: TEXT('Bildunterschrift'),
       },
     }),
 
@@ -157,6 +164,16 @@ export default config({
           fields.object({ no: TEXT('Nummer'), t: TEXT('Titel'), d: TEXT('Text', { multiline: true }) }),
           { label: 'Schritte', itemLabel: (p) => p.fields.t.value },
         ),
+      },
+    }),
+
+    work: singleton({
+      label: 'Arbeiten (Sektion)', path: 'src/content/site/work', format: { data: 'json' },
+      schema: {
+        railLeft: TEXT('Leiste links'),
+        railRight: TEXT('Leiste rechts'),
+        title: TEXT('Überschrift', { multiline: true, description: RICH }),
+        note: TEXT('Hinweis unter der Galerie', { description: 'z.B. Kennzeichnung der Dummymotive. Leer lassen, wenn alle Bilder echt sind.' }),
       },
     }),
 
@@ -197,6 +214,7 @@ export default config({
         eyebrow: TEXT('Label'),
         title: TEXT('Überschrift', { multiline: true, description: RICH }),
         lead: TEXT('Einleitung', { multiline: true }),
+        offerTitle: TEXT('Überschrift „Was ich einbringe"'),
         offer: fields.array(
           fields.object({ t: TEXT('Titel'), d: TEXT('Untertitel') }),
           { label: 'Was ich einbringe', itemLabel: (p) => p.fields.t.value },

@@ -1,172 +1,43 @@
 ---
-// Hero — the signature piece. The XXL wordmark is rendered to a texture and
-// distorted by a cursor-VELOCITY flowmap (RGB-split). Copy comes from the CMS
-// (src/content/site/hero.json).
-import data from '../content/site/hero.json';
+import h from '../content/site/hero.json';
 import { hl } from '../lib/text';
+
+// First line plain, *accent* line in Instrument Serif — as in the concept.
+const [first, ...rest] = h.headline.split('\n');
+const second = rest.join(' ');
+const plain = (s: string) => s.replace(/\*/g, '');
 ---
 
-<section class="hero" id="top" aria-label="Intro">
-  <canvas id="hero-canvas" aria-hidden="true" data-word={data.wordmark}></canvas>
-  <h1 class="hero__word" id="hero-word">
-    <span class="sr-only">dcentral — Fotografie, Film &amp; Aerial, Webdesign und KI-gestützte Kreativkonzepte im Salzkammergut</span>
-    <span aria-hidden="true">{data.wordmark}</span>
-  </h1>
-
-  <div class="hero__top shell shell--wide">
-    <span class="meta">{data.locatorLeft}</span>
-    <span class="meta">{data.locatorRight}</span>
+<section aria-label={plain(h.headline.replace(/\n/g, ' '))} class="hero" id="top">
+  <div class="landscape hero-landscape" data-landscape="hero">
+    <canvas aria-label="Interaktive Linienlandschaft des Traunsteins"></canvas>
   </div>
-
-  <div class="hero__bottom shell shell--wide">
-    <p class="hero__claim" data-reveal set:html={hl(data.claim)}></p>
-    <div class="hero__actions" data-reveal>
-      <a href="#kontakt" class="btn btn--signal" data-magnetic><span>{data.ctaPrimary}</span></a>
-      <a href="#arbeiten" class="btn btn--ghost">{data.ctaSecondary} <span aria-hidden="true">↓</span></a>
-    </div>
+  <div class="hero-copy">
+    <p class="location">{h.location}</p>
+    <p class="hero-intro">{h.intro}</p>
+    <h1>
+      <span set:html={hl(first)} />{second && <><br /><em>{plain(second)}</em></>}
+    </h1>
+    <p class="hero-network" set:html={hl(h.network)} />
+    <a class="action magnetic" href="#kontakt">
+      {h.ctaPrimary}
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
+    </a>
   </div>
-
-  <div class="hero__ticker" aria-hidden="true">
-    <div class="hero__ticker-track" data-ticker>
-      <span class="ticker__set">{data.ticker.map((w) => (<>{w} <i>✳</i> </>))}</span>
+  <div class="hero-bottom">
+    <a href="#leistungen">
+      {h.ticker.map((t, i) => <>{i > 0 && <span>·</span>}{t}</>)}
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+    </a>
+    <div class="hero-controls">
+      <button aria-label="Helle Hero-Ansicht aktivieren" aria-pressed="true" id="hero-theme-toggle" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6l1.4 1.4M5 19l1.4-1.4M17.6 6.4 19 5"></path></svg>
+        <span>Helle Ansicht</span>
+      </button>
+      <button aria-label="Animationen pausieren" aria-pressed="false" id="motion-toggle" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"></path></svg>
+        <span>Bewegung pausieren</span>
+      </button>
     </div>
   </div>
 </section>
-
-<style>
-  .hero { position: relative; min-height: 100svh; overflow: hidden; display: flex; flex-direction: column; }
-  #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }
-  /* DOM fallback wordmark — same look, hidden once WebGL takes over */
-  .hero__word {
-    position: absolute; left: 0; right: 0; bottom: 32%; margin: 0; z-index: 0;
-    text-align: center; font-variation-settings: "wght" 800, "wdth" 125;
-    font-size: 23vw; line-height: 0.8; color: var(--color-paper);
-    text-transform: uppercase; letter-spacing: -0.03em; pointer-events: none;
-  }
-
-  .hero__top {
-    position: relative; z-index: 3; display: flex; justify-content: space-between;
-    padding-top: clamp(6rem, 12vh, 8rem); gap: 1rem; flex-wrap: wrap;
-  }
-
-  .hero__bottom {
-    position: relative; z-index: 3; margin-top: auto;
-    display: flex; align-items: flex-end; justify-content: space-between;
-    gap: 2rem; flex-wrap: wrap; padding-bottom: clamp(3.5rem, 8vh, 5rem);
-  }
-  .hero__claim {
-    margin: 0; max-width: 34ch; min-width: 0; font-size: var(--step-2); line-height: 1.2;
-    color: var(--color-paper); font-family: var(--font-body); font-weight: 500;
-  }
-  .hero__claim .hl { color: var(--color-signal); }
-  /* keep the discipline group together on one line — only where it fits (≥ tablet) */
-  @media (min-width: 721px) { .hero__claim .hl { white-space: nowrap; } }
-
-  .hero__actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-
-  /* Buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;
-    font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.06em;
-    text-transform: uppercase; padding: 0.95rem 1.5rem; border-radius: 0;
-    border: 1px solid var(--color-line); will-change: transform;
-    transition: background 0.4s var(--ease-out), color 0.4s var(--ease-out), border-color 0.4s ease;
-  }
-  .btn--signal { background: var(--color-signal); color: var(--color-carbon); border-color: var(--color-signal); }
-  .btn--signal:hover { background: transparent; color: var(--color-signal); }
-  .btn--ghost { color: var(--color-paper); }
-  .btn--ghost:hover { border-color: var(--color-signal); color: var(--color-signal); }
-
-  /* Ticker */
-  .hero__ticker {
-    position: relative; z-index: 3; border-block: 1px solid var(--color-line);
-    overflow: hidden; padding-block: 0.7rem; background: var(--color-carbon);
-  }
-  .hero__ticker-track {
-    display: flex; width: max-content; white-space: nowrap; will-change: transform;
-    font-family: var(--font-display); font-variation-settings: "wght" 680, "wdth" 110;
-    text-transform: uppercase; font-size: var(--step-1); letter-spacing: -0.01em;
-    color: var(--color-paper);
-  }
-  .hero__ticker-track i { color: var(--color-signal); font-style: normal; margin-inline: 0.6em; }
-
-  @media (max-width: 720px) {
-    .hero__claim { font-size: var(--step-1); max-width: 100%; }
-    .hero__word { font-size: 26vw; bottom: 42%; }
-    .hero__bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding-bottom: clamp(2.6rem, 7vh, 3.5rem); }
-    .hero__actions { width: 100%; }
-    .hero__top { padding-top: clamp(5rem, 15vh, 7rem); }
-    .btn { padding: 0.9rem 1.3rem; }
-  }
-</style>
-
-<script>
-  import gsap from 'gsap';
-  import { prefersReducedMotion, magnetic, marquee } from '../lib/motion';
-  import { flowmapText } from '../lib/gl';
-
-  document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => magnetic(el, 0.3));
-
-  /* ── Ticker (seamless, always full) ── */
-  const track = document.querySelector<HTMLElement>('[data-ticker]');
-  if (track && !prefersReducedMotion) {
-    (document.fonts?.ready ?? Promise.resolve()).then(() => marquee(track, 90));
-  }
-
-  /* ── Flowmap wordmark ── */
-  const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
-  const domWord = document.getElementById('hero-word');
-
-  const paintWord = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
-    const text = (canvas?.dataset.word || 'dcentral').toUpperCase();
-    ctx.fillStyle = '#F4F4F0';
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
-    // fit width
-    let size = 200;
-    ctx.font = `800 ${size}px "Archivo Variable", sans-serif`;
-    (ctx as any).letterSpacing = `${-size * 0.03}px`;
-    const measured = ctx.measureText(text).width;
-    size = size * (w * 0.96) / measured;
-    ctx.font = `800 ${size}px "Archivo Variable", sans-serif`;
-    (ctx as any).letterSpacing = `${-size * 0.03}px`;
-    ctx.fillText(text, w / 2, h * 0.52);
-  };
-
-  let fm: ReturnType<typeof flowmapText> | null = null;
-  const startHero = () => {
-    if (!canvas) return;
-    try {
-      fm = flowmapText(canvas, { paint: paintWord, strength: 0.22, chromatic: 0.4, falloff: 0.16, dissipation: 0.92 });
-      // keep the h1 for SEO/screen-readers, just hide it visually behind the canvas
-      if (domWord) domWord.style.opacity = '0';
-      fm.start();
-      document.addEventListener('visibilitychange', () => {
-        if (!fm) return;
-        document.hidden ? fm.stop() : fm.start();
-      });
-    } catch (err) {
-      // WebGL unavailable → DOM wordmark stays visible
-      if (canvas) canvas.style.display = 'none';
-    }
-  };
-
-  // Reduced motion: leave the DOM wordmark visible, skip WebGL entirely.
-  // Otherwise wait for fonts so the texture is painted with Archivo, then start.
-  if (canvas) {
-    if (prefersReducedMotion) {
-      canvas.style.display = 'none';
-    } else {
-      (document.fonts?.ready ?? Promise.resolve()).then(() => {
-        startHero();
-        fm?.repaint();
-      });
-    }
-  }
-
-  /* ── Reveal claim + actions ── */
-  if (!prefersReducedMotion) {
-    gsap.set('.hero [data-reveal]', { opacity: 0, y: 24 });
-    gsap.to('.hero [data-reveal]', { opacity: 1, y: 0, duration: 1, stagger: 0.12, ease: 'expo.out', delay: 1.1 });
-  }
-</script>

@@ -1,207 +1,38 @@
 ---
-import data from '../content/site/accelerator.json';
+import a from '../content/site/accelerator.json';
 import { hl } from '../lib/text';
 ---
 
-<section class="acc" id="impact">
-  <div class="shell shell--wide acc__head">
-    <p class="eyebrow" data-st>[ 03 ] {data.eyebrow}</p>
-    <h2 class="acc__title display" data-st set:html={hl(data.title)}></h2>
-    <p class="acc__lead" data-st>{data.lead}</p>
-    <ul class="acc__causes" data-st aria-label="Themenfelder">
-      {data.causes.map((c) => <li>{c}</li>)}
-    </ul>
-  </div>
-
-  <!-- Particle accelerator: skills (left) get accelerated & focused into impact (right) -->
-  <div class="shell shell--wide">
-    <div class="acc__beam" data-st>
-      <canvas id="acc-canvas" aria-hidden="true"></canvas>
-      <span class="acc__beam-l meta" aria-hidden="true">Skills →</span>
-      <span class="acc__beam-r meta" aria-hidden="true">→ Impact</span>
-      <span class="acc__beam-note meta" aria-hidden="true">// skills rein · wirkung raus</span>
-    </div>
-  </div>
-
-  <div class="shell shell--wide acc__foot">
-    <div class="acc__offerwrap">
-      <h3 class="acc__sub" data-st>Was ich einbringe</h3>
-      <ul class="acc__offer">
-        {data.offer.map((o) => (
-          <li data-st><span class="acc__offer-t">{o.t}</span><span class="acc__offer-d">{o.d}</span></li>
+<section class="impact section" id="impact">
+  <div class="shell">
+    <div class="impact-grid">
+      <div>
+        <h2 set:html={hl(a.title)} />
+        <p class="impact-lead">{a.lead}</p>
+        <ul class="tags causes">{a.causes.map((c) => <li>{c}</li>)}</ul>
+        <a class="action magnetic" href={a.ctaHref}>
+          {a.ctaLabel}
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
+        </a>
+      </div>
+      <div class="impact-offers">
+        <h3>{a.offerTitle}</h3>
+        {a.offer.map((o) => (
+          <div>
+            <h4>{o.t}</h4>
+            <p>{o.d}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
-    <a href={data.ctaHref} class="btn btn--signal acc__cta" data-st data-magnetic>
-      <span>{data.ctaLabel}</span>
-      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </div>
-
-  <div class="shell shell--wide">
-    <hr class="rule" />
-    <ol class="acc__steps">
-      {data.steps.map((s) => (
-        <li class="acc__step" data-st>
-          <span class="acc__step-no meta">{s.no}</span>
-          <h4 class="acc__step-t">{s.t}</h4>
-          <p class="acc__step-d">{s.d}</p>
+    <ol class="impact-steps">
+      {a.steps.map((s) => (
+        <li>
+          <span>{s.no}</span>
+          <h3>{s.t}</h3>
+          <p>{s.d}</p>
         </li>
       ))}
     </ol>
   </div>
 </section>
-
-<style>
-  .acc { padding-block: var(--section-y); position: relative; overflow: hidden; }
-  .acc::before {
-    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: radial-gradient(70% 50% at 82% 50%, color-mix(in srgb, var(--color-signal) 8%, transparent), transparent 70%);
-  }
-  .acc__head { text-align: center; }
-  .acc__head .eyebrow { justify-content: center; }
-  .acc__title { font-size: var(--step-4); margin: 1rem 0 1.2rem; }
-  .acc__title em { font-style: normal; color: var(--color-signal); }
-  .acc__lead { margin: 0 auto; max-width: 56ch; font-size: var(--step-1); line-height: 1.6; color: var(--color-paper); }
-  .acc__causes { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; padding: 0; margin: 1.6rem 0 0; }
-  .acc__causes li {
-    font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.04em;
-    padding: 0.4rem 0.85rem; border: 1px solid var(--color-line); color: var(--color-ash);
-  }
-
-  /* Beam band */
-  .acc__beam {
-    position: relative; width: 100%; height: clamp(240px, 34vh, 400px);
-    border: 1px solid var(--color-line); margin: clamp(2.4rem, 5vw, 3.6rem) 0 clamp(2rem, 4vw, 3rem);
-    overflow: hidden;
-  }
-  #acc-canvas { width: 100%; height: 100%; display: block; }
-  .acc__beam-l, .acc__beam-r { position: absolute; top: 50%; transform: translateY(-50%); color: var(--color-ash); }
-  .acc__beam-l { left: 1rem; }
-  .acc__beam-r { right: 1rem; color: var(--color-signal); }
-  .acc__beam-note { position: absolute; bottom: 0.8rem; left: 1rem; }
-
-  .acc__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: clamp(1.6rem, 4vw, 3rem); flex-wrap: wrap; }
-  .acc__offerwrap { flex: 1 1 520px; }
-  .acc__sub { font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-signal); margin: 0 0 1.4rem; font-weight: 400; }
-  .acc__offer { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4rem 1.6rem; }
-  .acc__offer li { display: flex; flex-direction: column; gap: 0.3rem; border-top: 1px solid var(--color-line); padding-top: 0.9rem; }
-  .acc__offer-t { font-family: var(--font-display); font-variation-settings: "wght" 640, "wdth" 105; text-transform: uppercase; font-size: var(--step-1); letter-spacing: -0.01em; }
-  .acc__offer-d { color: var(--color-ash); font-size: var(--step-0); }
-  .acc__cta { flex: 0 0 auto; }
-
-  .acc__steps { list-style: none; margin: clamp(2.4rem, 5vw, 3.4rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.4rem, 3vw, 2.4rem); }
-  .acc__step-no { color: var(--color-signal); }
-  .acc__step-t { font-family: var(--font-display); font-variation-settings: "wght" 640, "wdth" 105; text-transform: uppercase; font-size: var(--step-1); margin: 0.5rem 0 0.5rem; }
-  .acc__step-d { margin: 0; color: var(--color-ash); font-size: var(--step-0); line-height: 1.5; }
-
-  @media (max-width: 860px) {
-    .acc__offer { grid-template-columns: repeat(2, 1fr); }
-    .acc__steps { grid-template-columns: 1fr; }
-    .acc__foot { flex-direction: column; align-items: stretch; }
-    .acc__cta { align-self: flex-start; }
-  }
-  @media (max-width: 480px) { .acc__offer { grid-template-columns: 1fr; } .acc__beam-l, .acc__beam-r { display: none; } }
-</style>
-
-<script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { prefersReducedMotion, registerGsap, whenVisible, magnetic } from '../lib/motion';
-
-  document.querySelectorAll<HTMLElement>('#impact [data-magnetic]').forEach((el) => magnetic(el, 0.3));
-
-  if (!prefersReducedMotion) {
-    registerGsap();
-    gsap.from('#impact [data-st]', { y: 28, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.06, scrollTrigger: { trigger: '#impact', start: 'top 72%' } });
-  }
-
-  /* ── Particle accelerator: streams of energy enter on the left, accelerate and
-        focus toward the impact point on the right, where they bloom into rings. ── */
-  const canvas = document.getElementById('acc-canvas') as HTMLCanvasElement | null;
-  if (canvas) {
-    const ctx = canvas.getContext('2d')!;
-    const SIGNAL = '194,242,61', ASH = '138,138,133';
-    let W = 0, H = 0, fx = 0, fy = 0;
-
-    type P = { x: number; y0: number; vx: number; trail: { x: number; y: number }[] };
-    let parts: P[] = [];
-    const rings: { r: number; max: number }[] = [];
-    const spawn = (): P => ({ x: -Math.random() * W * 0.25, y0: 0.12 + Math.random() * 0.76, vx: 0.6 + Math.random() * 0.8, trail: [] });
-
-    const build = () => {
-      const rect = canvas.getBoundingClientRect();
-      W = rect.width; H = rect.height; fx = W * 0.82; fy = H * 0.5;
-      const dpr = Math.min(window.devicePixelRatio, 2);
-      canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      parts = Array.from({ length: Math.min(60, Math.round(W / 22)) }, () => { const p = spawn(); p.x = Math.random() * fx; return p; });
-    };
-    build();
-    addEventListener('resize', build);
-
-    let steer = 0; // -1..1 vertical steer from cursor
-    canvas.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); steer = ((e.clientY - r.top) / r.height - 0.5) * 2; });
-    canvas.addEventListener('pointerleave', () => { steer = 0; });
-
-    let t = 0, running = false, ringTimer = 0;
-    const hexA = (rgb: string, a: number) => `rgba(${rgb},${a})`;
-
-    const draw = () => {
-      t += 0.016; ctx.clearRect(0, 0, W, H);
-
-      // faint converging guide channels (skills → focus)
-      ctx.strokeStyle = hexA(ASH, 0.1); ctx.lineWidth = 0.5;
-      for (let i = 0; i < 5; i++) {
-        const sy = H * (0.18 + i * 0.16);
-        ctx.beginPath(); ctx.moveTo(0, sy); ctx.quadraticCurveTo(W * 0.45, sy, fx, fy); ctx.stroke();
-      }
-
-      ctx.lineCap = 'round'; ctx.globalCompositeOperation = 'lighter';
-      for (const p of parts) {
-        p.vx += 0.05;                       // accelerate
-        p.x += p.vx;
-        const prog = Math.min(1, p.x / fx); // 0 at left → 1 at focus
-        const ease = prog * prog;
-        const baseY = H * p.y0;
-        const y = baseY + (fy - baseY) * ease + steer * (1 - ease) * H * 0.18;
-
-        p.trail.push({ x: p.x, y }); if (p.trail.length > 16) p.trail.shift();
-
-        // comet trail
-        for (let i = 1; i < p.trail.length; i++) {
-          const a = (i / p.trail.length) * (0.5 + prog * 0.5);
-          ctx.strokeStyle = hexA(SIGNAL, a * 0.5); ctx.lineWidth = 0.6 + prog * 1.6 * (i / p.trail.length);
-          ctx.beginPath(); ctx.moveTo(p.trail[i - 1].x, p.trail[i - 1].y); ctx.lineTo(p.trail[i].x, p.trail[i].y); ctx.stroke();
-        }
-        // head
-        const sz = (1 + prog * 2) * 2.4;
-        const g = ctx.createRadialGradient(p.x, y, 0, p.x, y, sz);
-        g.addColorStop(0, hexA(SIGNAL, 0.95)); g.addColorStop(1, hexA(SIGNAL, 0));
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, y, sz, 0, Math.PI * 2); ctx.fill();
-
-        if (p.x >= fx) { rings.push({ r: 6, max: Math.min(W, H) * 0.55 }); Object.assign(p, spawn()); }
-      }
-
-      // impact focus: rings + breathing core
-      ringTimer += 1;
-      for (let i = rings.length - 1; i >= 0; i--) {
-        const ring = rings[i]; ring.r += 2.2;
-        const a = Math.max(0, 1 - ring.r / ring.max);
-        ctx.strokeStyle = hexA(SIGNAL, a * 0.5); ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(fx, fy, ring.r, 0, Math.PI * 2); ctx.stroke();
-        if (ring.r >= ring.max) rings.splice(i, 1);
-      }
-      const breathe = 18 + Math.sin(t * 2) * 6;
-      const cg = ctx.createRadialGradient(fx, fy, 0, fx, fy, breathe + 14);
-      cg.addColorStop(0, hexA(SIGNAL, 0.9)); cg.addColorStop(0.5, hexA(SIGNAL, 0.3)); cg.addColorStop(1, hexA(SIGNAL, 0));
-      ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(fx, fy, breathe + 14, 0, Math.PI * 2); ctx.fill();
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = `rgb(${SIGNAL})`; ctx.beginPath(); ctx.arc(fx, fy, 4, 0, Math.PI * 2); ctx.fill();
-
-      if (running) requestAnimationFrame(draw);
-    };
-    const start = () => { if (running) return; running = true; draw(); };
-    document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && !prefersReducedMotion) start(); });
-    if (prefersReducedMotion) { for (let i = 0; i < 30; i++) draw(); } else whenVisible(canvas, start);
-  }
-</script>

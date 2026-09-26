@@ -1,9 +1,9 @@
 {
-  "locatorLeft": "Grünau im Almtal - Salzkammergut",
-  "wordmark": "dcentral",
-  "claim": "Der Ansprechpartner für *Foto, Film, Web & KI*.\nEin ganzes Netzwerk dahinter.",
+  "location": "Grünau im Almtal - Salzkammergut",
+  "intro": "Foto. Film. Web. KI.",
+  "headline": "Von hier.\n*Für Weiter.*",
+  "network": "Ein Ansprechpartner.\nEin ganzes Netzwerk dahinter.",
   "ctaPrimary": "Projekt starten",
-  "ctaSecondary": "Arbeiten",
   "ticker": [
     "Fotografie",
     "Film & Aerial",
