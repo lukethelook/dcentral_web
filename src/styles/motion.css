@@ -28,12 +28,6 @@ details[data-state=closing] summary svg { transform: none; }
 .line { display: block; overflow: hidden; padding: 0 .08em .14em; margin: 0 -.08em -.14em; }
 .line-inner { display: inline-block; }
 
-/* „Der Faden" — hero thread (home-motion.js). */
-.hero { --thread: #d4ff3f; }
-html[data-hero-theme=light] .hero { --thread: #789f16; }
-.hero-thread { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
-.hero-thread path { fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
-
 /* Discipline tabs: one travelling indicator replaces the per-tab underline. */
 .discipline-tabs { position: sticky; }
 .discipline-tabs.has-indicator button:before { display: none; }
