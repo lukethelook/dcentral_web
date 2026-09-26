@@ -305,6 +305,22 @@ document.querySelectorAll('video[data-motion-video]').forEach((video) => {
   reduced.addEventListener('change', sync);
 });
 
+/* ── 9 · Cinema stage: Vimeo loads only on explicit click (privacy, no autoplay). */
+document.querySelectorAll('[data-cinema]').forEach((stage) => {
+  const btn = stage.querySelector('.cinema-play');
+  btn?.addEventListener('click', () => {
+    const id = encodeURIComponent(stage.dataset.cinema);
+    const frame = document.createElement('iframe');
+    frame.src = `https://player.vimeo.com/video/${id}?dnt=1&autoplay=1&title=0&byline=0&portrait=0&color=d4ff3f`;
+    frame.allow = 'autoplay; fullscreen; picture-in-picture';
+    frame.allowFullscreen = true;
+    frame.title = btn.getAttribute('aria-label') || 'Film';
+    stage.classList.add('is-playing');
+    stage.append(frame);
+    frame.focus();
+  }, { once: true });
+});
+
 /* ── 6 · Footer curtain ──────────────────────────────────────────────────
    On large screens the chartreuse footer sits beneath the page and is
    uncovered as the content scrolls away (pure CSS sticky, see motion.css).

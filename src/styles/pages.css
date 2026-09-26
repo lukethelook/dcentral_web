@@ -52,6 +52,36 @@ html.motion-paused .case-live::before { animation: none; }
 html:not(.js-loop) .case-loop-signal { transform: scaleX(1); }
 html:not(.js-loop) .case-loop li > span { background: var(--lime); border-color: #8fae29; }
 
+/* ── Cinema stage: graded stills cross-fade with a slow Ken Burns drift;
+   the Vimeo film loads only on click (privacy: no request before). ──── */
+.case-cinema { background: #06070c; aspect-ratio: 16 / 9; }
+.cinema-slides, .cinema-slides img, .case-cinema iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.cinema-slides img { object-fit: cover; opacity: 0; animation: cinema calc(var(--n) * 7s) linear infinite; animation-delay: calc(var(--i) * 7s - .01s); }
+.cinema-slides img:first-child { opacity: 1; }
+@keyframes cinema {
+  0% { opacity: 0; transform: scale(1.1); }
+  4% { opacity: 1; }
+  25% { opacity: 1; }
+  29% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+html.motion-paused .cinema-slides img { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .cinema-slides img { animation: none; } }
+.case-cinema::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(6, 7, 12, 0) 45%, rgba(6, 7, 12, .7) 100%); }
+.case-cinema.is-playing::after, .case-cinema.is-playing .cinema-slides, .case-cinema.is-playing .cinema-note { display: none; }
+.cinema-play { position: absolute; z-index: 2; left: clamp(20px, 3vw, 40px); bottom: clamp(20px, 3vw, 40px); display: flex; align-items: center; gap: 16px; border: 0; background: none; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
+.cinema-icon { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--lime); color: var(--forest); box-shadow: 0 0 0 0 rgba(212, 255, 63, .5); transition: transform 200ms cubic-bezier(.23, 1, .32, 1); }
+.cinema-icon svg { width: 22px; height: 22px; fill: currentColor; stroke: none; margin-left: 3px; }
+.cinema-play:active .cinema-icon { transform: scale(.95); }
+@media (prefers-reduced-motion: no-preference) { .cinema-icon { animation: live-pulse 2.8s ease-out infinite; } }
+@media (hover: hover) and (pointer: fine) { .cinema-play:hover .cinema-icon { transform: scale(1.06); } }
+.cinema-note { position: absolute; z-index: 2; right: clamp(20px, 3vw, 40px); bottom: clamp(24px, 3vw, 46px); font-size: 11px; color: rgba(255, 255, 255, .6); max-width: 28ch; text-align: right; }
+.case-cinema.is-playing .cinema-play { display: none; }
+/* Exhibition list */
+.case-shown { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.case-shown li { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; }
+.case-shown li span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+
 /* Studies without a public URL: a greyed status instead of a live link. */
 .case-study { display: inline-flex; gap: 8px; align-items: center; color: var(--muted); }
 .case-study::before, .case-study-meta::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #9aa79c; flex: none; }

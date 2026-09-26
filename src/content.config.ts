@@ -37,6 +37,9 @@ const cases = defineCollection({
         label: z.string().nullable().optional(),
         phones: z.array(z.string().nullable()).optional(),
         video: z.string().nullable().optional(),
+        vimeo: z.string().nullable().optional(), // Vimeo ID → cinema stage with click-to-load player
+        vimeoLabel: z.string().nullable().optional(),
+        slides: z.array(z.string().nullable()).optional(),
         poster: z.string().nullable().optional(),
       })
       .optional(),
@@ -45,6 +48,8 @@ const cases = defineCollection({
     statusLabel: z.string().nullable().optional(),
     clientLabel: z.string().nullable().optional(), // e.g. „Auftrag: Quantiflux" on the case page
     scope: z.array(z.string()).default([]), // full scope, shown as „Umfang"
+    shown: z.array(z.object({ place: z.string(), year: z.string() })).default([]), // exhibitions
+    stackTitle: z.string().nullable().optional(),
     coverTone: z.enum(['', 'light', 'dark']).nullable().optional(), // dark image → light card text
     outlookTitle: z.string().nullable().optional(),
     outlookIntro: z.string().nullable().optional(),

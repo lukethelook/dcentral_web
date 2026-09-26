@@ -99,6 +99,12 @@ export default config({
             { label: 'App-Projekt: 3 Handy-Screens (statt Browser)', itemLabel: (p) => p.value?.filename ?? 'Screen' },
           ),
           video: fields.file({ label: 'Video im Browser-Mockup (MP4, statt Desktop-Screenshot)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+          vimeo: TEXT('Vimeo-ID (Kino-Bühne mit Film auf Klick)'),
+          vimeoLabel: TEXT('Beschriftung Film-Button (z.B. „Film ansehen · 3:07")'),
+          slides: fields.array(
+            fields.image({ label: 'Bild', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+            { label: 'Kino-Bühne: Bilder im Überblendlauf', itemLabel: (p) => p.value?.filename ?? 'Bild' },
+          ),
           poster: fields.image({ label: 'Standbild zum Video', directory: 'public/images/cases', publicPath: '/images/cases/' }),
         }, { label: 'Animiertes Geräte-Mockup (ersetzt das Titelbild auf der Projektseite)' }),
         status: fields.select({
@@ -108,6 +114,11 @@ export default config({
         }),
         clientLabel: TEXT('Kunden-Zeile auf der Projektseite (optional, z.B. „Auftrag: Quantiflux")'),
         scope: fields.array(fields.text({ label: 'Leistung' }), { label: 'Umfang (alle Leistungen im Projekt)', itemLabel: (p) => p.value }),
+        shown: fields.array(
+          fields.object({ place: TEXT('Ort / Anlass'), year: TEXT('Jahr') }),
+          { label: 'Ausgestellt / Stationen', itemLabel: (p) => `${p.fields.place.value} ${p.fields.year.value}` },
+        ),
+        stackTitle: TEXT('Überschrift Technik (Standard: Techstack)'),
         statusLabel: TEXT('Status-Text (bei Studie, z.B. „Web-Studie · Demo-Inhalte")'),
         coverTone: fields.select({
           label: 'Titelbild-Helligkeit',

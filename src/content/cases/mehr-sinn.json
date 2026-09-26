@@ -1,0 +1,108 @@
+{
+  "title": "Ein Raum aus Gehirnwellen",
+  "signal": "Gehirnwellen",
+  "client": "mehr S(IN)N",
+  "clientLabel": "Rauminstallation · gemeinsam mit Pia-Ina Hochstrasser",
+  "discipline": "Film & Aerial",
+  "also": [],
+  "year": 2022,
+  "summary": "„mehr S(IN)N“ übersetzt gemessene Gehirnwellen in einen Raum, den man hört, sieht und spürt. Eine experimentelle, interaktive Installation über die Frage, wie Wahrnehmung eigentlich entsteht – gezeigt in der Krypta Linz und auf dem Ars Electronica Festival.",
+  "body": "Wie viel von dem, was wir wahrnehmen, ist real – und wie viel entsteht erst in uns? Ausgehend von der Forschung zu Synästhesie und verschränkter Sinneswahrnehmung, unter anderem von Richard E. Cytowic und Emma Young, haben wir eine Installation gebaut, die diese Frage körperlich erfahrbar macht.\n\nEin EEG-Messgerät erfasst Gehirnwellen und übersetzt sie in Klang, Licht und Bewegung. In einer Raum-im-Raum-Situation laufen Projektionen über Wände und Gewölbe, rund 40 eigene Kompositionen bilden den Klangraum, eine mikrocontroller-gesteuerte Skulptur bricht Licht und Blicke, und ein verbal-assoziatives Experiment holt die Besuchenden selbst ins Werk.\n\nDer Prototyp war 2022 eine Woche lang in der Krypta Linz zu sehen, begleitet von einem Kunstvermittlungsprogramm. 2023 wurde die Installation zum Ars Electronica Festival Campus eingeladen.",
+  "tags": ["Rauminstallation", "EEG & Daten", "Projection Mapping", "Sounddesign"],
+  "scope": [
+    "Konzept & künstlerische Leitung",
+    "Projektionen & Visuals",
+    "Sounddesign (rund 40 Kompositionen)",
+    "Interaktive Skulptur",
+    "EEG-Datenübersetzung",
+    "Kunstvermittlung"
+  ],
+  "shown": [
+    { "place": "Krypta Linz", "year": "2022" },
+    { "place": "Ars Electronica Festival Campus", "year": "2023" }
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Gehirnwellen als Material",
+      "d": "Ein EEG-Messgerät liefert die Rohdaten: Die Aktivität des Gehirns wird zu Klang, Farbe und Bewegung im Raum."
+    },
+    {
+      "t": "Raum im Raum",
+      "d": "Eine eigene Raumstruktur im Gewölbe der Krypta, bespielt von Projektionen über Wände und Decke – der Raum selbst wird zur Leinwand."
+    },
+    {
+      "t": "Ein Klangraum aus 40 Stücken",
+      "d": "Eigenes Sounddesign mit rund 40 Kompositionen, das die Wahrnehmung führt, verschiebt und überlagert."
+    },
+    {
+      "t": "Die Wabenskulptur",
+      "d": "Eine mikrocontroller-gesteuerte Skulptur aus spiegelnden Waben, die Licht und Projektion bricht und das Publikum selbst ins Bild holt."
+    },
+    {
+      "t": "Ein Experiment mit Worten",
+      "d": "Besuchende beschreiben, was sie wahrnehmen – und entdecken, wie unterschiedlich derselbe Reiz bei jedem ankommt."
+    },
+    {
+      "t": "Kunstvermittlung",
+      "d": "Ein begleitendes Vermittlungsprogramm öffnet die wissenschaftlichen Hintergründe für ein breites Publikum."
+    }
+  ],
+  "screens": [
+    { "image": "/images/cases/mehr-sinn/detail-sculpture.webp", "device": "image", "caption": "Die Wabenskulptur bricht Projektion und Publikum." },
+    { "image": "/images/cases/mehr-sinn/detail-circuit.webp", "device": "image", "caption": "Dahinter: Mikrocontroller, Sensorik, viel Kabel." },
+    { "image": "/images/cases/mehr-sinn/detail-tunnel.webp", "device": "image", "caption": "Raum im Raum – Licht am Ende des Gewölbes." },
+    { "image": "/images/cases/mehr-sinn/projection-field.webp", "device": "wide", "caption": "Aus den Projektionen: Gehirnaktivität als fließendes Farbfeld." }
+  ],
+  "loopTitle": "Vom Signal zur Erfahrung",
+  "loop": [
+    { "t": "Messen", "d": "Ein EEG erfasst die Gehirnwellen – das Rohmaterial der Installation." },
+    { "t": "Übersetzen", "d": "Die Daten werden zu Klang, Farbe und Bewegung." },
+    { "t": "Erleben", "d": "Projektionen, Sound und Skulptur umhüllen den Raum – hören, sehen, spüren." },
+    { "t": "Teilen", "d": "Besuchende tauschen Assoziationen aus: Jede Wahrnehmung ist anders." }
+  ],
+  "outlookTitle": "Wo das Prinzip weiterwirkt",
+  "outlookIntro": "Daten in Erlebnis zu übersetzen funktioniert weit über den Kunstraum hinaus:",
+  "outlook": [
+    {
+      "t": "Museen & Science Center",
+      "d": "Wissenschaft zum Anfassen: Forschung, Messdaten und Prozesse als begehbare, interaktive Räume vermitteln."
+    },
+    {
+      "t": "Marken & Events",
+      "d": "Immersive Räume für Launches, Messen und Festivals, die auf ihr Publikum reagieren – statt nur Kulisse zu sein."
+    },
+    {
+      "t": "Digitale Erweiterung",
+      "d": "Das Erlebnis als Web- oder XR-Version weiterdenken, damit es über den Ausstellungsort hinaus erreichbar bleibt."
+    }
+  ],
+  "stackTitle": "Technik",
+  "stack": [
+    "EEG-Messung",
+    "Mikrocontroller & Sensorik",
+    "Mehrfach-Projektion",
+    "Projection Mapping",
+    "Sounddesign",
+    "360°-Dokumentation",
+    "Film & Schnitt"
+  ],
+  "showcase": {
+    "vimeo": "846716742",
+    "vimeoLabel": "Film ansehen · 3:07",
+    "slides": [
+      "/images/cases/mehr-sinn/slide-room.webp",
+      "/images/cases/mehr-sinn/slide-vault.webp",
+      "/images/cases/mehr-sinn/slide-tunnel.webp",
+      "/images/cases/mehr-sinn/slide-sculpture.webp"
+    ]
+  },
+  "hue": 280,
+  "format": "landscape",
+  "cover": "/images/cases/mehr-sinn/cover.webp",
+  "coverTone": "dark",
+  "previews": ["/images/cases/mehr-sinn/preview-room.webp", "/images/cases/mehr-sinn/preview-field.webp"],
+  "previewDummy": false,
+  "featured": true,
+  "order": 3
+}

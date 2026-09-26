@@ -29,6 +29,8 @@ const visual = d.cover
     ? { src: src(d.previews[0]), dummy: d.previewDummy }
     : { src: `/assets/project-lines-${idx % 4}.svg`, dummy: false };
 const showcase = d.showcase?.desktop || d.showcase?.video ? d.showcase : null;
+const slides = (d.showcase?.slides ?? []).filter((s): s is string => !!s);
+const cinema = d.showcase?.vimeo && slides.length ? d.showcase : null;
 const study = d.status === 'study';
 const phones = (d.showcase?.phones ?? []).filter((p): p is string => !!p).slice(0, 3);
 const screens = d.screens.filter((s) => s.image);
@@ -66,7 +68,18 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
       {study && <> · <span class="case-study">{d.statusLabel || 'Studie · nicht öffentlich'}</span></>}
     </p>
 
-    {phones.length > 0 ? (
+    {cinema ? (
+      <div class={`case-visual case-cinema`} data-cinema={cinema.vimeo} style={`--n:${slides.length}`}>
+        <div class="cinema-slides" aria-hidden="true">
+          {slides.map((s, i) => <img src={src(s)} alt="" decoding="async" style={`--i:${i}`} loading={i ? 'lazy' : 'eager'} />)}
+        </div>
+        <button type="button" class="cinema-play" aria-label={`Film abspielen: ${d.client} (lädt Vimeo)`}>
+          <span class="cinema-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5-13-7.5Z"></path></svg></span>
+          <span class="cinema-label">{cinema.vimeoLabel || 'Film ansehen'}</span>
+        </button>
+        <p class="cinema-note">Der Film wird erst beim Klick von Vimeo geladen – ohne Tracking.</p>
+      </div>
+    ) : phones.length > 0 ? (
       <div class={`case-visual case-showcase case-showcase--phones cover-${idx % 4}`} aria-label={`Mockup: ${d.client} auf dem Smartphone`} role="img">
         {phones.map((p, i) => (
           <div class={`sc-phone sc-float sc-float--${i}`} aria-hidden="true">
@@ -109,6 +122,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
         <div><dt>Jahr</dt><dd>{d.year}</dd></div>
         {study && <div><dt>Status</dt><dd class="case-study-meta">{d.statusLabel || 'Studie · nicht öffentlich'}</dd></div>}
         {d.url && !study && <div><dt>Live</dt><dd><a class="case-live" href={d.url} rel="noopener" target="_blank">{liveHost} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a></dd></div>}
+        {d.shown.length > 0 && <div><dt>Ausgestellt</dt><dd><ul class="case-shown">{d.shown.map((s) => <li><span>{s.place}</span><span>{s.year}</span></li>)}</ul></dd></div>}
         {d.tags.length > 0 && (
           <div><dt>Themen</dt><dd><ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul></dd></div>
         )}
@@ -191,7 +205,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
 
     {d.stack.length > 0 && (
       <section class="case-section case-section--stack" aria-labelledby="case-stack">
-        <h2 id="case-stack" class="case-h2">Techstack</h2>
+        <h2 id="case-stack" class="case-h2">{d.stackTitle || 'Techstack'}</h2>
         <ul class="case-stack">{d.stack.map((t) => <li>{t}</li>)}</ul>
       </section>
     )}
