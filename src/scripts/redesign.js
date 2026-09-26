@@ -23,7 +23,7 @@ function springEffect(el,type){let x=0,y=0,vx=0,vy=0,tx=0,ty=0,last=0,raf=0;cons
 }
 document.querySelectorAll('.magnetic').forEach(el=>springEffect(el,'magnetic'));document.querySelectorAll('[data-tilt]').forEach(el=>springEffect(el,'tilt'));
 document.addEventListener('motion-state',e=>{paused=e.detail.paused;effects.forEach(reset=>reset());});
-document.querySelectorAll('details').forEach(d=>{let pointer=false;d.querySelector('summary').addEventListener('click',e=>pointer=e.detail!==0);d.addEventListener('toggle',()=>{if(d.open&&pointer&&motion()){const c=d.querySelector('.detail-content');c.getAnimations().forEach(a=>a.cancel());c.animate([{opacity:.3,transform:'translateY(-5px)'},{opacity:1,transform:'translateY(0)'}],{duration:200,easing:'cubic-bezier(.23,1,.32,1)'});}pointer=false;});});
+// FAQ open/close motion lives in motion-system.js (height + fade, interruptible).
 
 const themeButton=document.querySelector('#hero-theme-toggle');
 if(themeButton)themeButton.onclick=()=>{const dark=document.documentElement.dataset.heroTheme!=='dark';document.documentElement.dataset.heroTheme=dark?'dark':'light';themeButton.setAttribute('aria-pressed',String(dark));themeButton.setAttribute('aria-label',dark?'Helle Hero-Ansicht aktivieren':'Dunkle Hero-Ansicht aktivieren');themeButton.querySelector('span').textContent=dark?'Helle Ansicht':'Dunkle Ansicht';document.querySelector('meta[name="theme-color"]').content=dark?'#102f28':'#f3f4ec';document.dispatchEvent(new CustomEvent('hero-theme',{detail:{dark}}));};

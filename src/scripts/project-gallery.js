@@ -1,4 +1,5 @@
 /** Continuous, interruptible project gallery. Dummy media is explicitly labelled in HTML. */
+import {inertia} from 'motion';
 const gallery=document.querySelector('.gallery');
 const originals=[...gallery.querySelectorAll('.project')];
 const filters=[...document.querySelectorAll('[data-filter]')];
@@ -48,9 +49,24 @@ gallery.addEventListener('touchstart',()=>{focused=true;wake();},{passive:true})
 gallery.addEventListener('touchend',()=>{focused=false;hold(4500);wake();},{passive:true});
 gallery.addEventListener('keydown',e=>{if(e.target===gallery&&['ArrowRight','ArrowLeft'].includes(e.key)){e.preventDefault();step(e.key==='ArrowRight'?1:-1,e);}});
 gallery.addEventListener('scroll',()=>{if(period&&gallery.scrollLeft>=period){gallery.scrollLeft-=period;position=lastApplied=gallery.scrollLeft;}controls();},{passive:true});
-gallery.addEventListener('pointerdown',e=>{if(!fine.matches||e.button!==0)return;drag={x:e.clientX,y:e.clientY,left:gallery.scrollLeft,id:e.pointerId,moved:false};wake();});
-gallery.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!drag.moved&&Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)){drag.moved=true;gallery.setPointerCapture(e.pointerId);gallery.classList.add('dragging');closePreviews();}if(drag.moved){e.preventDefault();gallery.scrollLeft=drag.left-dx;}});
-function endDrag(){if(!drag)return;suppressClick=drag.moved;setTimeout(()=>suppressClick=false,0);gallery.classList.remove('dragging');const id=drag.id;drag=null;if(gallery.hasPointerCapture(id))gallery.releasePointerCapture(id);hold(1800);wake();}
+gallery.addEventListener('pointerdown',e=>{stopGlide();if(!fine.matches||e.button!==0)return;drag={x:e.clientX,y:e.clientY,left:gallery.scrollLeft,id:e.pointerId,moved:false,samples:[]};wake();});
+gallery.addEventListener('wheel',stopGlide,{passive:true});
+gallery.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!drag.moved&&Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)){drag.moved=true;gallery.setPointerCapture(e.pointerId);gallery.classList.add('dragging');closePreviews();}if(drag.moved){e.preventDefault();gallery.scrollLeft=drag.left-dx;drag.samples.push({t:e.timeStamp,x:e.clientX});if(drag.samples.length>6)drag.samples.shift();}});
+// Momentum on release (Motion inertia): the strip keeps the flick's velocity and settles
+// like native touch scrolling, wrapping through the loop copies. Any new input stops it.
+let glide=0;
+function stopGlide(){if(glide){cancelAnimationFrame(glide);glide=0;}}
+function releaseVelocity(samples){const recent=samples.filter(s=>samples[samples.length-1].t-s.t<=90);if(recent.length<2)return 0;const a=recent[0],b=recent[recent.length-1],dt=(b.t-a.t)/1000;return dt>0?(b.x-a.x)/dt:0;}
+function startGlide(pointerVelocity){
+ const velocity=Math.max(-4000,Math.min(4000,-pointerVelocity));
+ if(Math.abs(velocity)<150||!motion())return 0;
+ const gen=inertia({keyframes:[gallery.scrollLeft],velocity,power:.35,timeConstant:325,restDelta:.5,restSpeed:8});
+ const t0=performance.now();
+ const frame=now=>{const {value,done}=gen.next(now-t0);let v=value;if(period)v=((v%period)+period)%period;else v=Math.max(0,Math.min(gallery.scrollWidth-gallery.clientWidth,v));gallery.scrollLeft=v;position=lastApplied=gallery.scrollLeft;glide=done?0:requestAnimationFrame(frame);};
+ glide=requestAnimationFrame(frame);
+ return 2600; // inertia with timeConstant 325 settles in < 2.6 s — hold the autoplay until then
+}
+function endDrag(){if(!drag)return;suppressClick=drag.moved;setTimeout(()=>suppressClick=false,0);gallery.classList.remove('dragging');const id=drag.id,moved=drag.moved,samples=drag.samples;drag=null;if(gallery.hasPointerCapture(id))gallery.releasePointerCapture(id);const glideMs=moved?startGlide(releaseVelocity(samples)):0;hold(1800+glideMs);wake();}
 gallery.addEventListener('pointerup',endDrag);gallery.addEventListener('pointercancel',endDrag);gallery.addEventListener('lostpointercapture',endDrag);
 window.addEventListener('pointerup',endDrag);
 gallery.addEventListener('click',e=>{if(suppressClick){e.preventDefault();e.stopPropagation();suppressClick=false;}},true);

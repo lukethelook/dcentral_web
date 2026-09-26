@@ -34,7 +34,5 @@ function queueScroll(){if(!pending)pending=requestAnimationFrame(updateScroll);}
 addEventListener('scroll',queueScroll,{passive:true});addEventListener('resize',queueScroll);updateScroll();
 
 // Hero text is present immediately; only the terrain has a first-visit entrance.
-// Restrained section reveals remain below the hero.
-const reveals=[...document.querySelectorAll('.studio-copy h2,.work-heading h2,.region h2,.contact h2')];
-const revealObserver=new IntersectionObserver(entries=>{for(const e of entries){if(!e.isIntersecting)continue;revealObserver.unobserve(e.target);if(canMove())e.target.animate([{opacity:.4,transform:'translateY(24px)'},{opacity:1,transform:'translateY(0)'}],{duration:650,easing:'cubic-bezier(.23,1,.32,1)'});}},{threshold:.25});reveals.forEach(e=>revealObserver.observe(e));
+// Section reveals below the hero live in motion-system.js (Motion inView + stagger).
 document.addEventListener('motion-state',e=>{paused=e.detail.paused;if(paused)document.getAnimations().filter(a=>Number.isFinite(a.effect?.getComputedTiming().endTime)).forEach(a=>a.finish());queueScroll();});

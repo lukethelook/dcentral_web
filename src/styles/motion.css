@@ -1,0 +1,30 @@
+/* Motion layer — companion to src/scripts/motion-system.js.
+   Page transitions use native cross-document View Transitions (no JS router):
+   Chrome/Edge/Safari 18.2+ animate, other browsers navigate normally. */
+
+@view-transition { navigation: auto; }
+
+/* Page change: the old page steps back quickly, the new one settles in. */
+::view-transition-old(root) { animation: 200ms cubic-bezier(.23,1,.32,1) both vt-out; }
+::view-transition-new(root) { animation: 460ms cubic-bezier(.23,1,.32,1) 60ms both vt-in; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px); } }
+
+/* Shared element: the clicked gallery cover travels into the case hero
+   (name set on click in motion-system.js), and case → next case morphs too. */
+.case-visual { view-transition-name: case-hero; }
+::view-transition-group(case-hero) { animation-duration: 560ms; animation-timing-function: cubic-bezier(.77,0,.175,1); }
+::view-transition-old(case-hero),
+::view-transition-new(case-hero) { animation-duration: 560ms; animation-timing-function: cubic-bezier(.23,1,.32,1); height: 100%; object-fit: cover; }
+
+/* FAQ: padding lives inside the answer so the height animation collapses cleanly. */
+.faq-list .detail-content { padding-bottom: 0; }
+.faq-list .detail-content > p { padding-bottom: 24px; }
+/* The plus turns back as soon as closing starts, not when it ends. */
+details[data-state=closing] summary svg { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation-duration: 1ms !important; animation-delay: 0s !important; }
+}
