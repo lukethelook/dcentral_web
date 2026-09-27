@@ -6,7 +6,7 @@
   "project": "grafinger",
   "width": 1920,
   "height": 1280,
-  "featured": true,
-  "order": 4,
+  "featured": false,
+  "order": 12,
   "title": "Das Werk"
 }

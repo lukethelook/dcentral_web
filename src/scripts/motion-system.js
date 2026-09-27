@@ -65,7 +65,7 @@ const REVEAL = [
   ['.ps .eg', false],
   ['.case-gallery .eg', false],
   ['.pg-head', false],
-  ['.pg-grid', ':scope > figure'],
+  ['.pg-grid > figure', false], // per photo: the archive grid is far taller than the viewport
   ['.disc-work-head', false],
   ['.cl-rows', ':scope > li'],
   ['.disc-more-grid', ':scope > a'],
@@ -157,7 +157,10 @@ if (canMove()) {
       // IntersectionObserver honours the target's own clip-path: a clipped element never
       // "intersects", so clip reveals watch their (unclipped) parent instead.
       const watch = mode === 'clip' ? el.parentElement : el;
-      inView(watch, () => { play(el, mode); }, { amount: 0.15, margin: '0px 0px -8% 0px' });
+      // Blocks taller than the viewport can never show 15 % of themselves — cap the
+      // threshold so they still trigger once half a screen of them is in view.
+      const amount = Math.min(0.15, (innerHeight * 0.5) / Math.max(1, watch.offsetHeight));
+      inView(watch, () => { play(el, mode); }, { amount, margin: '0px 0px -8% 0px' });
     });
   }
 }

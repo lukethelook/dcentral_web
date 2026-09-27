@@ -1,0 +1,90 @@
+{
+  "title": "Ein Album bekommt ein Gesicht",
+  "signal": "ein Gesicht",
+  "client": "Janold",
+  "clientLabel": "Janold · Album „waiting for something“",
+  "discipline": "Foto",
+  "also": [],
+  "year": 2018,
+  "summary": "„waiting for something“ ist das Album des Musikers Janold, 2018 bei Frogmountain Records erschienen. Dafür entstanden die Künstlerporträts, das Cover, Digipack und Inlay sowie Pressebilder – eine Bildsprache zwischen Nähe und Gitarrenholz.",
+  "body": "Zehn Songs, ein Musiker, seine Gitarre. Das Cover sollte genau das zeigen: ein Gesicht, sehr nah, und daneben das Griffbrett – unscharf genug, um Platz für die Musik zu lassen.\n\nFotografiert wurde an einem Sommertag an Orten mit Textur: Ziegelwand, verwitterte Mauer, grün gestrichenes Holz, ein Rollladen aus Metall. Daraus wurden Cover, Digipack und Inlay gestaltet, dazu Pressebilder und Motive für den Webauftritt.\n\nAlles stammt aus einer Hand: Fotografie, Bildbearbeitung und Gestaltung – deshalb passt jedes Motiv zum nächsten.",
+  "tags": [
+    "Künstlerporträts",
+    "Albumcover",
+    "Print"
+  ],
+  "scope": [
+    "Künstlerporträts",
+    "Albumcover",
+    "Digipack & Inlay",
+    "Pressebilder",
+    "Bildmaterial für Web"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Das Cover",
+      "d": "Ein Gesicht, ein Griffbrett, zwei Zeilen Typografie – reduziert auf das, was das Album ausmacht."
+    },
+    {
+      "t": "Digipack & Inlay",
+      "d": "Vom Foto bis zur Druckdatei: Cover, Rückseite und Inlay in einer durchgehenden Gestaltung."
+    },
+    {
+      "t": "Porträts mit Textur",
+      "d": "Ziegel, Holz, Metall – jede Wand erzählt etwas anderes, das Gesicht bleibt im Mittelpunkt."
+    },
+    {
+      "t": "Pressebilder",
+      "d": "Motive für Presse und Web, die zur Albumgestaltung passen."
+    }
+  ],
+  "loopTitle": "Vom Shooting zum Tonträger",
+  "loop": [
+    {
+      "t": "Shooting",
+      "d": "Porträts an Wänden mit Charakter."
+    },
+    {
+      "t": "Auswahl",
+      "d": "Das eine Bild für das Cover."
+    },
+    {
+      "t": "Gestaltung",
+      "d": "Cover, Digipack und Inlay."
+    },
+    {
+      "t": "Release",
+      "d": "Pressebilder und Motive für Web."
+    }
+  ],
+  "stackTitle": "Ausrüstung & Technik",
+  "stack": [
+    "Sony Alpha 7R II",
+    "Lightroom",
+    "Photoshop",
+    "InDesign"
+  ],
+  "galleryTitle": "Cover, Print & Porträts",
+  "galleryPhotos": [
+    "janold-cover",
+    "janold-digipack",
+    "janold-griffbrett",
+    "janold-perspektive",
+    "janold-gruen",
+    "janold-profil",
+    "janold-anschlag",
+    "janold-rahmen"
+  ],
+  "hue": 30,
+  "format": "landscape",
+  "cover": "/images/cases/janold/cover.webp",
+  "coverTone": "light",
+  "previews": [
+    "/images/cases/janold/hover-cover.webp",
+    "/images/cases/janold/hover-griffbrett.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 8
+}

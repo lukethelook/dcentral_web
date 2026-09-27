@@ -6,7 +6,7 @@
   "project": "grafinger",
   "width": 2000,
   "height": 1125,
-  "featured": true,
-  "order": 6,
+  "featured": false,
+  "order": 14,
   "title": "Von oben"
 }

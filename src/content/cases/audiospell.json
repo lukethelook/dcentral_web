@@ -1,0 +1,102 @@
+{
+  "title": "Handwerk, das man hören kann",
+  "signal": "hören kann",
+  "client": "audiospell",
+  "clientLabel": "audiospell · Plattenspieler-Manufaktur",
+  "discipline": "Foto",
+  "also": [],
+  "year": 2022,
+  "summary": "audiospell baut den Alphalex One: einen Plattenspieler auf Basis des legendären Linn LP12, mit einer Zarge aus heimischer Schwarznuss. Für die Manufaktur entstand eine Bildserie, die zeigt, wie viel Handarbeit in jedem Rahmen steckt – vom Rohling bis zum fertigen Stück auf rotem Samt.",
+  "body": "Ein Plattenspieler, neu gedacht: Beim Alphalex One wird die Technik eines Klassikers in eine eigene Zarge gesetzt – aus heimischer Schwarznuss oder Wenge, auf Wunsch in RAL-Farbe. Genau diese Zarge ist das Herz der Manufaktur, und um sie ging es beim Shooting.\n\nFotografiert wurde an einem Abend in der Werkstatt: Rahmen in langen Reihen auf dem Werktisch, Beschläge im Detail, die dunkle Ecke eines Rohlings, der Blick über die Lochwand. Dazu Produktbilder auf rotem Samt, die das Holz so warm zeigen, wie es in echt wirkt – und ein Teamporträt in Schwarzweiß.\n\nDie Serie funktioniert als Ganzes: Reportage und Produkt sprechen dieselbe Sprache, damit Website, Social Media und Präsentationen aus einem Guss wirken.",
+  "tags": [
+    "Produktfotografie",
+    "Manufaktur-Reportage",
+    "Detail"
+  ],
+  "scope": [
+    "Produktfotografie",
+    "Reportage in der Werkstatt",
+    "Detail- & Materialaufnahmen",
+    "Teamporträt",
+    "Bildbearbeitung & Color Grading"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Produktbilder mit Wärme",
+      "d": "Die fertige Zarge auf rotem Samt vor der Lochwand der Werkstatt – ein Setting, das Holz, Handwerk und Ort in einem Bild verbindet."
+    },
+    {
+      "t": "Reportage aus der Manufaktur",
+      "d": "Rahmen in Reihe, Menschen bei der Arbeit, der Blick von oben über den Werktisch: Bilder, die zeigen, dass hier nichts vom Band kommt."
+    },
+    {
+      "t": "Details, die man fühlt",
+      "d": "Beschläge, Bohrungen, Kanten – mit wenig Schärfentiefe fotografiert, damit Material und Präzision sichtbar werden."
+    },
+    {
+      "t": "Ein Team in Schwarzweiß",
+      "d": "Ein ruhiges Gruppenbild, das den Menschen hinter dem Produkt ein Gesicht gibt."
+    }
+  ],
+  "loopTitle": "Vom Rohling zum Produktbild",
+  "loop": [
+    {
+      "t": "Rohling",
+      "d": "Die ersten Rahmen am Werkstattboden."
+    },
+    {
+      "t": "Serie",
+      "d": "Reihen fertiger Zargen auf dem Werktisch."
+    },
+    {
+      "t": "Detail",
+      "d": "Beschläge und Kanten in der Nahaufnahme."
+    },
+    {
+      "t": "Produkt",
+      "d": "Das fertige Stück, inszeniert auf rotem Samt."
+    }
+  ],
+  "outlookTitle": "Was ich heute daraus machen würde",
+  "outlookIntro": "Beim Shooting ist auch Bewegtbild entstanden. Daraus ließe sich mehr machen:",
+  "outlook": [
+    {
+      "t": "Kurzfilm aus der Manufaktur",
+      "d": "Aus den gedrehten Clips ein ruhiger Film über die Entstehung einer Zarge – für Website und Messen."
+    },
+    {
+      "t": "Konfigurator mit echten Bildern",
+      "d": "Holzart, Farbe, Tonarm: ein Konfigurator, der jede Variante mit echten Fotos zeigt statt mit Renderings."
+    }
+  ],
+  "stackTitle": "Ausrüstung & Technik",
+  "stack": [
+    "Sony Alpha 7 III",
+    "Lightroom",
+    "Photoshop",
+    "Color Grading"
+  ],
+  "galleryTitle": "Aus der Serie",
+  "galleryPhotos": [
+    "audiospell-produkt-rot",
+    "audiospell-reihen",
+    "audiospell-ecke",
+    "audiospell-beschlaege",
+    "audiospell-von-oben",
+    "audiospell-rahmen-boden",
+    "audiospell-reihen-rot",
+    "audiospell-team"
+  ],
+  "hue": 25,
+  "format": "landscape",
+  "cover": "/images/cases/audiospell/cover.webp",
+  "coverTone": "dark",
+  "previews": [
+    "/images/cases/audiospell/hover-reihen.webp",
+    "/images/cases/audiospell/hover-beschlaege.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 6
+}

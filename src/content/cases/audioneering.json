@@ -1,0 +1,89 @@
+{
+  "title": "Akustik, die man sehen kann",
+  "signal": "sehen kann",
+  "client": "Audioneering",
+  "clientLabel": "Audioneering · Roman Sereinig, Linz",
+  "discipline": "Foto",
+  "also": [],
+  "year": 2023,
+  "summary": "Audioneering ist das Ingenieurbüro von Roman Sereinig in Linz: Akustik, Audio, Beschallung und Schwingungen. Schwer zu fotografieren – man hört es ja nur. Also zeigt die Bildserie den Menschen, seine Werkzeuge und die Orte, an denen gemessen wird.",
+  "body": "Wie fotografiert man etwas, das man nicht sieht? Bei Audioneering war die Antwort: über den Menschen und seine Arbeit. Business-Porträts, die nahbar bleiben, dazu Bilder im Einsatz – mit Kopfhörern im Freien, vor der Baustelle, am Laptop mit dem Spektrogramm auf dem Bildschirm.\n\nDie Messtechnik selbst bekam eigene Detailbilder: das Interface in der Hand, Kopfhörer und Mikrofon vor dem Rechner. So entsteht eine Bildwelt, die Kompetenz zeigt, ohne steif zu wirken.\n\nFarbe spielt mit: Das Blau der Marke findet sich im Hoodie, in den Räumen und im Licht wieder – ein roter Faden durch die ganze Serie.",
+  "tags": [
+    "Business-Porträts",
+    "Reportage",
+    "Technik-Detail"
+  ],
+  "scope": [
+    "Business-Porträts",
+    "Reportage im Einsatz",
+    "Technik- & Detailaufnahmen",
+    "Bildbearbeitung & Color Grading"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Porträts mit Haltung",
+      "d": "Nah, freundlich, klar: Porträts, die zeigen, wer hier berät – drinnen wie draußen."
+    },
+    {
+      "t": "Messen sichtbar machen",
+      "d": "Das Spektrogramm auf dem Bildschirm, die Kopfhörer auf der Baustelle: Bilder, die erklären, was Akustik-Ingenieur:innen eigentlich tun."
+    },
+    {
+      "t": "Werkzeug im Detail",
+      "d": "Interface, Mikrofon, Kopfhörer – Technik, fotografiert wie ein Produkt."
+    },
+    {
+      "t": "Eine Farbwelt",
+      "d": "Das Markenblau zieht sich durch Kleidung, Orte und Licht und macht die Serie wiedererkennbar."
+    }
+  ],
+  "loopTitle": "Vom Menschen zur Messung",
+  "loop": [
+    {
+      "t": "Porträt",
+      "d": "Wer hinter Audioneering steht."
+    },
+    {
+      "t": "Werkzeug",
+      "d": "Die Messtechnik in der Hand."
+    },
+    {
+      "t": "Einsatz",
+      "d": "Messungen im Freien und auf der Baustelle."
+    },
+    {
+      "t": "Ergebnis",
+      "d": "Das Spektrogramm – Klang, sichtbar gemacht."
+    }
+  ],
+  "stackTitle": "Ausrüstung & Technik",
+  "stack": [
+    "Sony Alpha 7 IV",
+    "Lightroom",
+    "Photoshop",
+    "Color Grading"
+  ],
+  "galleryTitle": "Aus der Serie",
+  "galleryPhotos": [
+    "audioneering-messung",
+    "audioneering-portrait",
+    "audioneering-interface",
+    "audioneering-hoeren",
+    "audioneering-draussen",
+    "audioneering-baustelle",
+    "audioneering-setup",
+    "audioneering-sonne"
+  ],
+  "hue": 215,
+  "format": "landscape",
+  "cover": "/images/cases/audioneering/cover.webp",
+  "coverTone": "dark",
+  "previews": [
+    "/images/cases/audioneering/hover-messung.webp",
+    "/images/cases/audioneering/hover-feld.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 7
+}
