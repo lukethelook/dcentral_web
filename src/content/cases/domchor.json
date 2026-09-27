@@ -1,0 +1,70 @@
+{
+  "title": "Magnificat – ein Cover für die Stille",
+  "signal": "für die Stille",
+  "client": "Domchor Linz",
+  "clientLabel": "Domchor Linz · CD „Magnificat“",
+  "discipline": "Foto",
+  "also": [],
+  "year": 2017,
+  "summary": "„Magnificat – Gregorianische Gesänge zum Stundengebet im Linzer Mariendom“: Für diese CD entstanden Fotografie und Grafikdesign – Bilder der Sängerinnen und Sänger im Dom und ein Cover, das den Mariendom durch ein Wabenfenster zeigt.",
+  "body": "Gregorianischer Gesang lebt vom Raum. Die Bilder sollten genau das festhalten: die Konzentration beim Singen, die Hände an den Notenmappen, das Licht im Altarraum – in ruhigem Schwarzweiß.\n\nFür das Cover wurde der Blick umgedreht: von innen nach außen, durch ein Wabenfenster auf die Silhouette des Mariendoms. Darüber ein großes „f“ aus dem Titel – ein Bogen, der das Magnificat trägt.\n\nFotografie und Gestaltung kamen aus einer Hand, vom Shooting bis zum CD-Druck.",
+  "tags": [
+    "Fotografie",
+    "Grafikdesign",
+    "CD-Cover"
+  ],
+  "scope": [
+    "Fotografie im Dom",
+    "Ensemble- & Porträtfotografie",
+    "CD-Cover",
+    "Gestaltung für den CD-Druck"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Das Cover",
+      "d": "Wabenfenster, Domsilhouette, ein goldenes „f“: ein Motiv, das Ort und Titel in einem Bild verbindet."
+    },
+    {
+      "t": "Bilder im Raum",
+      "d": "Fotografiert während des Singens, nicht davor – Gesichter, Hände und Noten im Licht des Altarraums."
+    },
+    {
+      "t": "Schwarzweiß als Haltung",
+      "d": "Ohne Farbe bleibt, worum es geht: Stimme, Konzentration, Gemeinschaft."
+    }
+  ],
+  "stackTitle": "Werkzeuge",
+  "stack": [
+    "Lightroom",
+    "Photoshop"
+  ],
+  "screens": [
+    {
+      "image": "/images/photos/domchor-cover.webp",
+      "device": "poster",
+      "caption": "CD-Cover „Magnificat“ – Gregorianische Gesänge zum Stundengebet im Linzer Mariendom."
+    }
+  ],
+  "galleryTitle": "Aus dem Dom",
+  "galleryPhotos": [
+    "domchor-ensemble",
+    "domchor-leitung",
+    "domchor-noten",
+    "domchor-stimme",
+    "domchor-lachen",
+    "domchor-profil",
+    "domchor-zwei"
+  ],
+  "hue": 230,
+  "format": "landscape",
+  "cover": "/images/cases/domchor/cover.webp",
+  "coverTone": "dark",
+  "previews": [
+    "/images/cases/domchor/hover-cover.webp",
+    "/images/cases/domchor/hover-fenster.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 8
+}

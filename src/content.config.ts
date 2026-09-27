@@ -64,7 +64,7 @@ const cases = defineCollection({
     outlookIntro: z.string().nullable().optional(),
     outlook: z.array(z.object({ t: z.string(), d: z.string() })).default([]),
     screens: z
-      .array(z.object({ image: z.string().nullable(), device: z.enum(['desktop', 'mobile', 'image', 'wide']), caption: z.string().nullable().optional() }))
+      .array(z.object({ image: z.string().nullable(), device: z.enum(['desktop', 'mobile', 'image', 'wide', 'poster']), caption: z.string().nullable().optional() }))
       .default([]),
     featured: z.boolean().default(false),
     order: z.number().default(0),

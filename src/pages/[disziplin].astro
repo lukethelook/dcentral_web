@@ -8,6 +8,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import CaseList from '../components/CaseList.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
+import Panorama360 from '../components/Panorama360.astro';
 import leistungen from '../content/site/leistungen.json';
 
 type Service = (typeof leistungen.services)[number] & { key: string; slug: string; short?: string };
@@ -31,6 +32,12 @@ const cases = (await getCollection('cases'))
   .sort((a, b) => a.data.order - b.data.order);
 const others = services.map((o, i) => ({ ...o, i })).filter((o) => o.i !== index);
 const isPhoto = s.key === 'Foto';
+// Film & Aerial: a live 360° drone tour (Almsee + Grafinger scenes) instead of a static reel.
+const aerialScenes = s.key === 'Film & Aerial' ? [
+  { image: '/images/panoramas/almsee.webp', title: 'Almsee' },
+  { image: '/images/cases/grafinger/pano-almtal.webp', title: 'Almtal' },
+  { image: '/images/cases/grafinger/pano-werk.webp', title: 'Sägewerk Grafinger' },
+] : [];
 const arrow = 'M6 18 18 6M6 6h12v12';
 ---
 
@@ -60,6 +67,7 @@ const arrow = 'M6 18 18 6M6 6h12v12';
     </section>
 
     {isPhoto && <div class="shell"><PhotoGallery /></div>}
+    {aerialScenes.length > 0 && <div class="shell"><Panorama360 title="Das Almtal von oben – in 360°" scenes={aerialScenes} /></div>}
 
     <section class="disc-work shell" aria-labelledby="disc-work-title">
       <div class="disc-work-head">

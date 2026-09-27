@@ -6,7 +6,7 @@
   "project": "audiospell",
   "width": 2200,
   "height": 1467,
-  "featured": true,
-  "order": 6,
+  "featured": false,
+  "order": 15,
   "title": "In Reihe"
 }

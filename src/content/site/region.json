@@ -2,28 +2,29 @@
   "eyebrow": "Region & Vertrauen",
   "title": "Von hier.\n*Für dein Vorhaben.*",
   "clients": [
-    "WKO Oberösterreich",
-    "Seehotel Traunblick",
-    "Bergbahnen Höhenrausch",
-    "Salzgut Manufaktur",
-    "Alpenlachs",
-    "Festival am See",
-    "Atelier Seeblick",
-    "Tourismusverband",
-    "Grafinger"
+    "audiospell",
+    "Kronawitter",
+    "Sägewerk Grafinger",
+    "Audioneering",
+    "Domchor Linz",
+    "Physionetzwerk Almtal",
+    "mehr S(IN)N",
+    "Quantiflux",
+    "Janold",
+    "MapLove"
   ],
   "stats": [
     {
-      "n": "10+",
-      "l": "Jahre vor Ort"
+      "n": "{projekte}",
+      "l": "Projekte im Portfolio"
     },
     {
-      "n": "40+",
-      "l": "Projekte realisiert"
+      "n": "{fotos}",
+      "l": "Fotos im Archiv"
     },
     {
-      "n": "15",
-      "l": "Spezialist:innen im Netz"
+      "n": "4",
+      "l": "Disziplinen"
     },
     {
       "n": "1",

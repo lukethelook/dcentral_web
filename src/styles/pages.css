@@ -224,6 +224,11 @@ html.motion-paused .nf-node .nf-dot { animation-play-state: paused; }
 .case-screens--mobile { gap: clamp(16px, 3vw, 40px); }
 .case-image { display: block; width: 100%; height: auto; }
 .case-screens--image .case-image { aspect-ratio: 4 / 3; object-fit: cover; }
+/* Posters & portrait designs: never cropped — one shared height, natural widths. */
+.case-screens--poster { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+.case-screens--poster .case-screen { flex: 0 1 auto; min-width: 0; }
+.case-screens--poster .case-image { height: min(66vh, 640px); width: auto; max-width: 100%; object-fit: contain; }
+.case-screens--poster figcaption { max-width: 34ch; }
 
 /* App projects: three phones, the middle one in front, floating gently. */
 .case-showcase--phones { background: linear-gradient(160deg, #efeaff 0%, #f7f3ff 45%, #e3f6f0 100%); }
@@ -357,6 +362,7 @@ html.motion-paused .sc-float { animation-play-state: paused; }
   .case-screens--combo .case-screen--mobile{width:62%}
   .case-screens--mobile{grid-template-columns:1fr 1fr}
   .case-screens--image{grid-template-columns:1fr}
+  .case-screens--poster .case-image{height:auto;width:100%}
   .case-showcase--phones .sc-phone{width:28%}
   .case-showcase--phones .sc-float--0{left:6%}
   .case-showcase--phones .sc-float--1{left:35%;width:30%}

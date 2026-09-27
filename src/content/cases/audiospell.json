@@ -1,102 +1,146 @@
 {
-  "title": "Handwerk, das man hören kann",
+  "title": "Eine Marke, die man hören kann",
   "signal": "hören kann",
   "client": "audiospell",
-  "clientLabel": "audiospell · Plattenspieler-Manufaktur",
-  "discipline": "Foto",
-  "also": [],
+  "clientLabel": "audiospell by Christian Schwaiger · Linz",
+  "discipline": "Web",
+  "also": [
+    "Foto"
+  ],
   "year": 2022,
-  "summary": "audiospell baut den Alphalex One: einen Plattenspieler auf Basis des legendären Linn LP12, mit einer Zarge aus heimischer Schwarznuss. Für die Manufaktur entstand eine Bildserie, die zeigt, wie viel Handarbeit in jedem Rahmen steckt – vom Rohling bis zum fertigen Stück auf rotem Samt.",
-  "body": "Ein Plattenspieler, neu gedacht: Beim Alphalex One wird die Technik eines Klassikers in eine eigene Zarge gesetzt – aus heimischer Schwarznuss oder Wenge, auf Wunsch in RAL-Farbe. Genau diese Zarge ist das Herz der Manufaktur, und um sie ging es beim Shooting.\n\nFotografiert wurde an einem Abend in der Werkstatt: Rahmen in langen Reihen auf dem Werktisch, Beschläge im Detail, die dunkle Ecke eines Rohlings, der Blick über die Lochwand. Dazu Produktbilder auf rotem Samt, die das Holz so warm zeigen, wie es in echt wirkt – und ein Teamporträt in Schwarzweiß.\n\nDie Serie funktioniert als Ganzes: Reportage und Produkt sprechen dieselbe Sprache, damit Website, Social Media und Präsentationen aus einem Guss wirken.",
+  "url": "https://www.audiospell.com",
+  "status": "live",
+  "summary": "audiospell baut HiFi ohne Kompromisse: den Plattenspieler Alphalex One, den Lautsprecher Alpha One, das Kabel Alpha Wire One. Vom Namen über Corporate Identity, Website und Bildwelt bis zu Produkt- und Tech-Support kommt alles aus einer Hand – ein Leidenschaftsprojekt, das stetig Fahrt aufnimmt.",
+  "body": "„true sound – zero compromise“ – das ist der Anspruch von audiospell, der HiFi-Manufaktur von Christian Schwaiger in Linz. Dahinter steht ein kleines Team, das Plattenspieler, Lautsprecher und Kabel so lange verfeinert, bis nichts mehr stört.\n\nDer Auftritt entstand von Grund auf: Name, Logo und Corporate Identity, die Website mit Produktseiten für Alpha One, Alphawire und Alphalex One, Kampagnenmotive wie „Redefining Clarity“ und eine Bildwelt aus Studio, Werkstatt und Team – dunkel, warm, mit Walnuss und rotem Samt.\n\nUnd es endet nicht beim Launch: Produkt- und Tech-Support, neue Inhalte, laufende Weiterentwicklung. audiospell ist ein Leidenschaftsprojekt, das immer mehr Fahrt aufnimmt.",
   "tags": [
-    "Produktfotografie",
-    "Manufaktur-Reportage",
-    "Detail"
+    "Namensgebung & CI",
+    "Website",
+    "Fotografie",
+    "Support"
   ],
   "scope": [
-    "Produktfotografie",
-    "Reportage in der Werkstatt",
-    "Detail- & Materialaufnahmen",
-    "Teamporträt",
-    "Bildbearbeitung & Color Grading"
+    "Namensgebung",
+    "Corporate Identity & Logo",
+    "Website",
+    "Produkt- & Kampagnenfotografie",
+    "Team- & Porträtfotografie",
+    "Kampagnenmotive",
+    "Produktsupport",
+    "Tech-Support & Betreuung"
   ],
   "highlightsTitle": "Was gebaut wurde",
   "highlights": [
     {
-      "t": "Produktbilder mit Wärme",
-      "d": "Die fertige Zarge auf rotem Samt vor der Lochwand der Werkstatt – ein Setting, das Holz, Handwerk und Ort in einem Bild verbindet."
+      "t": "Name & Identität",
+      "d": "Vom Namen bis zum Logo: eine Marke, die nach Präzision und Handwerk klingt – und auf Website, Kampagnen und Produkten gleich auftritt."
     },
     {
-      "t": "Reportage aus der Manufaktur",
-      "d": "Rahmen in Reihe, Menschen bei der Arbeit, der Blick von oben über den Werktisch: Bilder, die zeigen, dass hier nichts vom Band kommt."
+      "t": "Website",
+      "d": "Ein dunkler, ruhiger Auftritt für Produkte, Team und Studio-Besuche nach Vereinbarung – gebaut, damit man den Klang schon beim Scrollen ahnt."
     },
     {
-      "t": "Details, die man fühlt",
-      "d": "Beschläge, Bohrungen, Kanten – mit wenig Schärfentiefe fotografiert, damit Material und Präzision sichtbar werden."
+      "t": "Bildwelt",
+      "d": "Lautsprecher im Studiolicht, Zargen aus Walnuss, das Team auf dem roten Sofa: Fotos, die Produkte und Menschen in dieselbe Stimmung setzen."
     },
     {
-      "t": "Ein Team in Schwarzweiß",
-      "d": "Ein ruhiges Gruppenbild, das den Menschen hinter dem Produkt ein Gesicht gibt."
+      "t": "Kampagnen",
+      "d": "Motive wie „Redefining Clarity – Alphalex One“ übersetzen die Bildwelt in Anzeigen mit klarer Botschaft."
+    },
+    {
+      "t": "Produkt- & Tech-Support",
+      "d": "Fragen zu Setup, Komponenten und Technik landen nicht im Nirgendwo – Support gehört bei audiospell zum Produkt."
+    },
+    {
+      "t": "Laufende Betreuung",
+      "d": "Neue Produkte, neue Inhalte, neue Bilder: Die Marke wächst, und der Auftritt wächst mit."
     }
   ],
-  "loopTitle": "Vom Rohling zum Produktbild",
+  "loopTitle": "Vom Namen zum Klangerlebnis",
   "loop": [
     {
-      "t": "Rohling",
-      "d": "Die ersten Rahmen am Werkstattboden."
+      "t": "Name",
+      "d": "Ein Name und ein Zeichen für true sound."
     },
     {
-      "t": "Serie",
-      "d": "Reihen fertiger Zargen auf dem Werktisch."
+      "t": "Bild",
+      "d": "Studio, Werkstatt und Team in einer Bildsprache."
     },
     {
-      "t": "Detail",
-      "d": "Beschläge und Kanten in der Nahaufnahme."
+      "t": "Web",
+      "d": "Produkte, Team und Kontakt auf audiospell.com."
     },
     {
-      "t": "Produkt",
-      "d": "Das fertige Stück, inszeniert auf rotem Samt."
+      "t": "Support",
+      "d": "Betreuung, die nach dem Kauf weitergeht."
     }
   ],
-  "outlookTitle": "Was ich heute daraus machen würde",
-  "outlookIntro": "Beim Shooting ist auch Bewegtbild entstanden. Daraus ließe sich mehr machen:",
+  "outlookTitle": "Wie es weitergeht",
+  "outlookIntro": "audiospell nimmt Fahrt auf. Ein paar Schritte, die sich anbieten:",
   "outlook": [
     {
-      "t": "Kurzfilm aus der Manufaktur",
-      "d": "Aus den gedrehten Clips ein ruhiger Film über die Entstehung einer Zarge – für Website und Messen."
+      "t": "Film aus der Manufaktur",
+      "d": "Aus den gedrehten Clips aus der Werkstatt ein ruhiger Film über die Entstehung einer Zarge – für Website und Messen."
     },
     {
       "t": "Konfigurator mit echten Bildern",
       "d": "Holzart, Farbe, Tonarm: ein Konfigurator, der jede Variante mit echten Fotos zeigt statt mit Renderings."
+    },
+    {
+      "t": "Support-Assistent",
+      "d": "Ein KI-Assistent, der Setup-Fragen zu Alpha One und Alphalex One rund um die Uhr beantwortet – und nur Knifflige weitergibt."
     }
   ],
-  "stackTitle": "Ausrüstung & Technik",
+  "stackTitle": "Werkzeuge & Technik",
   "stack": [
+    "WordPress",
+    "Elementor",
     "Sony Alpha 7 III",
     "Lightroom",
     "Photoshop",
     "Color Grading"
   ],
-  "galleryTitle": "Aus der Serie",
+  "showcase": {
+    "desktop": "/images/cases/audiospell/scroll-desktop.webp",
+    "mobile": "/images/cases/audiospell/scroll-mobile.webp",
+    "label": "audiospell.com"
+  },
+  "screens": [
+    {
+      "image": "/images/photos/audiospell-kampagne-alphalex.webp",
+      "device": "poster",
+      "caption": "Kampagnenmotiv „Redefining Clarity“ für den Alphalex One."
+    },
+    {
+      "image": "/images/photos/audiospell-alpha-one-paar.webp",
+      "device": "poster",
+      "caption": "Alpha One – schwarz auf schwarz."
+    },
+    {
+      "image": "/images/photos/audiospell-feinschliff.webp",
+      "device": "poster",
+      "caption": "Der letzte Schliff vor dem Hören."
+    }
+  ],
+  "galleryTitle": "Aus der Bildwelt",
   "galleryPhotos": [
-    "audiospell-produkt-rot",
-    "audiospell-reihen",
-    "audiospell-ecke",
-    "audiospell-beschlaege",
-    "audiospell-von-oben",
-    "audiospell-rahmen-boden",
-    "audiospell-reihen-rot",
-    "audiospell-team"
+    "audiospell-alpha-one-studio",
+    "audiospell-team-sofa",
+    "audiospell-zarge-rot",
+    "audiospell-phono-moebel",
+    "audiospell-portrait-blau",
+    "audiospell-zargen",
+    "audiospell-team-sw",
+    "audiospell-kante"
   ],
   "hue": 25,
   "format": "landscape",
   "cover": "/images/cases/audiospell/cover.webp",
   "coverTone": "dark",
   "previews": [
-    "/images/cases/audiospell/hover-reihen.webp",
-    "/images/cases/audiospell/hover-beschlaege.webp"
+    "/images/cases/audiospell/hover-kampagne.webp",
+    "/images/cases/audiospell/hover-team.webp"
   ],
   "previewDummy": false,
   "featured": true,
-  "order": 6
+  "order": 1
 }

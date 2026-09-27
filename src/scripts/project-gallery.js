@@ -1,4 +1,4 @@
-/** Continuous, interruptible project gallery. Dummy media is explicitly labelled in HTML. */
+/** Continuous, interruptible project gallery. */
 import {inertia} from 'motion';
 const gallery=document.querySelector('.gallery');
 const originals=[...gallery.querySelectorAll('.project')];
@@ -79,7 +79,7 @@ document.addEventListener('motion-state',e=>{paused=e.detail.paused;syncPlay();f
 reduced.addEventListener('change',()=>{syncPlay();for(const card of previews.keys())cycle(card);wake();});
 syncPlay();buildLoop();
 
-const mediaNote=document.querySelector('#gallery-note');function note(){mediaNote.textContent=fine.matches?'Bildvorschauen mit Dummymotiven · Originale folgen.':'Antippen: Vorschau · Erneut tippen: Projekt · Dummymotive';}note();fine.addEventListener('change',note);
+const mediaNote=document.querySelector('#gallery-note');function note(){mediaNote.textContent=fine.matches?'Projektgalerie, horizontal scrollbar.':'Antippen: Vorschau · Erneut tippen: Projekt';}note();fine.addEventListener('change',note);
 
 // Yield to page scrolling. Native scrollIntoView and horizontal autoplay must not compete.
 window.addEventListener('scroll',()=>{holdUntil=performance.now()+600;last=0;},{passive:true});

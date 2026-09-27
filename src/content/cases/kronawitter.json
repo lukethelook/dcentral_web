@@ -1,0 +1,154 @@
+{
+  "title": "Eine Fischzucht wird zur Marke",
+  "signal": "zur Marke",
+  "client": "Kronawitter",
+  "clientLabel": "Naturhof Kronawitter · Scharnstein im Almtal",
+  "discipline": "Web",
+  "also": [
+    "Foto"
+  ],
+  "year": 2024,
+  "url": "https://www.kronawitter.at",
+  "status": "live",
+  "summary": "Johanna und Michael Ehrenleitner züchten im Almtal Forellen und Saiblinge und veredeln sie selbst. Für den Naturhof Kronawitter entstand eine komplette Marke: Logo, Website, Folder, das Design des neuen SB-Ladens, Fotografie und Vermarktungskonzepte. Videoproduktionen folgen.",
+  "body": "Kronawitter ist Fischzucht, Räucherei und Selbstbedienungsladen in einem – in Scharnstein, mitten im Almtal. Die Marke dazu musste genau das tragen: Frische, Handwerk, Herkunft. Der Claim: „Natur F(r)isch Erleben“.\n\nDas Zeichen verbindet Welle und Fisch zu einer Form, die auch im Schriftzug steckt. Daraus wurde ein System in Nachtblau und Gold – auf der Website, im Folder, auf Gutscheinkarten, Plakaten und Social-Media-Motiven.\n\nIm Herbst 2024 eröffnete der neue SB-Laden: Fassade, Beschriftung und Kühlautomat tragen das Wellenmuster – Regionalität rund um die Uhr. Dazu kommen Porträts der Familie, Bilder aus Teich und Räucherei und mit „s’wiad WÜD“ eine eigene Wildfleisch-Linie, gemeinsam mit der Jagdgesellschaft Scharnstein und der Fleischerei Stadler.",
+  "tags": [
+    "Branding",
+    "Website",
+    "Verkaufsraum",
+    "Fotografie"
+  ],
+  "scope": [
+    "Logo & Markenzeichen",
+    "Corporate Design",
+    "Website",
+    "Verkaufsraum-Design SB-Laden",
+    "Folder & Drucksorten",
+    "Plakate & Social Media",
+    "Fotografie",
+    "Vermarktungskonzepte",
+    "Videoproduktion (in Planung)"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Das Zeichen",
+      "d": "Welle und Fisch in einer Form – als Symbol, im Schriftzug und als Muster, das sich über Laden, Folder und Automat zieht."
+    },
+    {
+      "t": "Der SB-Laden",
+      "d": "Vom Schriftzug an der Fassade bis zum gebrandeten Kühlautomaten: ein Verkaufsraum, der auch ohne Personal nach Kronawitter aussieht."
+    },
+    {
+      "t": "Website",
+      "d": "Naturfisch, Selbstbedienungsladen, Landwirtschaft und Kontakt – klar gegliedert und mit Bildern aus dem eigenen Betrieb."
+    },
+    {
+      "t": "Drucksorten",
+      "d": "Folder, Gutscheinkarten, Eröffnungsmotive: alles im selben System aus Nachtblau und Gold."
+    },
+    {
+      "t": "Fotografie",
+      "d": "Die Familie am Teich, der frische Fang, die Räucherei – Bilder, die Herkunft zeigen, statt sie zu behaupten."
+    },
+    {
+      "t": "Vermarktung",
+      "d": "Konzepte für Eröffnung, Gutscheine und neue Linien wie „s’wiad WÜD“ – Wildfleisch aus der Region, mit Partnern vor Ort."
+    }
+  ],
+  "loopTitle": "Vom Teich in den Laden",
+  "loop": [
+    {
+      "t": "Zucht",
+      "d": "Forellen und Saiblinge aus eigener Zucht im Almtal."
+    },
+    {
+      "t": "Veredelung",
+      "d": "Filetiert, geräuchert, eingelegt – vom Fischmeister selbst."
+    },
+    {
+      "t": "Marke",
+      "d": "Ein Zeichen, eine Farbwelt, ein Claim."
+    },
+    {
+      "t": "Verkauf",
+      "d": "Im SB-Laden, auf der Website, mit Gutschein."
+    }
+  ],
+  "outlookTitle": "Wie es weitergeht",
+  "outlookIntro": "Die Marke steht. Als Nächstes geht es um Bewegtbild und Reichweite:",
+  "outlook": [
+    {
+      "t": "Videoproduktionen",
+      "d": "Kurze Filme aus Zucht, Räucherei und Laden – für Website und Social Media."
+    },
+    {
+      "t": "Saisonale Kampagnen",
+      "d": "Wiederkehrende Motive für Saisonales wie Saiblingskaviar oder Wild aus der Region."
+    }
+  ],
+  "stackTitle": "Werkzeuge & Technik",
+  "stack": [
+    "WordPress",
+    "Elementor",
+    "Illustrator",
+    "InDesign",
+    "Photoshop",
+    "Lightroom",
+    "DJI-Drohne"
+  ],
+  "showcase": {
+    "desktop": "/images/cases/kronawitter/scroll-desktop.webp",
+    "mobile": "/images/cases/kronawitter/scroll-mobile.webp",
+    "label": "kronawitter.at"
+  },
+  "screens": [
+    {
+      "image": "/images/cases/kronawitter/logo.webp",
+      "device": "wide",
+      "caption": "Das Zeichen: Welle und Fisch in einer Form – in Nachtblau und Gold."
+    },
+    {
+      "image": "/images/cases/kronawitter/folder-aussen.webp",
+      "device": "wide",
+      "caption": "Folder, außen: das Wellenmuster als Rahmen für Produkte und Kontakt."
+    },
+    {
+      "image": "/images/cases/kronawitter/folder-innen.webp",
+      "device": "wide",
+      "caption": "Folder, innen: Familie, Philosophie, SB-Laden und Gutscheine."
+    },
+    {
+      "image": "/images/cases/kronawitter/eroeffnung.webp",
+      "device": "poster",
+      "caption": "Social-Media-Motiv zur Eröffnung des SB-Ladens."
+    },
+    {
+      "image": "/images/cases/kronawitter/wud-plakat.webp",
+      "device": "poster",
+      "caption": "„s’wiad WÜD“ – Wildfleisch-Linie mit Partnern aus der Region."
+    }
+  ],
+  "galleryTitle": "Aus der Bildwelt",
+  "galleryPhotos": [
+    "kronawitter-am-wasser",
+    "kronawitter-sb-laden",
+    "kronawitter-raeucherei",
+    "kronawitter-forelle",
+    "kronawitter-automat",
+    "kronawitter-ehrenleitner",
+    "kronawitter-fang",
+    "kronawitter-rauch-reihe"
+  ],
+  "hue": 215,
+  "format": "landscape",
+  "cover": "/images/cases/kronawitter/cover.webp",
+  "coverTone": "dark",
+  "previews": [
+    "/images/cases/kronawitter/hover-laden.webp",
+    "/images/cases/kronawitter/hover-logo.webp"
+  ],
+  "previewDummy": false,
+  "featured": true,
+  "order": 3
+}

@@ -6,7 +6,7 @@
   "project": "audiospell",
   "width": 2200,
   "height": 1467,
-  "featured": true,
-  "order": 0,
+  "featured": false,
+  "order": 7,
   "title": "Auf Rot"
 }

@@ -170,7 +170,7 @@ export default config({
         screens: fields.array(
           fields.object({
             image: fields.image({ label: 'Screenshot', directory: 'public/images/cases', publicPath: '/images/cases/' }),
-            device: fields.select({ label: 'Gerät', options: [{ label: 'Desktop (Browser)', value: 'desktop' }, { label: 'Mobil (Handy)', value: 'mobile' }, { label: 'Bild', value: 'image' }, { label: 'Bild, volle Breite', value: 'wide' }], defaultValue: 'desktop' }),
+            device: fields.select({ label: 'Gerät', options: [{ label: 'Desktop (Browser)', value: 'desktop' }, { label: 'Mobil (Handy)', value: 'mobile' }, { label: 'Bild', value: 'image' }, { label: 'Bild, volle Breite', value: 'wide' }, { label: 'Plakat / Hochformat (ungeschnitten)', value: 'poster' }], defaultValue: 'desktop' }),
             caption: TEXT('Bildunterschrift'),
           }),
           { label: 'Screens', itemLabel: (p) => p.fields.caption.value || p.fields.device.value },
