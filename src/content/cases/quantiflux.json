@@ -155,8 +155,8 @@
   "cover": "/images/cases/quantiflux/cover.webp",
   "coverTone": "dark",
   "previews": [
-    "/images/cases/quantiflux/preview-burst.webp",
-    "/images/cases/quantiflux/preview-services.webp"
+    "/images/cases/quantiflux/hover-atom.webp",
+    "/images/cases/quantiflux/hover-glow.webp"
   ],
   "previewDummy": false,
   "featured": true,

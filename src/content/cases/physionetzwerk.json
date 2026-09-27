@@ -100,8 +100,8 @@
   "hue": 170,
   "format": "landscape",
   "previews": [
-    "/images/cases/physionetzwerk/preview-web.webp",
-    "/images/cases/physionetzwerk/preview-cards.webp"
+    "/images/cases/physionetzwerk/hover-cards.webp",
+    "/images/cases/physionetzwerk/hover-logo.webp"
   ],
   "previewDummy": false,
   "featured": true,

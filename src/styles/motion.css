@@ -66,6 +66,14 @@ html.footer-curtain footer.contact { position: sticky; bottom: 0; z-index: 0; }
   }
 }
 
+/* Gallery hover previews: a slow push-in while each frame is on screen
+   (independent `scale`, so it composes with the frame's entrance transform). */
+@media (prefers-reduced-motion: no-preference) {
+  .project-preview .preview-frame.is-current { animation: preview-drift 4.6s cubic-bezier(.33, 0, .2, 1) both; }
+}
+@keyframes preview-drift { from { scale: 1; } to { scale: 1.07; } }
+html.motion-paused .project-preview .preview-frame { animation-play-state: paused; }
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),

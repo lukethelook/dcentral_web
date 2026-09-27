@@ -99,8 +99,8 @@
   "format": "landscape",
   "cover": "/images/cases/maplove/cover.webp",
   "previews": [
-    "/images/cases/maplove/preview-home.webp",
-    "/images/cases/maplove/preview-editor.webp"
+    "/images/cases/maplove/hover-poster.webp",
+    "/images/cases/maplove/hover-mobile.webp"
   ],
   "previewDummy": false,
   "featured": true,

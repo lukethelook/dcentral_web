@@ -162,8 +162,8 @@
   "cover": "/images/cases/grafinger/cover.webp",
   "coverTone": "dark",
   "previews": [
-    "/images/cases/grafinger/preview-forest.webp",
-    "/images/cases/grafinger/preview-river.webp"
+    "/images/cases/grafinger/hover-aerial.webp",
+    "/images/cases/grafinger/hover-building.webp"
   ],
   "previewDummy": false,
   "featured": true,

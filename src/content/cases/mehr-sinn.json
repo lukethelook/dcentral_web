@@ -8,7 +8,12 @@
   "year": 2022,
   "summary": "„mehr S(IN)N“ übersetzt gemessene Gehirnwellen in einen Raum, den man hört, sieht und spürt. Eine experimentelle, interaktive Installation über die Frage, wie Wahrnehmung eigentlich entsteht – gezeigt in der Krypta Linz und auf dem Ars Electronica Festival.",
   "body": "Wie viel von dem, was wir wahrnehmen, ist real – und wie viel entsteht erst in uns? Ausgehend von der Forschung zu Synästhesie und verschränkter Sinneswahrnehmung, unter anderem von Richard E. Cytowic und Emma Young, haben wir eine Installation gebaut, die diese Frage körperlich erfahrbar macht.\n\nEin EEG-Messgerät erfasst Gehirnwellen und übersetzt sie in Klang, Licht und Bewegung. In einer Raum-im-Raum-Situation laufen Projektionen über Wände und Gewölbe, rund 40 eigene Kompositionen bilden den Klangraum, eine mikrocontroller-gesteuerte Skulptur bricht Licht und Blicke, und ein verbal-assoziatives Experiment holt die Besuchenden selbst ins Werk.\n\nDer Prototyp war 2022 eine Woche lang in der Krypta Linz zu sehen, begleitet von einem Kunstvermittlungsprogramm. 2023 wurde die Installation zum Ars Electronica Festival Campus eingeladen.",
-  "tags": ["Rauminstallation", "EEG & Daten", "Projection Mapping", "Sounddesign"],
+  "tags": [
+    "Rauminstallation",
+    "EEG & Daten",
+    "Projection Mapping",
+    "Sounddesign"
+  ],
   "scope": [
     "Konzept & künstlerische Leitung",
     "Projektionen & Visuals",
@@ -18,8 +23,14 @@
     "Kunstvermittlung"
   ],
   "shown": [
-    { "place": "Krypta Linz", "year": "2022" },
-    { "place": "Ars Electronica Festival Campus", "year": "2023" }
+    {
+      "place": "Krypta Linz",
+      "year": "2022"
+    },
+    {
+      "place": "Ars Electronica Festival Campus",
+      "year": "2023"
+    }
   ],
   "highlightsTitle": "Was gebaut wurde",
   "highlights": [
@@ -49,17 +60,45 @@
     }
   ],
   "screens": [
-    { "image": "/images/cases/mehr-sinn/detail-sculpture.webp", "device": "image", "caption": "Die Wabenskulptur bricht Projektion und Publikum." },
-    { "image": "/images/cases/mehr-sinn/detail-circuit.webp", "device": "image", "caption": "Dahinter: Mikrocontroller, Sensorik, viel Kabel." },
-    { "image": "/images/cases/mehr-sinn/detail-tunnel.webp", "device": "image", "caption": "Raum im Raum – Licht am Ende des Gewölbes." },
-    { "image": "/images/cases/mehr-sinn/projection-field.webp", "device": "wide", "caption": "Aus den Projektionen: Gehirnaktivität als fließendes Farbfeld." }
+    {
+      "image": "/images/cases/mehr-sinn/detail-sculpture.webp",
+      "device": "image",
+      "caption": "Die Wabenskulptur bricht Projektion und Publikum."
+    },
+    {
+      "image": "/images/cases/mehr-sinn/detail-circuit.webp",
+      "device": "image",
+      "caption": "Dahinter: Mikrocontroller, Sensorik, viel Kabel."
+    },
+    {
+      "image": "/images/cases/mehr-sinn/detail-tunnel.webp",
+      "device": "image",
+      "caption": "Raum im Raum – Licht am Ende des Gewölbes."
+    },
+    {
+      "image": "/images/cases/mehr-sinn/projection-field.webp",
+      "device": "wide",
+      "caption": "Aus den Projektionen: Gehirnaktivität als fließendes Farbfeld."
+    }
   ],
   "loopTitle": "Vom Signal zur Erfahrung",
   "loop": [
-    { "t": "Messen", "d": "Ein EEG erfasst die Gehirnwellen – das Rohmaterial der Installation." },
-    { "t": "Übersetzen", "d": "Die Daten werden zu Klang, Farbe und Bewegung." },
-    { "t": "Erleben", "d": "Projektionen, Sound und Skulptur umhüllen den Raum – hören, sehen, spüren." },
-    { "t": "Teilen", "d": "Besuchende tauschen Assoziationen aus: Jede Wahrnehmung ist anders." }
+    {
+      "t": "Messen",
+      "d": "Ein EEG erfasst die Gehirnwellen – das Rohmaterial der Installation."
+    },
+    {
+      "t": "Übersetzen",
+      "d": "Die Daten werden zu Klang, Farbe und Bewegung."
+    },
+    {
+      "t": "Erleben",
+      "d": "Projektionen, Sound und Skulptur umhüllen den Raum – hören, sehen, spüren."
+    },
+    {
+      "t": "Teilen",
+      "d": "Besuchende tauschen Assoziationen aus: Jede Wahrnehmung ist anders."
+    }
   ],
   "outlookTitle": "Wo das Prinzip weiterwirkt",
   "outlookIntro": "Daten in Erlebnis zu übersetzen funktioniert weit über den Kunstraum hinaus:",
@@ -101,7 +140,10 @@
   "format": "landscape",
   "cover": "/images/cases/mehr-sinn/cover.webp",
   "coverTone": "dark",
-  "previews": ["/images/cases/mehr-sinn/preview-room.webp", "/images/cases/mehr-sinn/preview-field.webp"],
+  "previews": [
+    "/images/cases/mehr-sinn/hover-room.webp",
+    "/images/cases/mehr-sinn/hover-vault.webp"
+  ],
   "previewDummy": false,
   "featured": true,
   "order": 3
