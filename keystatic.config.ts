@@ -144,7 +144,7 @@ export default config({
         ),
         demo: fields.select({
           label: 'Interaktive Demo',
-          options: [{ label: 'Keine', value: '' }, { label: 'Neural Soundscape Player', value: 'soundscape' }, { label: 'Netzwerk-Finder (Physionetzwerk)', value: 'network' }],
+          options: [{ label: 'Keine', value: '' }, { label: 'Neural Soundscape Player', value: 'soundscape' }, { label: 'Netzwerk-Finder (Physionetzwerk)', value: 'network' }, { label: 'Atom (Quantiflux, WebGL)', value: 'atom' }],
           defaultValue: '',
         }),
         signal: TEXT('Signal im Titel (optional)', { description: 'Wortgruppe aus dem Titel, die mit dem Signal-Marker hervorgehoben wird, z.B. „selbst verbessert".' }),

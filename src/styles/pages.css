@@ -83,6 +83,27 @@ html.motion-paused .cinema-slides img { animation-play-state: paused; }
 .case-shown li { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; }
 .case-shown li span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
 
+/* ── Atom demo (Quantiflux) ─────────────────────────────────────────── */
+.atom { margin-top: clamp(80px, 10vw, 140px); }
+.atom-head { max-width: 760px; margin-bottom: clamp(24px, 3vw, 40px); }
+.atom-head .case-h2 { margin-bottom: 16px; }
+.atom-head .case-h2 em { color: #e42718; }
+.atom-eyebrow { display: flex; gap: 10px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.atom-eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: #fd5122; box-shadow: 0 0 10px #fd5122; }
+.atom-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; cursor: crosshair; touch-action: pan-y;
+  background: radial-gradient(60% 70% at 55% 50%, #2a0a06 0%, #0b0505 70%); }
+.atom-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.atom-states { position: absolute; left: clamp(16px, 2.5vw, 32px); top: clamp(16px, 2.5vw, 32px); list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; pointer-events: none; }
+.atom-states li { display: flex; gap: 10px; align-items: center; font: 500 12px/1 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: rgba(243, 239, 233, .32); transition: color 260ms ease, transform 260ms cubic-bezier(.23, 1, .32, 1); }
+.atom-states li span { color: rgba(253, 81, 34, .35); transition: color 260ms ease; }
+.atom-states li.is-on { color: #f3efe9; transform: translateX(6px); }
+.atom-states li.is-on span { color: #fd5122; }
+.atom-burst { position: absolute; right: clamp(16px, 2.5vw, 32px); bottom: clamp(16px, 2.5vw, 32px); display: flex; gap: 10px; align-items: center; border: 1px solid rgba(228, 39, 24, .8); background: rgba(11, 5, 5, .5); color: #f3efe9; font: 500 12px/1 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; padding: 13px 18px; cursor: pointer; transition: background 200ms ease; }
+.atom-burst span { width: 8px; height: 8px; border-radius: 50%; background: #e42718; box-shadow: 0 0 10px #e42718; }
+.atom-burst:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .atom-burst:hover { background: #e42718; } }
+@media (max-width: 760px) { .atom-stage { aspect-ratio: 4 / 5; } }
+
 /* ── Network finder (Physionetzwerk): the logo as a working map ───────── */
 .nf { margin-top: clamp(80px, 10vw, 140px); display: grid; grid-template-columns: .9fr 1.4fr; gap: clamp(24px, 4vw, 56px); align-items: center; background: #050505; color: #f2f2ee; padding: clamp(28px, 4.5vw, 64px); }
 .nf h2 { font-size: clamp(34px, 3.6vw, 54px); letter-spacing: -.04em; color: #f2f2ee; }

@@ -45,7 +45,7 @@ const cases = defineCollection({
         poster: z.string().nullable().optional(),
       })
       .optional(),
-    demo: z.enum(['', 'soundscape', 'network']).nullable().optional(), // '' = Keystatic "Keine"
+    demo: z.enum(['', 'soundscape', 'network', 'atom']).nullable().optional(), // '' = Keystatic "Keine"
     status: z.enum(['', 'live', 'study']).nullable().optional(), // study = greyed note instead of a live link
     statusLabel: z.string().nullable().optional(),
     clientLabel: z.string().nullable().optional(), // e.g. „Auftrag: Quantiflux" on the case page

@@ -1,0 +1,31 @@
+---
+// Live WebGL demo of the Quantiflux atom (atom-demo.js), with the four states
+// of the case's process list lighting up as they happen.
+const states = [
+  { id: 'ruhe', t: 'Ruhe' },
+  { id: 'annaeherung', t: 'Annäherung' },
+  { id: 'beruehrung', t: 'Berührung' },
+  { id: 'rueckkehr', t: 'Rückkehr' },
+];
+---
+
+<section class="atom" data-atom-demo aria-labelledby="atom-title">
+  <div class="atom-head">
+    <p class="atom-eyebrow"><span></span>Live-Demo · WebGL</p>
+    <h2 id="atom-title" class="case-h2">Berühr das <em>Atom.</em></h2>
+    <p class="atom-lead">Die echte Szene aus dem Auftritt, live im Browser gerendert. Fahr darüber – das Gitter schlägt Wellen. Klick oder tippe – der Kern zerbirst in Licht und setzt sich wieder zusammen.</p>
+  </div>
+  <div class="atom-stage">
+    <canvas aria-hidden="true"></canvas>
+    <ol class="atom-states" aria-hidden="true">
+      {states.map((s, i) => <li data-atom-state={s.id} class={i === 0 ? 'is-on' : ''}><span>{String(i + 1).padStart(2, '0')}</span>{s.t}</li>)}
+    </ol>
+    <button type="button" class="atom-burst" data-atom-burst>
+      <span aria-hidden="true"></span>Impuls auslösen
+    </button>
+  </div>
+</section>
+
+<script>
+  import '../scripts/atom-demo.js';
+</script>

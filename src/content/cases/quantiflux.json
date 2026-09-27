@@ -8,7 +8,7 @@
   "status": "study",
   "statusLabel": "Demo-Inhalte · noch nicht öffentlich",
   "summary": "Ein Auftrag vom ersten Wort bis zur letzten Serverzeile: Name, Marke, Auftritt und Infrastruktur für Quantiflux. Im Zentrum schwebt ein atomarer Kern aus Licht, der auf jede Bewegung antwortet – und beim Klick in ein Energiefeld zerbirst. Präzision, die man nicht behaupten muss, weil man sie spürt.",
-  "body": "Am Anfang stand der Name. Quantiflux verbindet Quantum – das kleinste, präzise Maß – mit Flux, dem Fluss, der Energie, der Bewegung. Daraus wurden eine Wortmarke mit atomarem Zeichen, ein Farbsystem aus Signalrot auf Tiefschwarz und zwei Sätze, die die Haltung tragen: „Precision meets Scale“ und „Innovation without the hype“.\n\nAuf der Website wird das Zeichen lebendig: ein Atom aus verschlungenen Energiebahnen, umkreist von Orbitalen und Teilchen, in Echtzeit im Browser gerendert. Fährt man darüber, beginnt es zu glühen und schlägt Wellen um den Mauszeiger. Ein Klick lässt es in Fragmente zerspringen, Licht flutet das Bild, die Szene bebt – und setzt sich wieder zusammen.\n\nDarunter liegt ein echtes Fundament: Headless-CMS, Cloud-Umgebung, Domain und Deployment. Der Auftritt läuft derzeit mit Demo-Inhalten und ist bewusst als Plattform gebaut, nicht als Kulisse.",
+  "body": "Am Anfang stand der Name. Quantiflux verbindet Quantum – das kleinste, präzise Maß – mit Flux, dem Fluss, der Energie, der Bewegung. Daraus wurden eine Wortmarke mit atomarem Zeichen, ein Farbsystem aus Signalrot auf Tiefschwarz und zwei Sätze, die die Haltung tragen: „Precision meets Scale“ und „Innovation without the hype“.\n\nAuf der Website wird das Zeichen lebendig: ein Atom aus verschlungenen Energiebahnen, umkreist von Orbitalen und Teilchen, in Echtzeit im Browser gerendert. Fährt man darüber, beginnt es zu glühen und schlägt Wellen um den Mauszeiger. Eine Berührung lässt es in Fragmente zerspringen, Licht flutet das Bild, die Szene bebt – und setzt sich wieder zusammen. Weiter unten kannst du es selbst ausprobieren.\n\nDarunter liegt ein echtes Fundament: Headless-CMS, Cloud-Umgebung, Domain und Deployment. Der Auftritt läuft derzeit mit Demo-Inhalten und ist bewusst als Plattform gebaut, nicht als Kulisse.",
   "tags": [
     "Naming & Branding",
     "WebGL & VFX",
@@ -69,16 +69,6 @@
       "image": "/images/cases/quantiflux/mobile-hero.webp",
       "device": "mobile",
       "caption": "Mobil: dieselbe Energie."
-    },
-    {
-      "image": "/images/cases/quantiflux/detail-hover.webp",
-      "device": "image",
-      "caption": "Annäherung: Das Gitter beginnt zu glühen …"
-    },
-    {
-      "image": "/images/cases/quantiflux/detail-burst.webp",
-      "device": "image",
-      "caption": "… Berührung: Der Kern zerbirst in Licht."
     },
     {
       "image": "/images/cases/quantiflux/innovation.webp",
@@ -169,5 +159,6 @@
     "Web & visuelle Effekte",
     "Headless CMS",
     "Cloud & Infrastruktur"
-  ]
+  ],
+  "demo": "atom"
 }

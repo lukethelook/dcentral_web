@@ -6,6 +6,7 @@ import Footer from '../../components/Footer.astro';
 import SoundscapeDemo from '../../components/SoundscapeDemo.astro';
 import Panorama360 from '../../components/Panorama360.astro';
 import NetworkFinder from '../../components/NetworkFinder.astro';
+import AtomDemo from '../../components/AtomDemo.astro';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -151,6 +152,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
 
     {d.demo === 'soundscape' && <SoundscapeDemo />}
     {d.demo === 'network' && <NetworkFinder />}
+    {d.demo === 'atom' && <AtomDemo />}
     {panoramas.length > 0 && <Panorama360 title={d.panoramaTitle || '360°-Rundgang'} scenes={panoramas} />}
 
     {rows.map((row) => (
