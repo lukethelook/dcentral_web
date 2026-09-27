@@ -70,21 +70,6 @@
   ],
   "screens": [
     {
-      "image": "/images/cases/grafinger/photo-logs.webp",
-      "device": "image",
-      "caption": "Rundholz, frisch vom Platz."
-    },
-    {
-      "image": "/images/cases/grafinger/photo-stairs.webp",
-      "device": "image",
-      "caption": "Hartholz auch im eigenen Haus."
-    },
-    {
-      "image": "/images/cases/grafinger/photo-office.webp",
-      "device": "image",
-      "caption": "Arbeitsplätze mit Blick ins Tal."
-    },
-    {
       "image": "/images/cases/grafinger/aerial-yard.webp",
       "device": "wide",
       "caption": "Aus der Luft: Holzlager, Werk und Straße in einem Bild."
@@ -167,5 +152,14 @@
   ],
   "previewDummy": false,
   "featured": true,
-  "order": 4
+  "order": 4,
+  "galleryPhotos": [
+    "almtal-werk-am-fluss",
+    "arbeitsplatz",
+    "stammquerschnitt",
+    "buero-mit-ausblick",
+    "stapler-fahrer",
+    "innenraum-glas"
+  ],
+  "galleryTitle": "Aus der Fotoserie"
 }

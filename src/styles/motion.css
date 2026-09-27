@@ -46,7 +46,6 @@ html.footer-curtain body > main::before {
   content: ''; position: absolute; z-index: -1; top: 0; bottom: 0;
   left: calc(50% - 50vw); right: calc(50% - 50vw);
   background: var(--paper);
-  box-shadow: 0 34px 60px -30px rgba(8, 30, 24, .4);
   pointer-events: none;
 }
 html.footer-curtain footer.contact { position: sticky; bottom: 0; z-index: 0; }

@@ -76,10 +76,12 @@ const arrow = 'M6 18 18 6M6 6h12v12';
       <div class="disc-more-grid">
         {others.map((o) => (
           <a class="disc-tile" href={`/${o.slug}`} style={`--t-bg:${palettes[o.i % 4].bg};--t-ink:${palettes[o.i % 4].ink}`}>
-            <span class="disc-tile-no">{o.no}</span>
-            <strong>{o.title}</strong>
-            <span class="disc-tile-tag">{o.tag}</span>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+            <span class="disc-tile-art landscape" data-pattern={o.i % 4} aria-hidden="true"><canvas></canvas></span>
+            <span class="disc-tile-top"><span class="disc-tile-no">{o.no}</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></span>
+            <span class="disc-tile-copy">
+              <strong>{o.title}</strong>
+              <span class="disc-tile-tag">{o.tag}</span>
+            </span>
           </a>
         ))}
       </div>

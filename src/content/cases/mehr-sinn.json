@@ -61,11 +61,6 @@
   ],
   "screens": [
     {
-      "image": "/images/cases/mehr-sinn/detail-sculpture.webp",
-      "device": "image",
-      "caption": "Die Wabenskulptur bricht Projektion und Publikum."
-    },
-    {
       "image": "/images/cases/mehr-sinn/detail-circuit.webp",
       "device": "image",
       "caption": "Dahinter: Mikrocontroller, Sensorik, viel Kabel."
@@ -146,5 +141,32 @@
   ],
   "previewDummy": false,
   "featured": true,
-  "order": 3
+  "order": 3,
+  "galleryPhotos": [
+    "sinn-waben",
+    "sinn-schaltkreis"
+  ],
+  "galleryTitle": "Im Raum",
+  "gallery": [
+    {
+      "image": "/images/cases/mehr-sinn/slide-room.webp",
+      "title": "Projektionsraum",
+      "alt": "Projektionen und Wabenskulptur im abgedunkelten Raum"
+    },
+    {
+      "image": "/images/cases/mehr-sinn/slide-vault.webp",
+      "title": "Gewölbe",
+      "alt": "Bespielte Wände im Gewölbe der Krypta Linz"
+    },
+    {
+      "image": "/images/cases/mehr-sinn/slide-tunnel.webp",
+      "title": "Raum im Raum",
+      "alt": "Lichtquelle am Ende des projizierten Gangs"
+    },
+    {
+      "image": "/images/cases/mehr-sinn/slide-sculpture.webp",
+      "title": "Waben",
+      "alt": "Spiegelnde Waben der Skulptur"
+    }
+  ]
 }

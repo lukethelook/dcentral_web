@@ -143,6 +143,19 @@ export default config({
           fields.object({ t: TEXT('Idee'), d: TEXT('Text', { multiline: true }) }),
           { label: 'Ausblick / Ausbaustufen', itemLabel: (p) => p.fields.t.value },
         ),
+        galleryTitle: TEXT('Galerie: Überschrift (optional, Standard „Galerie")'),
+        galleryPhotos: fields.array(
+          fields.relationship({ label: 'Foto aus der Bibliothek', collection: 'photos' }),
+          { label: 'Galerie: Fotos aus der Bibliothek auswählen', itemLabel: (p) => p.value ?? 'Foto wählen' },
+        ),
+        gallery: fields.array(
+          fields.object({
+            image: fields.image({ label: 'Bild', directory: 'public/images/cases', publicPath: '/images/cases/' }),
+            title: TEXT('Titel'),
+            alt: TEXT('Bildbeschreibung (Alt-Text)'),
+          }),
+          { label: 'Galerie: eigene Bilder hochladen', itemLabel: (p) => p.fields.title.value || 'Bild' },
+        ),
         demo: fields.select({
           label: 'Interaktive Demo',
           options: [{ label: 'Keine', value: '' }, { label: 'Neural Soundscape Player', value: 'soundscape' }, { label: 'Netzwerk-Finder (Physionetzwerk)', value: 'network' }, { label: 'Atom (Quantiflux, WebGL)', value: 'atom' }],
@@ -181,6 +194,7 @@ export default config({
       columns: ['series'],
       schema: {
         alt: fields.slug({ name: { label: 'Bildbeschreibung (Alt-Text)' } }),
+        title: TEXT('Kurzer Titel (für Galerien, z.B. „Werk am Fluss")'),
         image: fields.image({ label: 'Foto', directory: 'public/images/photos', publicPath: '/images/photos/' }),
         thumb: fields.image({ label: 'Vorschau (optional, sonst Foto)', directory: 'public/images/photos', publicPath: '/images/photos/' }),
         series: TEXT('Serie (Filter auf /fotografie, z.B. „Porträt")'),

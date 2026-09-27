@@ -45,6 +45,11 @@ const cases = defineCollection({
         poster: z.string().nullable().optional(),
       })
       .optional(),
+    // Case gallery (Elastic Gallery on the project page): photos picked from the
+    // library (ids) and/or images uploaded directly to the case.
+    galleryTitle: z.string().nullable().optional(),
+    galleryPhotos: z.array(z.string().nullable()).default([]),
+    gallery: z.array(z.object({ image: z.string().nullable(), title: z.string().nullable().optional(), alt: z.string().nullable().optional() })).default([]),
     demo: z.enum(['', 'soundscape', 'network', 'atom']).nullable().optional(), // '' = Keystatic "Keine"
     status: z.enum(['', 'live', 'study']).nullable().optional(), // study = greyed note instead of a live link
     statusLabel: z.string().nullable().optional(),
@@ -71,6 +76,7 @@ const photos = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/photos' }),
   schema: z.object({
     image: z.string(),
+    title: z.string().nullable().optional(), // short title shown in galleries (fallback: alt)
     thumb: z.string().nullable().optional(),
     alt: z.string(),
     series: z.string().default('Fotografie'),

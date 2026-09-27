@@ -1,0 +1,35 @@
+---
+// Homepage photography section: featured photos (Keystatic „Fotos“ →
+// „Auf der Startseite zeigen“) in the Elastic Gallery.
+import { getCollection } from 'astro:content';
+import ElasticGallery from './ElasticGallery.astro';
+
+const photos = (await getCollection('photos'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 7)
+  .map((p) => p.data);
+const items = photos.map((p) => ({
+  src: p.image,
+  alt: p.alt,
+  title: p.title || p.alt,
+  category: p.series,
+  href: p.project ? `/arbeiten/${p.project}` : null,
+}));
+---
+
+{items.length >= 3 && (
+  <section class="ps" id="fotografie" aria-labelledby="ps-title">
+    <div class="ps-head shell">
+      <div>
+        <p class="ps-eyebrow"><span></span>Fotografie</p>
+        <h2 id="ps-title">Bilder, die <em>bleiben.</em></h2>
+      </div>
+      <div class="ps-side">
+        <p>Menschen, Räume, Material, Landschaft – fotografiert mit Blick für das, was einen Ort oder eine Marke ausmacht.</p>
+        <a class="text-link ps-link" href="/fotografie">Zur Fotografie <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg></a>
+      </div>
+    </div>
+    <div class="shell"><ElasticGallery items={items} label="Ausgewählte Fotografie" /></div>
+  </section>
+)}

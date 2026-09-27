@@ -7,6 +7,7 @@ import SoundscapeDemo from '../../components/SoundscapeDemo.astro';
 import Panorama360 from '../../components/Panorama360.astro';
 import NetworkFinder from '../../components/NetworkFinder.astro';
 import AtomDemo from '../../components/AtomDemo.astro';
+import ElasticGallery from '../../components/ElasticGallery.astro';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -34,6 +35,12 @@ const visual = d.cover
 const showcase = d.showcase?.desktop || d.showcase?.video ? d.showcase : null;
 const slides = (d.showcase?.slides ?? []).filter((s): s is string => !!s);
 const cinema = (d.showcase?.vimeo || d.showcase?.youtube) && (slides.length || d.showcase?.loop) ? d.showcase : null;
+// Case gallery: library photos (in the chosen order) + uploaded images.
+const library = new Map((await getCollection('photos')).map((p) => [p.id, p.data]));
+const galleryItems = [
+  ...d.galleryPhotos.filter((id): id is string => !!id && library.has(id)).map((id) => { const p = library.get(id)!; return { src: p.image, alt: p.alt, title: p.title || p.alt, category: p.series }; }),
+  ...d.gallery.filter((g) => g.image).map((g) => ({ src: src(g.image!), alt: g.alt || g.title || d.client, title: g.title || d.client, category: d.client })),
+];
 const panoramas = d.panoramas.filter((p) => p.image).map((p) => ({ ...p, image: src(p.image!) }));
 const study = d.status === 'study';
 const phones = (d.showcase?.phones ?? []).filter((p): p is string => !!p).slice(0, 3);
@@ -154,6 +161,13 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
     {d.demo === 'network' && <NetworkFinder />}
     {d.demo === 'atom' && <AtomDemo />}
     {panoramas.length > 0 && <Panorama360 title={d.panoramaTitle || '360°-Rundgang'} scenes={panoramas} />}
+
+    {galleryItems.length > 0 && (
+      <section class="case-section case-gallery" aria-labelledby="case-gallery-title">
+        <h2 id="case-gallery-title" class="case-h2">{d.galleryTitle || 'Galerie'}</h2>
+        <ElasticGallery items={galleryItems} label={`Galerie: ${d.client}`} tone="light" />
+      </section>
+    )}
 
     {rows.map((row) => (
       <section class={`case-screens case-screens--${row.kind}`} style={`--n:${row.items.length}`} aria-label="Screens">

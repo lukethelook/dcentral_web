@@ -1,0 +1,74 @@
+---
+// Elastic Gallery — after the 21st.dev component (accordion of images: the
+// active panel takes flex 4, the others flex 1, easing cubic-bezier(.25,1,.5,1)).
+// Rebuilt for Astro without React/Tailwind and styled for dcentral.
+// Hover or focus opens a panel; on touch the first tap opens, the second follows
+// the link; arrow keys move between panels.
+export interface ElasticItem {
+  src: string;
+  alt: string;
+  title: string;
+  category?: string | null;
+  href?: string | null;
+  cta?: string | null;
+}
+interface Props {
+  items: ElasticItem[];
+  label?: string;
+  tone?: 'dark' | 'light';
+  active?: number;
+}
+const { items, label = 'Bildergalerie', tone = 'dark', active = Math.floor((items.length - 1) / 2) } = Astro.props;
+const arrow = 'M6 18 18 6M6 6h12v12';
+---
+
+{items.length > 0 && (
+  <div class={`eg eg--${tone}`} data-elastic-gallery role="group" aria-label={label}>
+    {items.map((it, i) => {
+      const Tag = it.href ? 'a' : 'button';
+      return (
+        <Tag
+          class={`eg-panel${i === active ? ' is-active' : ''}`}
+          aria-current={i === active ? 'true' : undefined}
+          aria-label={`${it.title}${it.category ? ` – ${it.category}` : ''}`}
+          {...(it.href ? { href: it.href } : { type: 'button' })}
+        >
+          <img src={it.src} alt={it.alt} loading="lazy" decoding="async" />
+          <span class="eg-shade" aria-hidden="true"></span>
+          <span class="eg-content">
+            {it.category && <span class="eg-cat">{it.category}</span>}
+            <span class="eg-title">{it.title}</span>
+            {it.href && <span class="eg-cta">{it.cta || 'Projekt ansehen'} <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></span>}
+          </span>
+          <span class="eg-rest" aria-hidden="true">
+            <span class="eg-rest-title">{it.title}</span>
+            <span class="eg-rest-no">{String(i + 1).padStart(2, '0')}</span>
+          </span>
+        </Tag>
+      );
+    })}
+  </div>
+)}
+
+<script>
+  document.querySelectorAll('[data-elastic-gallery]').forEach((root) => {
+    const panels = [...root.querySelectorAll('.eg-panel')];
+    const set = (p) => panels.forEach((x) => {
+      const on = x === p;
+      x.classList.toggle('is-active', on);
+      if (on) x.setAttribute('aria-current', 'true'); else x.removeAttribute('aria-current');
+    });
+    panels.forEach((p, i) => {
+      p.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') set(p); });
+      p.addEventListener('focus', () => set(p));
+      // Touch: first tap opens a closed panel; a tap on the open one follows its link.
+      p.addEventListener('click', (e) => { if (!p.classList.contains('is-active')) { e.preventDefault(); set(p); } });
+      p.addEventListener('keydown', (e) => {
+        const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (!d) return;
+        e.preventDefault();
+        panels[(i + d + panels.length) % panels.length].focus();
+      });
+    });
+  });
+</script>
