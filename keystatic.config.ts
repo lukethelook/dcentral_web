@@ -20,6 +20,7 @@ export default config({
     brand: { name: 'dcentral' },
     navigation: {
       Arbeiten: ['cases'],
+      Fotografie: ['photos'],
       Seiteninhalte: ['hero', 'manifest', 'leistungen', 'work', 'studio', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
       Rechtliches: ['impressum', 'datenschutz'],
       'SEO & Firma': ['seo'],
@@ -171,6 +172,25 @@ export default config({
         order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
       },
     }),
+
+    photos: collection({
+      label: 'Fotos',
+      slugField: 'alt',
+      path: 'src/content/photos/*',
+      format: { data: 'json' },
+      columns: ['series'],
+      schema: {
+        alt: fields.slug({ name: { label: 'Bildbeschreibung (Alt-Text)' } }),
+        image: fields.image({ label: 'Foto', directory: 'public/images/photos', publicPath: '/images/photos/' }),
+        thumb: fields.image({ label: 'Vorschau (optional, sonst Foto)', directory: 'public/images/photos', publicPath: '/images/photos/' }),
+        series: TEXT('Serie (Filter auf /fotografie, z.B. „Porträt")'),
+        project: TEXT('Projekt-ID (optional, verlinkt aufs Projekt, z.B. grafinger)'),
+        width: fields.integer({ label: 'Breite in px (optional)' }),
+        height: fields.integer({ label: 'Höhe in px (optional)' }),
+        featured: fields.checkbox({ label: 'Auf der Startseite zeigen (max. 7)', defaultValue: false }),
+        order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
+      },
+    }),
   },
 
   singletons: {
@@ -204,6 +224,8 @@ export default config({
           fields.object({
             no: TEXT('Nummer'),
             title: TEXT('Titel'),
+            slug: TEXT('Adresse der Unterseite (z.B. fotografie)'),
+            key: fields.select({ label: 'Projekt-Kategorie', options: [{ label: 'Foto', value: 'Foto' }, { label: 'Film & Aerial', value: 'Film & Aerial' }, { label: 'Web', value: 'Web' }, { label: 'KI', value: 'KI' }], defaultValue: 'Foto' }),
             short: TEXT('Kurzname (Tab)', { description: 'Optional, z.B. „Web" statt „Web & Entwicklung"' }),
             tag: TEXT('Schlagzeile'),
             body: TEXT('Beschreibung', { multiline: true }),

@@ -14,7 +14,9 @@
         "Architektur",
         "Porträt"
       ],
-      "short": "Fotografie"
+      "short": "Fotografie",
+      "key": "Foto",
+      "slug": "fotografie"
     },
     {
       "no": "02",
@@ -28,7 +30,9 @@
         "Aerial / Drohne",
         "Eventdoku"
       ],
-      "short": "Film & Aerial"
+      "short": "Film & Aerial",
+      "key": "Film & Aerial",
+      "slug": "film-aerial"
     },
     {
       "no": "03",
@@ -44,7 +48,9 @@
         "SEO-Basis",
         "Pflege & Hosting"
       ],
-      "short": "Web"
+      "short": "Web",
+      "key": "Web",
+      "slug": "web"
     },
     {
       "no": "04",
@@ -58,7 +64,9 @@
         "Kampagne",
         "Automatisierung"
       ],
-      "short": "AI-Solutions"
+      "short": "AI-Solutions",
+      "key": "KI",
+      "slug": "ki"
     }
   ]
 }

@@ -1,0 +1,90 @@
+---
+// Photography page gallery: series filter, masonry columns, and a lightbox
+// dialog (arrows, swipe, Esc). New photos come from the Keystatic „Fotos“ collection.
+import { getCollection } from 'astro:content';
+
+const photos = (await getCollection('photos')).sort((a, b) => a.data.order - b.data.order).map((p) => ({ id: p.id, ...p.data }));
+const series = [...new Set(photos.map((p) => p.series))];
+---
+
+<section class="pg" data-photo-gallery aria-labelledby="pg-title">
+  <div class="pg-head">
+    <h2 id="pg-title" class="case-h2">Aus dem <em>Archiv.</em></h2>
+    <div class="pg-filters" role="group" aria-label="Serie filtern">
+      <button type="button" aria-pressed="true" data-series="">Alle <span>{photos.length}</span></button>
+      {series.map((s) => <button type="button" aria-pressed="false" data-series={s}>{s} <span>{photos.filter((p) => p.series === s).length}</span></button>)}
+    </div>
+  </div>
+  <div class="pg-grid">
+    {photos.map((p, i) => (
+      <figure class="pg-item" data-series={p.series} style={p.width && p.height ? `aspect-ratio:${p.width}/${p.height}` : undefined}>
+        <button type="button" data-index={i} aria-label={`Foto vergrößern: ${p.alt}`}>
+          <img src={p.thumb || p.image} alt={p.alt} loading="lazy" decoding="async" width={p.width ?? undefined} height={p.height ?? undefined} />
+        </button>
+      </figure>
+    ))}
+  </div>
+
+  <dialog class="pg-lightbox" aria-label="Foto-Ansicht">
+    <img class="pg-lb-img" alt="" />
+    <div class="pg-lb-bar">
+      <p class="pg-lb-caption"></p>
+      <span class="pg-lb-count"></span>
+      <a class="pg-lb-project" href="#" hidden>Zum Projekt</a>
+    </div>
+    <button type="button" class="pg-lb-btn pg-lb-prev" aria-label="Vorheriges Foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+    <button type="button" class="pg-lb-btn pg-lb-next" aria-label="Nächstes Foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+    <button type="button" class="pg-lb-close" aria-label="Schließen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+  </dialog>
+  <script type="application/json" data-photos set:html={JSON.stringify(photos.map((p) => ({ src: p.image, alt: p.alt, series: p.series, project: p.project })))} />
+</section>
+
+<script>
+  import { animate } from 'motion';
+  const root = document.querySelector('[data-photo-gallery]');
+  if (root) {
+    const data = JSON.parse(root.querySelector('[data-photos]').textContent);
+    const items = [...root.querySelectorAll('.pg-item')];
+    const filters = [...root.querySelectorAll('button[data-series]')];
+    const dlg = root.querySelector('.pg-lightbox');
+    const img = dlg.querySelector('.pg-lb-img');
+    const cap = dlg.querySelector('.pg-lb-caption');
+    const count = dlg.querySelector('.pg-lb-count');
+    const proj = dlg.querySelector('.pg-lb-project');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const ease = [0.23, 1, 0.32, 1];
+    let visible = data.map((_, i) => i), at = 0;
+
+    filters.forEach((b) => b.addEventListener('click', () => {
+      filters.forEach((f) => f.setAttribute('aria-pressed', String(f === b)));
+      const s = b.dataset.series;
+      visible = [];
+      items.forEach((it, i) => { const on = !s || it.dataset.series === s; it.hidden = !on; if (on) visible.push(i); });
+      if (!reduced.matches) animate(items.filter((it) => !it.hidden), { opacity: [0, 1], transform: ['translateY(14px)', 'translateY(0px)'] }, { duration: 0.5, delay: (i) => Math.min(i, 12) * 0.03, ease });
+    }));
+
+    function show(i, dir = 0) {
+      at = i;
+      const p = data[i];
+      const pos = visible.indexOf(i);
+      img.src = p.src; img.alt = p.alt; cap.textContent = p.alt;
+      count.textContent = `${String(pos + 1).padStart(2, '0')} / ${String(visible.length).padStart(2, '0')}`;
+      if (p.project) { proj.hidden = false; proj.href = `/arbeiten/${p.project}`; } else proj.hidden = true;
+      if (dir && !reduced.matches) animate(img, { opacity: [0, 1], transform: [`translateX(${dir * 28}px)`, 'translateX(0px)'] }, { duration: 0.35, ease });
+    }
+    const step = (d) => { const pos = visible.indexOf(at); show(visible[(pos + d + visible.length) % visible.length], d); };
+    items.forEach((it) => it.querySelector('button').addEventListener('click', (e) => {
+      show(Number(e.currentTarget.dataset.index));
+      dlg.showModal();
+      if (!reduced.matches) animate(img, { opacity: [0, 1], transform: ['scale(.96)', 'scale(1)'] }, { duration: 0.4, ease });
+    }));
+    dlg.querySelector('.pg-lb-prev').addEventListener('click', () => step(-1));
+    dlg.querySelector('.pg-lb-next').addEventListener('click', () => step(1));
+    dlg.querySelector('.pg-lb-close').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
+    let sx = null;
+    dlg.addEventListener('pointerdown', (e) => { sx = e.clientX; });
+    dlg.addEventListener('pointerup', (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 50) step(e.clientX < sx ? 1 : -1); sx = null; });
+  }
+</script>

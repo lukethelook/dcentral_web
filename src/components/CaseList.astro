@@ -1,0 +1,55 @@
+---
+// Editorial project list for the discipline pages: big rows, and on desktop a
+// preview image that follows the pointer with a spring (hover reveal).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { cases: CollectionEntry<'cases'>[]; tint?: string }
+const { cases, tint = '#d4ff3f' } = Astro.props;
+const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
+---
+
+<div class="cl" data-case-list style={`--tint:${tint}`}>
+  <ol class="cl-rows">
+    {cases.map(({ id, data: d }, i) => (
+      <li>
+        <a class="cl-row" href={`/arbeiten/${id}`} data-preview={d.previews[0] ? src(d.previews[0]) : ''}>
+          <span class="cl-no">{String(i + 1).padStart(2, '0')}</span>
+          <span class="cl-thumb" aria-hidden="true">{d.previews[0] && <img src={src(d.previews[0])} alt="" loading="lazy" decoding="async" />}</span>
+          <span class="cl-client">{d.client}</span>
+          <span class="cl-title">{d.title}</span>
+          <span class="cl-meta">{[d.discipline, ...d.also].join(' · ')} · {d.year}</span>
+          <svg class="cl-arrow" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
+        </a>
+      </li>
+    ))}
+  </ol>
+  <div class="cl-float" aria-hidden="true"><img alt="" /></div>
+</div>
+
+<script>
+  import { animate } from 'motion';
+  const root = document.querySelector('[data-case-list]');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  if (root && fine.matches) {
+    const float = root.querySelector('.cl-float');
+    const img = float.querySelector('img');
+    let shown = false;
+    const move = (e, jump) => {
+      const r = root.getBoundingClientRect();
+      const to = { transform: `translate(${e.clientX - r.left}px, ${e.clientY - r.top}px) translate(-50%, -50%)` };
+      if (jump || reduced.matches) Object.assign(float.style, to);
+      else animate(float, to, { type: 'spring', stiffness: 260, damping: 28, mass: 0.6 });
+    };
+    root.querySelectorAll('.cl-row').forEach((row) => {
+      row.addEventListener('pointerenter', (e) => {
+        if (!row.dataset.preview) return;
+        img.src = row.dataset.preview;
+        move(e, !shown); shown = true;
+        root.classList.add('is-previewing');
+      });
+      row.addEventListener('pointermove', (e) => move(e, false));
+    });
+    root.addEventListener('pointerleave', () => { root.classList.remove('is-previewing'); shown = false; });
+  }
+</script>

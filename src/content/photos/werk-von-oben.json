@@ -1,0 +1,11 @@
+{
+  "image": "/images/photos/werk-von-oben.webp",
+  "thumb": "/images/photos/werk-von-oben-sm.webp",
+  "alt": "Luftaufnahme des Werksgeländes von oben",
+  "series": "Aerial",
+  "project": "grafinger",
+  "width": 2000,
+  "height": 1125,
+  "featured": true,
+  "order": 6
+}

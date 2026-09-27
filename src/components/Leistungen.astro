@@ -2,7 +2,7 @@
 import l from '../content/site/leistungen.json';
 import { hl } from '../lib/text';
 
-type Service = (typeof l.services)[number] & { short?: string };
+type Service = (typeof l.services)[number] & { short?: string; slug?: string };
 const services = l.services as Service[];
 ---
 
@@ -40,6 +40,7 @@ const services = l.services as Service[];
             <p>{s.body}</p>
             <ul class="tags">{s.items.map((t) => <li>{t}</li>)}</ul>
             <p class="entry">{s.entry}</p>
+            {s.slug && <a class="text-link service-more" href={`/${s.slug}`}>Mehr zu {s.short || s.title}<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg></a>}
           </div>
         </article>
       ))}

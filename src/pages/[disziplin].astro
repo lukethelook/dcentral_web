@@ -1,0 +1,93 @@
+---
+// Discipline pages: /fotografie, /film-aerial, /web, /ki — generated from the
+// „Leistungen“ singleton. Real projects (no dummy previews) of the discipline
+// are listed automatically; new cases appear as soon as they are added.
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CaseList from '../components/CaseList.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import leistungen from '../content/site/leistungen.json';
+
+type Service = (typeof leistungen.services)[number] & { key: string; slug: string; short?: string };
+const services = leistungen.services as Service[];
+
+export function getStaticPaths() {
+  return (leistungen.services as Service[]).map((s, i) => ({ params: { disziplin: s.slug }, props: { index: i } }));
+}
+
+const { index } = Astro.props as { index: number };
+const s = services[index];
+const palettes = [
+  { bg: '#d4ff3f', ink: '#1f3a12', soft: '#37561c' },
+  { bg: '#b5dbe8', ink: '#16364a', soft: '#244e68' },
+  { bg: '#cdc1ee', ink: '#352a52', soft: '#564576' },
+  { bg: '#edb09b', ink: '#4f221f', soft: '#7f3d3a' },
+];
+const pal = palettes[index % 4];
+const cases = (await getCollection('cases'))
+  .filter((c) => !c.data.previewDummy && [c.data.discipline, ...c.data.also].includes(s.key as never))
+  .sort((a, b) => a.data.order - b.data.order);
+const others = services.map((o, i) => ({ ...o, i })).filter((o) => o.i !== index);
+const isPhoto = s.key === 'Foto';
+const arrow = 'M6 18 18 6M6 6h12v12';
+---
+
+<Layout title={`${s.title} im Salzkammergut · dcentral`} description={s.body} heroTheme="light">
+  <Nav />
+  <main id="main" class="disc" style={`--disc-bg:${pal.bg};--disc-ink:${pal.ink};--disc-soft:${pal.soft}`}>
+    <section class="disc-hero" aria-labelledby="disc-title">
+      <div class="disc-copy">
+        <a href="/#leistungen" class="page-back disc-back">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"></path></svg>
+          Alle Leistungen
+        </a>
+        <p class="disc-eyebrow">Leistung {s.no} / {String(services.length).padStart(2, '0')}</p>
+        <h1 id="disc-title">{s.title}</h1>
+        <p class="disc-tag"><em>{s.tag}</em></p>
+        <p class="disc-body">{s.body}</p>
+        <ul class="disc-items">{s.items.map((t) => <li>{t}</li>)}</ul>
+        <p class="disc-entry">{s.entry}</p>
+        <a class="disc-cta" href="/#kontakt">
+          Projekt anfragen
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+        </a>
+      </div>
+      <div class="disc-art landscape" data-pattern={index % 4} role="img" aria-label={`Abstraktes Linienmuster für ${s.title}`}>
+        <canvas aria-hidden="true"></canvas>
+      </div>
+    </section>
+
+    {isPhoto && <div class="shell"><PhotoGallery /></div>}
+
+    <section class="disc-work shell" aria-labelledby="disc-work-title">
+      <div class="disc-work-head">
+        <h2 id="disc-work-title" class="case-h2">Arbeiten in <em>{s.short || s.title}.</em></h2>
+        <span class="disc-count">{String(cases.length).padStart(2, '0')} {cases.length === 1 ? 'Projekt' : 'Projekte'}</span>
+      </div>
+      {cases.length > 0
+        ? <CaseList cases={cases} tint={pal.bg} />
+        : <p class="disc-empty">Die ersten Projekte in diesem Bereich sind in Arbeit – <a href="/#kontakt">erzähl mir von deinem.</a></p>}
+    </section>
+
+    <section class="disc-more shell" aria-labelledby="disc-more-title">
+      <h2 id="disc-more-title" class="disc-more-title">Weitere Leistungen</h2>
+      <div class="disc-more-grid">
+        {others.map((o) => (
+          <a class="disc-tile" href={`/${o.slug}`} style={`--t-bg:${palettes[o.i % 4].bg};--t-ink:${palettes[o.i % 4].ink}`}>
+            <span class="disc-tile-no">{o.no}</span>
+            <strong>{o.title}</strong>
+            <span class="disc-tile-tag">{o.tag}</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  import '../scripts/discipline-patterns.js';
+</script>

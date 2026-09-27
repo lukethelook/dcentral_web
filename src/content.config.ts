@@ -66,4 +66,20 @@ const cases = defineCollection({
   }),
 });
 
-export const collections = { cases };
+// Photography library: shown on /fotografie and (featured) in the homepage module.
+const photos = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/photos' }),
+  schema: z.object({
+    image: z.string(),
+    thumb: z.string().nullable().optional(),
+    alt: z.string(),
+    series: z.string().default('Fotografie'),
+    project: z.string().nullable().optional(), // case id, links the photo to its project
+    width: z.number().nullable().optional(),
+    height: z.number().nullable().optional(),
+    featured: z.boolean().default(false),
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { cases, photos };

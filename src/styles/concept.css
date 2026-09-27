@@ -65,3 +65,5 @@ html{scroll-behavior:auto}
 /* The manifesto stands on typography alone; its right column retains the editorial rhythm. */
 .manifest-bottom{display:block;margin-top:44px}.manifest-bottom>p{width:58%;max-width:64ch;margin-left:auto}
 @media(max-width:760px){.manifest-bottom{margin-top:28px}.manifest-bottom>p{width:100%;margin-left:0}}
+
+.service-more{margin-top:22px}

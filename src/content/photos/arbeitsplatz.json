@@ -1,0 +1,11 @@
+{
+  "image": "/images/photos/arbeitsplatz.webp",
+  "thumb": "/images/photos/arbeitsplatz-sm.webp",
+  "alt": "Rundholz im Sonnenlicht",
+  "series": "Sägewerk Grafinger",
+  "project": "grafinger",
+  "width": 1920,
+  "height": 1280,
+  "featured": true,
+  "order": 1
+}
