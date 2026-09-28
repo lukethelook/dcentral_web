@@ -102,7 +102,7 @@ import '../styles/motion.css';
     <slot name="head" />
   </head>
   <body>
-    <div aria-hidden="true" class="reading-progress"></div>
+    <div aria-hidden="true" class="scroll-frame"><i data-edge="t"></i><i data-edge="r"></i><i data-edge="b"></i><i data-edge="l"></i></div>
     <a class="skip" href="#main">Zum Inhalt</a>
 
     <slot />
@@ -110,6 +110,7 @@ import '../styles/motion.css';
     <script>
       import '../scripts/redesign.js';
       import '../scripts/motion-system.js';
+      import '../scripts/scroll-frame.js';
     </script>
   </body>
 </html>

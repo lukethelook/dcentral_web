@@ -5,7 +5,16 @@ body{font-size:17px;background:var(--paper)}
 .shell{width:min(1500px,calc(100% - 10vw))}.section{padding-block:120px}
 p{font-size:17px;line-height:1.7}.section-rail,.section-label{font-size:12px}.site-header nav a,.header-contact{font-size:13px}
 .site-header .brand{letter-spacing:-.055em}.action{font-size:14px;padding:17px 22px;min-height:52px}.action svg{transition:transform 220ms var(--ease-out)}
-.reading-progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--lime);z-index:50;transform:scaleX(0);transform-origin:left;pointer-events:none}
+.scroll-frame{--frame:var(--lime);position:fixed;inset:0;z-index:50;pointer-events:none}
+.scroll-frame.on-lime{--frame:var(--forest)}
+.scroll-frame i{position:absolute;display:block;background:var(--frame);will-change:transform;transition:background-color 300ms ease}
+.scroll-frame [data-edge=t]{top:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left}
+.scroll-frame [data-edge=r]{top:0;right:0;bottom:0;width:2px;transform:scaleY(0);transform-origin:top;opacity:.85}
+.scroll-frame [data-edge=b]{left:0;right:0;bottom:0;height:2px;transform:scaleX(0);transform-origin:right;opacity:.85}
+.scroll-frame [data-edge=l]{top:0;left:0;bottom:0;width:2px;transform:scaleY(0);transform-origin:bottom;opacity:.85}
+/* the frame closes at the end of the page: one soft flash */
+.scroll-frame.is-closed i{animation:frame-close 1.2s var(--ease-out)}
+@keyframes frame-close{from{opacity:1;box-shadow:0 0 0 2px var(--frame)}}
 .hero{isolation:isolate}.hero-landscape{z-index:-1}.hero-copy h1 span,.hero-copy h1 em{display:inline-block}.hero-bottom button{font-size:12px}
 .hero .hero-network{background:none!important;line-height:1.5}.hero-copy .hero-intro{color:#bdcdbb!important}
 .origin{background:var(--forest);padding:0 0 22px;color:#f0f2e9;border-radius:0 0 20pt 20pt;overflow:hidden}

@@ -20,13 +20,12 @@ tabs.forEach((tab,index)=>{
 function hashTab(){const i=panels.findIndex(p=>'#'+p.id===location.hash);if(i>=0)choose(i);}
 choose(0);hashTab();addEventListener('hashchange',hashTab);
 
-// Reading progress follow normal document scrolling.
-const progress=document.querySelector('.reading-progress');
+// Reading highlight follows normal document scrolling (the page progress frame lives in scroll-frame.js).
 const reading=document.querySelector('[data-reading]');
 const text=reading.textContent.replace(/\s+/g,' ').trim();reading.replaceChildren();
 text.split(' ').forEach((word,i)=>{if(i)reading.append(' ');const span=document.createElement('span');span.className='reading-word';span.textContent=word;reading.append(span);});
 const words=[...reading.querySelectorAll('.reading-word')];let pending=0;
-function updateScroll(){pending=0;const range=document.documentElement.scrollHeight-innerHeight;progress.style.transform=`scaleX(${range>0?scrollY/range:0})`;
+function updateScroll(){pending=0;
  const box=reading.getBoundingClientRect(),fraction=Math.max(0,Math.min(1,(innerHeight*.83-box.top)/(innerHeight*.6)));
  words.forEach((w,i)=>w.classList.toggle('read',!canMove()||i/words.length<fraction));
 }
