@@ -1,6 +1,12 @@
-// Gallery editor API (dev only — injected by the `dcentral-gallery-editor`
-// integration in astro.config.mjs, never part of the production build).
-// Reads and writes the same JSON files Keystatic uses, so both editors stay in sync.
+// Gallery editor API — /api/cms/[action]
+//
+// Two storage modes behind one interface:
+//   • local (astro dev): reads/writes the JSON + image files directly.
+//   • online (Vercel): reads and commits through GitHub with the editor's own
+//     Keystatic login (cookie `keystatic-gh-access-token`). Only people with push
+//     access to the repo can save; every save is one commit on the branch this
+//     deployment was built from, and Vercel rebuilds automatically.
+// Both modes edit exactly the files Keystatic edits, so the two editors stay in sync.
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -8,29 +14,100 @@ import sharp from 'sharp';
 
 export const prerender = false;
 
-const ROOT = process.cwd();
-const CASES = path.join(ROOT, 'src/content/cases');
-const PHOTOS = path.join(ROOT, 'src/content/photos');
-const PHOTO_IMG = path.join(ROOT, 'public/images/photos');
+declare const __CMS_BRANCH__: string;
+const LOCAL = import.meta.env.DEV;
+const REPO = process.env.CMS_REPO || 'lukethelook/dcentral_web';
+const BRANCH = process.env.CMS_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || (typeof __CMS_BRANCH__ === 'string' && __CMS_BRANCH__) || 'main';
+const CASES = 'src/content/cases';
+const PHOTOS = 'src/content/photos';
+const PHOTO_IMG = 'public/images/photos';
 
-type Json = Record<string, unknown>;
-const readJson = async (file: string): Promise<Json> => JSON.parse(await fs.readFile(file, 'utf8'));
-// Same format Keystatic writes: 2-space indent, trailing newline.
-const writeJson = (file: string, data: Json) => fs.writeFile(file, JSON.stringify(data, null, 2) + '\n');
+type Json = Record<string, any>;
+type Change = { path: string; content: Buffer | string };
+type Entry = Json & { id: string };
+
 const ok = (data: unknown) => new Response(JSON.stringify(data), { headers: { 'content-type': 'application/json' } });
 const fail = (msg: string, status = 400) => new Response(JSON.stringify({ error: msg }), { status, headers: { 'content-type': 'application/json' } });
 // ids come from file names; never let a request escape the content folders
 const safeId = (id: unknown) => (typeof id === 'string' && /^[a-z0-9][a-z0-9-]*$/.test(id) ? id : null);
+// Same format Keystatic writes: 2-space indent, trailing newline.
+const jsonText = (data: Json) => JSON.stringify(data, null, 2) + '\n';
+const byOrder = (a: Json, b: Json) => (Number(a.order) || 0) - (Number(b.order) || 0);
 
-async function readDir(dir: string) {
-  const files = (await fs.readdir(dir)).filter((f) => f.endsWith('.json'));
-  return Promise.all(files.map(async (f) => ({ id: f.slice(0, -5), ...(await readJson(path.join(dir, f))) })));
+/* ── storage ──────────────────────────────────────────────────────────── */
+interface Store {
+  mode: 'local' | 'github';
+  list(dir: string): Promise<Entry[]>;
+  commit(changes: Change[], message: string): Promise<void>;
 }
 
+const localStore: Store = {
+  mode: 'local',
+  async list(dir) {
+    const abs = path.join(process.cwd(), dir);
+    const files = (await fs.readdir(abs)).filter((f) => f.endsWith('.json'));
+    return Promise.all(files.map(async (f) => ({ id: f.slice(0, -5), ...JSON.parse(await fs.readFile(path.join(abs, f), 'utf8')) })));
+  },
+  async commit(changes) {
+    for (const c of changes) await fs.writeFile(path.join(process.cwd(), c.path), c.content);
+  },
+};
+
+class AuthError extends Error {}
+function githubStore(token: string): Store {
+  const [owner, name] = REPO.split('/');
+  async function gql(query: string, variables: Json) {
+    const r = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: { authorization: `bearer ${token}`, 'content-type': 'application/json', 'user-agent': 'dcentral-cms' },
+      body: JSON.stringify({ query, variables }),
+    });
+    if (r.status === 401) throw new AuthError('GitHub-Anmeldung abgelaufen');
+    const d = await r.json();
+    if (d.errors?.length) throw new Error(d.errors.map((e: Json) => e.message).join('; '));
+    return d.data;
+  }
+  return {
+    mode: 'github',
+    async list(dir) {
+      const d = await gql(
+        `query($owner:String!,$name:String!,$expr:String!){repository(owner:$owner,name:$name){object(expression:$expr){... on Tree{entries{name object{... on Blob{text}}}}}}}`,
+        { owner, name, expr: `${BRANCH}:${dir}` },
+      );
+      const entries = d.repository?.object?.entries ?? [];
+      return entries.filter((e: Json) => e.name.endsWith('.json') && e.object?.text).map((e: Json) => ({ id: e.name.slice(0, -5), ...JSON.parse(e.object.text) }));
+    },
+    async commit(changes, message) {
+      // optimistic: expectedHeadOid makes GitHub reject the commit if someone pushed in between
+      const head = await gql(`query($owner:String!,$name:String!,$ref:String!){repository(owner:$owner,name:$name){ref(qualifiedName:$ref){target{oid}}}}`, { owner, name, ref: `refs/heads/${BRANCH}` });
+      const oid = head.repository?.ref?.target?.oid;
+      if (!oid) throw new Error(`Branch ${BRANCH} nicht gefunden`);
+      await gql(
+        `mutation($input:CreateCommitOnBranchInput!){createCommitOnBranch(input:$input){commit{oid}}}`,
+        {
+          input: {
+            branch: { repositoryNameWithOwner: REPO, branchName: BRANCH },
+            message: { headline: message },
+            expectedHeadOid: oid,
+            fileChanges: { additions: changes.map((c) => ({ path: c.path, contents: Buffer.from(c.content).toString('base64') })) },
+          },
+        },
+      );
+    },
+  };
+}
+
+function storeFor(request: Request): Store | null {
+  if (LOCAL) return localStore;
+  const cookie = request.headers.get('cookie') || '';
+  const token = /(?:^|;\s*)keystatic-gh-access-token=([^;]+)/.exec(cookie)?.[1];
+  return token ? githubStore(decodeURIComponent(token)) : null;
+}
+
+/* ── helpers ──────────────────────────────────────────────────────────── */
 function slugify(name: string) {
   return name
-    .replace(/\.[^.]+$/, '')
-    .toLowerCase()
+    .replace(/\.[^.]+$/, '').toLowerCase()
     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
     .normalize('NFKD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
@@ -38,92 +115,121 @@ function slugify(name: string) {
 }
 const titleFrom = (name: string) => name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
 
-async function uniqueSlug(base: string) {
-  let slug = base, n = 2;
-  for (;;) {
-    try { await fs.access(path.join(PHOTOS, `${slug}.json`)); slug = `${base}-${n++}`; } catch { return slug; }
-  }
-}
-
-export const GET: APIRoute = async ({ params }) => {
+/* ── routes ───────────────────────────────────────────────────────────── */
+export const GET: APIRoute = async ({ params, request }) => {
   if (params.action !== 'state') return fail('unknown action', 404);
-  const [cases, photos] = await Promise.all([readDir(CASES), readDir(PHOTOS)]);
-  return ok({
-    cases: cases
-      .map((c: Json) => ({ id: c.id, title: c.title, client: c.client, order: c.order ?? 0, galleryTitle: c.galleryTitle ?? '', galleryPhotos: ((c.galleryPhotos as string[]) ?? []).filter(Boolean) }))
-      .sort((a, b) => (a.order as number) - (b.order as number)),
-    photos: photos.sort((a: Json, b: Json) => (a.order as number) - (b.order as number)),
-  });
+  const store = storeFor(request);
+  if (!store) return fail('login', 401);
+  try {
+    const [cases, photos] = await Promise.all([store.list(CASES), store.list(PHOTOS)]);
+    return ok({
+      mode: store.mode,
+      branch: store.mode === 'github' ? BRANCH : null,
+      // online, images come straight from the repo so fresh uploads show before Vercel has rebuilt
+      imageBase: store.mode === 'github' ? `https://raw.githubusercontent.com/${REPO}/${BRANCH}/public` : '',
+      cases: cases
+        .map((c) => ({ id: c.id, title: c.title, client: c.client, order: c.order ?? 0, galleryTitle: c.galleryTitle ?? '', galleryPhotos: (c.galleryPhotos ?? []).filter(Boolean) }))
+        .sort(byOrder),
+      photos: photos.sort(byOrder),
+    });
+  } catch (e) {
+    return e instanceof AuthError ? fail('login', 401) : fail(String((e as Error).message), 500);
+  }
 };
 
-export const POST: APIRoute = async ({ params, request }) => {
+export const POST: APIRoute = async ({ params, request, url }) => {
+  // only the editor itself may post (cookies are SameSite=lax, this is a second fence)
+  const origin = request.headers.get('origin');
+  if (origin && new URL(origin).host !== url.host) return fail('forbidden', 403);
+  const store = storeFor(request);
+  if (!store) return fail('login', 401);
   const action = params.action;
 
-  // A project's gallery: title + ordered list of library photo ids.
-  if (action === 'gallery') {
-    const body = await request.json();
-    const id = safeId(body.case);
-    if (!id) return fail('invalid case');
-    const file = path.join(CASES, `${id}.json`);
-    const data = await readJson(file);
-    if (typeof body.galleryTitle === 'string') data.galleryTitle = body.galleryTitle;
-    data.galleryPhotos = (body.photos as unknown[]).map(safeId).filter(Boolean);
-    await writeJson(file, data);
-    return ok({ saved: id });
-  }
-
-  // Homepage module: exactly these photos are featured, in this order.
-  if (action === 'home') {
-    const body = await request.json();
-    const ids = (body.photos as unknown[]).map(safeId).filter(Boolean) as string[];
-    const photos = (await readDir(PHOTOS)).sort((a: Json, b: Json) => (a.order as number) - (b.order as number));
-    let rest = ids.length;
-    for (const p of photos) {
-      const { id, ...data } = p as Json & { id: string };
-      const at = ids.indexOf(id), featured = at >= 0, order = featured ? at : rest++;
-      if (data.featured !== featured || data.order !== order) await writeJson(path.join(PHOTOS, `${id}.json`), { ...data, featured, order });
-    }
-    return ok({ saved: ids.length });
-  }
-
-  // Inline edits of one photo (title, alt text, series, project link).
-  if (action === 'photo') {
-    const body = await request.json();
-    const id = safeId(body.id);
-    if (!id) return fail('invalid photo');
-    const file = path.join(PHOTOS, `${id}.json`);
-    const data = await readJson(file);
-    for (const key of ['title', 'alt', 'series'] as const) if (typeof body[key] === 'string') data[key] = body[key];
-    if ('project' in body) data.project = safeId(body.project);
-    await writeJson(file, data);
-    return ok({ saved: id, photo: { id, ...data } });
-  }
-
-  // Drag & drop upload: rotate by EXIF, export 2200 px + 760 px WebP, create the library entry.
-  if (action === 'upload') {
-    const form = await request.formData();
-    const series = String(form.get('series') || 'Fotografie');
-    const project = safeId(form.get('project'));
-    const existing = await readDir(PHOTOS);
-    let order = Math.max(0, ...existing.map((p: Json) => Number(p.order) || 0)) + 1;
-    const created: Json[] = [];
-    for (const entry of form.getAll('files')) {
-      if (!(entry instanceof File) || !entry.type.startsWith('image/')) continue;
-      const input = Buffer.from(await entry.arrayBuffer());
-      const id = await uniqueSlug(slugify(entry.name));
+  try {
+    // 1) One image in → web versions out (nothing is stored yet; the client keeps it until "Speichern").
+    if (action === 'process') {
+      const form = await request.formData();
+      const file = form.get('file');
+      if (!(file instanceof File) || !file.type.startsWith('image/')) return fail('kein Bild');
+      const taken = new Set([...(await store.list(PHOTOS)).map((p) => p.id), ...String(form.get('taken') || '').split(',').filter(Boolean)]);
+      const base = slugify(String(form.get('name') || file.name));
+      let id = base, n = 2;
+      while (taken.has(id)) id = `${base}-${n++}`;
+      const input = Buffer.from(await file.arrayBuffer());
       const big = await sharp(input).rotate().resize({ width: 2200, height: 2200, fit: 'inside', withoutEnlargement: true }).sharpen({ sigma: 0.6 }).webp({ quality: 84 }).toBuffer({ resolveWithObject: true });
-      await fs.writeFile(path.join(PHOTO_IMG, `${id}.webp`), big.data);
-      await sharp(input).rotate().resize({ width: 760, height: 760, fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 }).toFile(path.join(PHOTO_IMG, `${id}-sm.webp`));
-      const data = {
-        image: `/images/photos/${id}.webp`, thumb: `/images/photos/${id}-sm.webp`,
-        alt: '', series, project, width: big.info.width, height: big.info.height,
-        featured: false, order: order++, title: titleFrom(entry.name),
-      };
-      await writeJson(path.join(PHOTOS, `${id}.json`), data);
-      created.push({ id, ...data });
+      const sm = await sharp(input).rotate().resize({ width: 760, height: 760, fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 }).toBuffer();
+      return ok({
+        id,
+        json: {
+          image: `/images/photos/${id}.webp`, thumb: `/images/photos/${id}-sm.webp`, alt: '',
+          series: String(form.get('series') || 'Fotografie'), project: safeId(form.get('project')),
+          width: big.info.width, height: big.info.height, featured: false, order: 0, title: titleFrom(String(form.get('name') || file.name)),
+        },
+        big: big.data.toString('base64'),
+        sm: sm.toString('base64'),
+      });
     }
-    return ok({ created });
-  }
 
-  return fail('unknown action', 404);
+    // 2) Save: gallery or homepage selection + edited/new photos, written as one change set (one commit online).
+    if (action === 'save') {
+      const body = await request.json();
+      const changes: Change[] = [];
+      const photos = new Map((await store.list(PHOTOS)).map((p) => [p.id, p]));
+      const touched = new Set<string>();
+
+      // new photos: binaries + entries (order: after everything else)
+      let nextOrder = Math.max(0, ...[...photos.values()].map((p) => Number(p.order) || 0)) + 1;
+      for (const np of body.newPhotos ?? []) {
+        const id = safeId(np.id);
+        if (!id || photos.has(id)) continue;
+        if (np.big) changes.push({ path: `${PHOTO_IMG}/${id}.webp`, content: Buffer.from(np.big, 'base64') });
+        if (np.sm) changes.push({ path: `${PHOTO_IMG}/${id}-sm.webp`, content: Buffer.from(np.sm, 'base64') });
+        const { id: _drop, ...json } = np.json ?? {};
+        photos.set(id, { id, ...json, order: nextOrder++ });
+        touched.add(id);
+      }
+      // inline edits (title, alt, series, project)
+      for (const [rawId, edit] of Object.entries<Json>(body.photoEdits ?? {})) {
+        const id = safeId(rawId), p = id && photos.get(id);
+        if (!p) continue;
+        for (const key of ['title', 'alt', 'series'] as const) if (typeof edit[key] === 'string') p[key] = edit[key];
+        if ('project' in edit) p.project = safeId(edit.project);
+        touched.add(id!);
+      }
+      const selection = ((body.photos ?? []) as unknown[]).map(safeId).filter((id): id is string => !!id && photos.has(id));
+
+      let message = 'cms: Fotos aktualisiert';
+      if (body.kind === 'gallery') {
+        const caseId = safeId(body.case);
+        const c = caseId && (await store.list(CASES)).find((x) => x.id === caseId);
+        if (!c) return fail('Projekt nicht gefunden');
+        const { id: _id, ...data } = c;
+        if (typeof body.galleryTitle === 'string') data.galleryTitle = body.galleryTitle;
+        data.galleryPhotos = selection;
+        changes.push({ path: `${CASES}/${caseId}.json`, content: jsonText(data) });
+        message = `cms: Galerie ${data.client || caseId} (${selection.length} Fotos)`;
+      } else if (body.kind === 'home') {
+        let rest = selection.length;
+        for (const p of [...photos.values()].sort(byOrder)) {
+          const at = selection.indexOf(p.id), featured = at >= 0, order = featured ? at : rest++;
+          if (p.featured !== featured || p.order !== order) { p.featured = featured; p.order = order; touched.add(p.id); }
+        }
+        message = `cms: Startseiten-Fotos (${selection.length})`;
+      }
+      for (const id of touched) { const { id: _id, ...data } = photos.get(id)!; changes.push({ path: `${PHOTOS}/${id}.json`, content: jsonText(data) }); }
+      const added = (body.newPhotos ?? []).length;
+      if (added) message += ` · ${added} neue${added === 1 ? 's Foto' : ' Fotos'}`;
+      if (!changes.length) return ok({ saved: 0 });
+      await store.commit(changes, message);
+      return ok({ saved: changes.length, mode: store.mode, branch: store.mode === 'github' ? BRANCH : null });
+    }
+
+    return fail('unknown action', 404);
+  } catch (e) {
+    if (e instanceof AuthError) return fail('login', 401);
+    const msg = String((e as Error).message);
+    // someone else committed in between → the client reloads and the user saves again
+    if (/expected|head|stale|fast.forward/i.test(msg)) return fail('Inzwischen wurde etwas anderes gespeichert. Seite neu laden und erneut speichern.', 409);
+    return fail(msg, 500);
+  }
 };

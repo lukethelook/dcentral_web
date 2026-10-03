@@ -5,14 +5,15 @@ import keystatic from '@keystatic/astro';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
-// Visual gallery editor (/cms/galerien): local dev only, never in the build.
-// It writes the same JSON files as Keystatic — drag & drop galleries, uploads,
-// homepage photo order.
+// Visual gallery editor (/cms/galerien): drag & drop galleries, uploads, homepage
+// photo order. Locally it writes the files; online it commits through GitHub with
+// the Keystatic login (src/cms/api.ts). Same JSON files as Keystatic.
 const galleryEditor = {
   name: 'dcentral-gallery-editor',
   hooks: {
-    'astro:config:setup': ({ command, injectRoute }) => {
-      if (command !== 'dev') return;
+    'astro:config:setup': ({ injectRoute, updateConfig }) => {
+      // the branch this deployment was built from = the branch the editor commits to
+      updateConfig({ vite: { define: { __CMS_BRANCH__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_REF || '') } } });
       injectRoute({ pattern: '/cms/galerien', entrypoint: './src/cms/galerien.astro', prerender: false });
       injectRoute({ pattern: '/api/cms/[action]', entrypoint: './src/cms/api.ts', prerender: false });
     },
@@ -31,6 +32,6 @@ export default defineConfig({
     react(),
     keystatic(),
     galleryEditor,
-    sitemap({ filter: (page) => !page.includes('/keystatic') && !page.includes('/api/') }),
+    sitemap({ filter: (page) => !page.includes('/keystatic') && !page.includes('/api/') && !page.includes('/cms/') }),
   ],
 });

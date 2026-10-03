@@ -1,6 +1,7 @@
 ---
-// Gallery editor (dev only, see astro.config.mjs). Visual, drag & drop editing of
-// project galleries and the homepage photo module; writes the same JSON as Keystatic.
+// Gallery editor (/cms/galerien). Visual, drag & drop editing of project galleries
+// and the homepage photo module. Local: writes files; online: commits via GitHub
+// with the Keystatic login (see src/cms/api.ts). Same JSON as Keystatic.
 import '../styles/fonts.css';
 export const prerender = false;
 ---
@@ -78,6 +79,16 @@ export const prerender = false;
     .ghost { background: none; border: 1px solid var(--line); padding: 8px 14px; border-radius: 99px; cursor: pointer; }
     .toast { position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--forest); color: var(--paper); padding: 10px 18px; border-radius: 99px; font-size: 13px; transition: transform 220ms cubic-bezier(.23,1,.32,1), opacity 220ms ease; z-index: 50; }
     .toast.show { transform: translate(-50%, 0); opacity: 1; }
+    .ph .new { position: absolute; left: 8px; bottom: 34px; background: var(--forest); color: var(--lime); font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
+    .hint.mode { margin: -4px 0 10px; color: var(--ink); }
+    .login { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: var(--forest); color: var(--paper); text-align: center; padding: 24px; }
+    .login[hidden] { display: none; }
+    .login .brand { font-weight: 800; font-size: 22px; letter-spacing: -.05em; margin: 0 0 18px; }
+    .login .brand span { color: var(--lime); }
+    .login h1 { font-weight: 600; font-size: clamp(30px, 4vw, 44px); letter-spacing: -.04em; margin: 0 0 10px; }
+    .login p { max-width: 46ch; margin: 0 auto 22px; color: rgba(243,244,236,.75); }
+    .login a.save { display: inline-block; text-decoration: none; }
+    .login .hint { margin-top: 16px; color: rgba(243,244,236,.55); }
     .home-only, body.home .case-only { display: none; }
     body.home .home-only { display: block; }
     @media (prefers-reduced-motion: reduce) { .chip, .ph img, .toast { transition: none; } }
@@ -127,6 +138,7 @@ export const prerender = false;
           <input id="file" type="file" accept="image/*" multiple />
         </div>
       </div>
+      <p class="hint mode" id="modeinfo"></p>
       <p class="hint" style="margin:-4px 0 14px">Klick auf ein Foto = zur Auswahl hinzufügen / entfernen. Bilder einfach ins Fenster ziehen, um sie hochzuladen. <span style="color:#b97a12">●</span> = Alt-Text fehlt.</p>
       <div class="grid" id="grid"></div>
     </section>
@@ -134,6 +146,15 @@ export const prerender = false;
 
   <div class="drop" id="drop"><div>Loslassen zum Hochladen<small id="dropinfo"></small></div></div>
   <div class="toast" id="toast" role="status"></div>
+  <div class="login" id="login" hidden>
+    <div>
+      <p class="brand">dcentral<span>.</span> Galerien</p>
+      <h1>Bitte zuerst anmelden.</h1>
+      <p>Der Galerie-Editor nutzt deine Keystatic-Anmeldung über GitHub. Nur wer im Repository schreiben darf, kann speichern.</p>
+      <a class="save" href="/keystatic">In Keystatic mit GitHub anmelden</a>
+      <p class="hint">Danach diese Seite neu laden.</p>
+    </div>
+  </div>
 
   <dialog id="dlg">
     <div class="dlg">
@@ -150,29 +171,55 @@ export const prerender = false;
   </dialog>
 
   <script>
-    type Photo = { id: string; image: string; thumb?: string; title?: string; alt?: string; series?: string; project?: string | null; featured?: boolean; order?: number; width?: number; height?: number };
+    type Photo = { id: string; image: string; thumb?: string; title?: string; alt?: string; series?: string; project?: string | null; featured?: boolean; order?: number; width?: number; height?: number; preview?: string };
     type Case = { id: string; title: string; client: string; galleryTitle: string; galleryPhotos: string[] };
+    type NewPhoto = { id: string; json: Photo; big: string; sm: string };
     const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector(s) as T;
     let cases: Case[] = [], photos: Photo[] = [], byId = new Map<string, Photo>();
     let mode: 'case' | 'home' = 'case', current = '', selection: string[] = [], dirty = false, seriesFilter = 'Alle', query = '';
+    let store: 'local' | 'github' = 'local', branch = '', imageBase = '';
+    // everything waits here until "Speichern" (online that is one commit)
+    let newPhotos = new Map<string, NewPhoto>(), photoEdits: Record<string, Partial<Photo>> = {};
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
-    const api = (action: string, body?: unknown) =>
-      fetch(`/api/cms/${action}`, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined)
-        .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d.error || r.statusText); return d; });
+    const src = (p: Photo) => p.preview || imageBase + (p.thumb || p.image);
+
+    class LoginNeeded extends Error {}
+    async function call(action: string, init?: RequestInit, retry = true): Promise<any> {
+      const r = await fetch(`/api/cms/${action}`, init);
+      if (r.status === 401) {
+        // the GitHub token from Keystatic lasts ~8 h; Keystatic can renew it with its refresh cookie
+        if (retry && (await fetch('/api/keystatic/github/refresh-token', { method: 'POST' })).ok) return call(action, init, false);
+        throw new LoginNeeded();
+      }
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || r.statusText);
+      return d;
+    }
+    const postJson = (action: string, body: unknown) => call(action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
 
     let toastTimer = 0;
-    function toast(msg: string) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = window.setTimeout(() => t.classList.remove('show'), 2400); }
-    function setDirty(v: boolean) { dirty = v; $<HTMLButtonElement>('#save').disabled = !v; $('#status').textContent = v ? 'Nicht gespeichert' : ''; }
+    function toast(msg: string, ms = 2600) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = window.setTimeout(() => t.classList.remove('show'), ms); }
+    function setDirty(v: boolean) {
+      dirty = v; $<HTMLButtonElement>('#save').disabled = !v;
+      $('#status').textContent = v ? 'Nicht gespeichert' : store === 'github' ? `Online · ${branch}` : 'Lokal';
+    }
+    function showLogin() { $('#login').hidden = false; }
 
     async function load() {
-      const s = await api('state');
-      cases = s.cases; photos = s.photos; byId = new Map(photos.map((p) => [p.id, p]));
+      let s;
+      try { s = await call('state'); } catch (e) { if (e instanceof LoginNeeded) return showLogin(); throw e; }
+      store = s.mode; branch = s.branch || ''; imageBase = s.imageBase || '';
+      $('#modeinfo').textContent = store === 'github'
+        ? `Online-Modus: Speichern erzeugt einen Commit auf „${branch}“. Die Website zeigt es nach dem nächsten Vercel-Build (ca. 1–2 Minuten).`
+        : 'Lokaler Modus: Speichern schreibt direkt in die Projektdateien.';
+      cases = s.cases; photos = s.photos; byId = new Map(photos.map((p: Photo) => [p.id, p]));
+      newPhotos = new Map(); photoEdits = {};
       $('#case').innerHTML = cases.map((c) => `<option value="${c.id}">${esc(c.client)} — ${esc(c.title)}</option>`).join('');
       $('#dproject').innerHTML = '<option value="">– keinem –</option>' + cases.map((c) => `<option value="${c.id}">${esc(c.client)}</option>`).join('');
       const wanted = new URLSearchParams(location.search).get('projekt');
-      current = cases.some((c) => c.id === wanted) ? wanted! : cases[0]?.id || '';
+      current = cases.some((c) => c.id === wanted) ? wanted! : cases.some((c) => c.id === current) ? current : cases[0]?.id || '';
       $<HTMLSelectElement>('#case').value = current;
-      $('#serieslist').innerHTML = [...new Set(photos.map((p) => p.series).filter(Boolean))].map((s) => `<option value="${esc(s)}">`).join('');
+      $('#serieslist').innerHTML = [...new Set(photos.map((p) => p.series).filter(Boolean))].map((x) => `<option value="${esc(x)}">`).join('');
       pick();
     }
     function pick() {
@@ -181,12 +228,12 @@ export const prerender = false;
         selection = c.galleryPhotos.filter((id) => byId.has(id));
         $<HTMLInputElement>('#gtitle').value = c.galleryTitle || '';
       } else selection = photos.filter((p) => p.featured).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((p) => p.id);
-      setDirty(false); render();
+      setDirty(newPhotos.size > 0 || Object.keys(photoEdits).length > 0); render();
     }
 
     function renderSeries() {
       const all = ['Alle', ...(mode === 'case' ? ['Dieses Projekt'] : []), ...new Set(photos.map((p) => p.series || 'Fotografie'))];
-      $('#series').innerHTML = all.map((s) => `<button type="button" aria-pressed="${s === seriesFilter}" data-s="${esc(s)}">${esc(s)}</button>`).join('');
+      $('#series').innerHTML = all.map((x) => `<button type="button" aria-pressed="${x === seriesFilter}" data-s="${esc(x)}">${esc(x)}</button>`).join('');
     }
     function visible() {
       const q = query.toLowerCase();
@@ -199,59 +246,93 @@ export const prerender = false;
       renderSeries();
       $('#sel').innerHTML = selection.map((id, i) => {
         const p = byId.get(id)!;
-        return `<div class="chip" draggable="true" data-id="${id}" title="${esc(p.title || id)}"><img src="${p.thumb || p.image}" alt="" loading="lazy"><span class="no">${i + 1}</span><button class="x" type="button" data-x="${id}" aria-label="Aus der Auswahl entfernen">×</button></div>`;
+        return `<div class="chip" draggable="true" data-id="${id}" title="${esc(p.title || id)}"><img src="${src(p)}" alt="" loading="lazy"><span class="no">${i + 1}</span><button class="x" type="button" data-x="${id}" aria-label="Aus der Auswahl entfernen">×</button></div>`;
       }).join('');
       $('#count').textContent = `${selection.length} ${selection.length === 1 ? 'Foto' : 'Fotos'}`;
       $('#hcount').textContent = `${selection.length} gewählt${selection.length > 7 ? ' · nur 7 sichtbar' : ''}`;
       $('#grid').innerHTML = visible().map((p) => {
-        const at = selection.indexOf(p.id);
-        return `<div class="ph${at >= 0 ? ' on' : ''}" data-id="${p.id}" tabindex="0" role="button" aria-pressed="${at >= 0}" aria-label="${esc(p.title || p.id)}">${at >= 0 ? `<span class="badge">${at + 1}</span>` : ''}<img src="${p.thumb || p.image}" alt="" loading="lazy"><button class="edit" type="button" data-edit="${p.id}">Bearbeiten</button>${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}<div class="cap"><b>${esc(p.title || p.id)}</b><span>${esc(p.series)}</span></div></div>`;
+        const at = selection.indexOf(p.id), fresh = newPhotos.has(p.id);
+        return `<div class="ph${at >= 0 ? ' on' : ''}" data-id="${p.id}" tabindex="0" role="button" aria-pressed="${at >= 0}" aria-label="${esc(p.title || p.id)}">${at >= 0 ? `<span class="badge">${at + 1}</span>` : ''}${fresh ? '<span class="new">neu</span>' : ''}<img src="${src(p)}" alt="" loading="lazy"><button class="edit" type="button" data-edit="${p.id}">Bearbeiten</button>${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}<div class="cap"><b>${esc(p.title || p.id)}</b><span>${esc(p.series)}</span></div></div>`;
       }).join('');
     }
     function toggle(id: string) { const i = selection.indexOf(id); if (i >= 0) selection.splice(i, 1); else selection.push(id); setDirty(true); render(); }
 
     async function save() {
       if (!dirty) return;
-      $('#status').textContent = 'Speichert …';
+      $('#status').textContent = store === 'github' ? 'Speichert auf GitHub …' : 'Speichert …';
+      $<HTMLButtonElement>('#save').disabled = true;
       try {
-        if (mode === 'case') {
-          const galleryTitle = $<HTMLInputElement>('#gtitle').value;
-          await api('gallery', { case: current, galleryTitle, photos: selection });
-          const c = cases.find((x) => x.id === current)!; c.galleryPhotos = [...selection]; c.galleryTitle = galleryTitle;
-        } else {
-          await api('home', { photos: selection });
-          photos.forEach((p) => { const at = selection.indexOf(p.id); p.featured = at >= 0; if (at >= 0) p.order = at; });
-        }
-        setDirty(false); toast('Gespeichert – auf localhost und in Keystatic sichtbar.');
-      } catch (e) { $('#status').textContent = 'Fehler beim Speichern'; toast(String(e)); }
+        // keep each request under Vercel's 4.5 MB body limit: big uploads go first in their own commits
+        const pending = [...newPhotos.values()];
+        const size = (n: NewPhoto) => n.big.length + n.sm.length;
+        const chunks: NewPhoto[][] = [[]]; let used = 0;
+        for (const n of pending) { if (used + size(n) > 3_200_000 && chunks.at(-1)!.length) { chunks.push([]); used = 0; } chunks.at(-1)!.push(n); used += size(n); }
+        for (const chunk of chunks.slice(0, -1)) await postJson('save', { kind: 'files', newPhotos: chunk });
+        const base = { photoEdits, newPhotos: chunks.at(-1), photos: selection };
+        if (mode === 'case') await postJson('save', { ...base, kind: 'gallery', case: current, galleryTitle: $<HTMLInputElement>('#gtitle').value });
+        else await postJson('save', { ...base, kind: 'home' });
+        if (mode === 'case') { const c = cases.find((x) => x.id === current)!; c.galleryPhotos = [...selection]; c.galleryTitle = $<HTMLInputElement>('#gtitle').value; }
+        else photos.forEach((p) => { const at = selection.indexOf(p.id); p.featured = at >= 0; if (at >= 0) p.order = at; });
+        newPhotos = new Map(); photoEdits = {};
+        setDirty(false);
+        toast(store === 'github' ? 'Gespeichert – auf der Website in ca. 1–2 Minuten sichtbar.' : 'Gespeichert.', 3600);
+      } catch (e) {
+        setDirty(true);
+        if (e instanceof LoginNeeded) { showLogin(); return; }
+        $('#status').textContent = 'Fehler beim Speichern'; toast(String((e as Error).message), 6000);
+      }
     }
 
+    // downscale in the browser first (EXIF-rotated), so even 20 MB camera files fit through
+    async function shrink(file: File): Promise<Blob> {
+      try {
+        const bmp = await createImageBitmap(file);
+        const k = Math.min(1, 2400 / Math.max(bmp.width, bmp.height));
+        const c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+        c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
+        return await new Promise((res) => c.toBlob((b) => res(b || file), 'image/jpeg', 0.92));
+      } catch { return file; }
+    }
     async function upload(files: FileList | File[]) {
       const list = [...files].filter((f) => f.type.startsWith('image/'));
       if (!list.length) return;
       const c = cases.find((x) => x.id === current);
-      const form = new FormData();
-      list.forEach((f) => form.append('files', f));
-      form.append('series', mode === 'case' && c ? c.client : 'Fotografie');
-      if (mode === 'case' && c) form.append('project', c.id);
-      $('#status').textContent = `Lädt ${list.length} ${list.length === 1 ? 'Bild' : 'Bilder'} hoch …`;
-      try {
-        const r = await fetch('/api/cms/upload', { method: 'POST', body: form }).then((x) => x.json());
-        for (const p of r.created as Photo[]) { photos.push(p); byId.set(p.id, p); selection.push(p.id); }
-        setDirty(true); render();
-        toast(`${r.created.length} hochgeladen und hinzugefügt – Alt-Texte ergänzen, dann speichern.`);
-      } catch (e) { $('#status').textContent = 'Upload fehlgeschlagen'; toast(String(e)); }
+      let done = 0;
+      for (const f of list) {
+        $('#status').textContent = `Bereitet Bild ${++done} von ${list.length} vor …`;
+        try {
+          const form = new FormData();
+          form.append('file', await shrink(f), f.name.replace(/\.[^.]+$/, '') + '.jpg');
+          form.append('name', f.name);
+          form.append('series', mode === 'case' && c ? c.client : 'Fotografie');
+          if (mode === 'case' && c) form.append('project', c.id);
+          form.append('taken', [...byId.keys()].join(','));
+          const r = await call('process', { method: 'POST', body: form });
+          const p: Photo = { id: r.id, ...r.json, preview: `data:image/webp;base64,${r.sm}` };
+          newPhotos.set(r.id, { id: r.id, json: r.json, big: r.big, sm: r.sm });
+          photos.push(p); byId.set(p.id, p); selection.push(p.id);
+          render();
+        } catch (e) {
+          if (e instanceof LoginNeeded) { showLogin(); return; }
+          toast(`${f.name}: ${(e as Error).message}`, 5000);
+        }
+      }
+      setDirty(true);
+      toast(`${list.length} ${list.length === 1 ? 'Bild' : 'Bilder'} bereit – Alt-Texte ergänzen, dann speichern.`, 4000);
     }
 
     // ── events ──
     $('#case').addEventListener('change', () => {
       const next = $<HTMLSelectElement>('#case').value;
-      if (dirty && !confirm('Änderungen an dieser Galerie verwerfen?')) { $<HTMLSelectElement>('#case').value = current; return; }
+      if (dirty && !confirm('Ungespeicherte Änderungen verwerfen?')) { $<HTMLSelectElement>('#case').value = current; return; }
+      if (dirty) { newPhotos.forEach((_, id) => { byId.delete(id); }); photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos = new Map(); photoEdits = {}; }
       current = next; seriesFilter = 'Alle'; history.replaceState(null, '', `?projekt=${current}`); pick();
     });
     $('#gtitle').addEventListener('input', () => setDirty(true));
     document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.addEventListener('click', () => {
+      if (b.dataset.mode === mode) return;
       if (dirty && !confirm('Ungespeicherte Änderungen verwerfen?')) return;
+      if (dirty) { photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos.forEach((_, id) => byId.delete(id)); newPhotos = new Map(); photoEdits = {}; }
       mode = b.dataset.mode as 'case' | 'home'; document.body.classList.toggle('home', mode === 'home');
       document.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
       seriesFilter = 'Alle'; pick();
@@ -272,7 +353,7 @@ export const prerender = false;
     $('#save').addEventListener('click', save);
     addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); } });
     addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
-    $<HTMLInputElement>('#file').addEventListener('change', () => { const input = $<HTMLInputElement>('#file'); if (input.files) upload(input.files); input.value = ''; });
+    $<HTMLInputElement>('#file').addEventListener('change', () => { const input = $<HTMLInputElement>('#file'); if (input.files) upload([...input.files]); input.value = ''; });
 
     // reorder inside the selection (HTML5 drag & drop)
     let dragId: string | null = null;
@@ -298,13 +379,13 @@ export const prerender = false;
     });
     addEventListener('dragleave', (e) => { if (!hasFiles(e)) return; if (--depth <= 0) { depth = 0; drop.classList.remove('show'); } });
     addEventListener('dragover', (e) => { if (hasFiles(e)) e.preventDefault(); });
-    addEventListener('drop', (e) => { if (!hasFiles(e)) return; e.preventDefault(); depth = 0; drop.classList.remove('show'); upload(e.dataTransfer!.files); });
+    addEventListener('drop', (e) => { if (!hasFiles(e)) return; e.preventDefault(); depth = 0; drop.classList.remove('show'); upload([...e.dataTransfer!.files]); });
 
-    // photo details
+    // photo details: collected and saved together with the gallery
     let editing = '';
     function openEdit(id: string) {
       const p = byId.get(id)!; editing = id;
-      $<HTMLImageElement>('#dimg').src = p.thumb || p.image;
+      $<HTMLImageElement>('#dimg').src = src(p);
       $<HTMLInputElement>('#dtitle').value = p.title || '';
       $<HTMLTextAreaElement>('#dalt').value = p.alt || '';
       $<HTMLInputElement>('#dseries').value = p.series || '';
@@ -312,11 +393,13 @@ export const prerender = false;
       $('#dmeta').textContent = `${id} · ${p.width ?? '?'} × ${p.height ?? '?'} px`;
       $<HTMLDialogElement>('#dlg').showModal();
     }
-    $('#dlg').addEventListener('close', async () => {
+    $('#dlg').addEventListener('close', () => {
       if ($<HTMLDialogElement>('#dlg').returnValue !== 'save' || !editing) return;
-      const body = { id: editing, title: $<HTMLInputElement>('#dtitle').value, alt: $<HTMLTextAreaElement>('#dalt').value, series: $<HTMLInputElement>('#dseries').value, project: $<HTMLSelectElement>('#dproject').value || null };
-      try { const r = await api('photo', body); Object.assign(byId.get(editing)!, r.photo); render(); toast('Foto gespeichert.'); }
-      catch (e) { toast(String(e)); }
+      const edit = { title: $<HTMLInputElement>('#dtitle').value, alt: $<HTMLTextAreaElement>('#dalt').value, series: $<HTMLInputElement>('#dseries').value, project: $<HTMLSelectElement>('#dproject').value || null };
+      const p = byId.get(editing)!; Object.assign(p, edit);
+      const fresh = newPhotos.get(editing);
+      if (fresh) Object.assign(fresh.json, edit); else photoEdits[editing] = { ...(photoEdits[editing] || {}), ...edit };
+      setDirty(true); render();
     });
 
     load();

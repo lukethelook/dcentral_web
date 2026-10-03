@@ -146,7 +146,7 @@ export default config({
         galleryTitle: TEXT('Galerie: Überschrift (optional, Standard „Galerie")'),
         galleryPhotos: fields.array(
           fields.relationship({ label: 'Foto aus der Bibliothek', collection: 'photos' }),
-          { label: 'Galerie: Fotos aus der Bibliothek auswählen', description: 'Komfortabler mit Vorschaubildern, Drag & Drop und Upload: localhost:4321/cms/galerien', itemLabel: (p) => p.value ?? 'Foto wählen' },
+          { label: 'Galerie: Fotos aus der Bibliothek auswählen', description: 'Komfortabler mit Vorschaubildern, Drag & Drop und Upload: /cms/galerien (lokal und online)', itemLabel: (p) => p.value ?? 'Foto wählen' },
         ),
         gallery: fields.array(
           fields.object({
