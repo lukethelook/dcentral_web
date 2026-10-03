@@ -15,7 +15,8 @@ import sharp from 'sharp';
 export const prerender = false;
 
 declare const __CMS_BRANCH__: string;
-const LOCAL = import.meta.env.DEV;
+// CMS_STORE=github forces the online mode in `astro dev` (to test commits locally)
+const LOCAL = import.meta.env.DEV && process.env.CMS_STORE !== 'github';
 const REPO = process.env.CMS_REPO || 'lukethelook/dcentral_web';
 const BRANCH = process.env.CMS_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || (typeof __CMS_BRANCH__ === 'string' && __CMS_BRANCH__) || 'main';
 const CASES = 'src/content/cases';
