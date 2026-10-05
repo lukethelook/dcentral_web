@@ -124,13 +124,17 @@
   "galleryTitle": "Aus der Bildwelt",
   "galleryPhotos": [
     "audiospell-alpha-one-studio",
-    "audiospell-team-sofa",
     "audiospell-zarge-rot",
     "audiospell-phono-moebel",
     "audiospell-portrait-blau",
     "audiospell-zargen",
     "audiospell-team-sw",
-    "audiospell-kante"
+    "audiospell-kante",
+    "audiospell-rahmen-boden",
+    "audiospell-werkstatt",
+    "audiospell-serie",
+    "audiospell-produkt-hoch",
+    "audiospell-portrait-sw"
   ],
   "hue": 25,
   "format": "landscape",
