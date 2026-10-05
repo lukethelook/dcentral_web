@@ -159,7 +159,9 @@ function init(frame) {
     visible = e.isIntersecting;
     if (visible && !n && !frame.dataset.loading) { frame.dataset.loading = '1'; load().catch(() => frame.classList.remove('is-line')); }
     wake();
-  }, { rootMargin: '300px 0px' }).observe(frame);
+  // observe the section, not the frame: the frame sits inside a clip-path reveal, and a
+  // clipped element reports "not intersecting" without an update once the clip opens
+  }, { rootMargin: '300px 0px' }).observe(frame.closest('section') || frame);
   addEventListener('scroll', wake, { passive: true });
   new ResizeObserver(() => { if (!n) return; layout(); buildWords(); wake(); }).observe(frame);
   document.addEventListener('motion-state', (e) => { paused = e.detail.paused || reduce.matches; wake(); });
