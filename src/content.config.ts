@@ -40,6 +40,7 @@ const cases = defineCollection({
         video: z.string().nullable().optional(),
         vimeo: z.string().nullable().optional(), // Vimeo ID → cinema stage with click-to-load player
         youtube: z.string().nullable().optional(), // YouTube ID (loaded via youtube-nocookie on click)
+        film: z.string().nullable().optional(), // self-hosted MP4 with sound → cinema stage plays it on click
         loop: z.string().nullable().optional(), // muted background film for the cinema stage
         vimeoLabel: z.string().nullable().optional(),
         slides: z.array(z.string().nullable()).optional(),

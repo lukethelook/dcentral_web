@@ -1,0 +1,29 @@
+---
+// Cinema stage: a muted background loop (or cross-fading stills) with a play button.
+// The film itself loads only on click — Vimeo/YouTube as an iframe (privacy), a
+// self-hosted MP4 (showcase.film) as a video with sound and controls (motion-system.js).
+interface Props {
+  showcase: { film?: string | null; vimeo?: string | null; youtube?: string | null; loop?: string | null; poster?: string | null; slides?: (string | null)[]; vimeoLabel?: string | null };
+  client: string;
+  class?: string;
+}
+const { showcase: c, client, class: cls = '' } = Astro.props;
+// Keystatic file fields may store just a filename — tolerate both forms.
+const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
+const slides = (c.slides ?? []).filter((s): s is string => !!s);
+const provider = c.film ? 'file' : c.youtube ? 'youtube' : 'vimeo';
+const host = provider === 'youtube' ? 'YouTube' : 'Vimeo';
+---
+
+<div class={`case-cinema ${cls}`} data-cinema={c.film ? src(c.film) : c.vimeo || c.youtube} data-provider={provider} style={`--n:${slides.length}`}>
+  {c.loop
+    ? <video class="cinema-loop" src={src(c.loop)} poster={c.poster ? src(c.poster) : undefined} autoplay muted loop playsinline preload="metadata" aria-hidden="true" data-motion-video></video>
+    : <div class="cinema-slides" aria-hidden="true">
+        {slides.map((s, i) => <img src={src(s)} alt="" decoding="async" style={`--i:${i}`} loading={i ? 'lazy' : 'eager'} />)}
+      </div>}
+  <button type="button" class="cinema-play" aria-label={provider === 'file' ? `Film abspielen: ${client}` : `Film abspielen: ${client} (lädt ${host})`}>
+    <span class="cinema-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5-13-7.5Z"></path></svg></span>
+    <span class="cinema-label">{c.vimeoLabel || 'Film ansehen'}</span>
+  </button>
+  {provider !== 'file' && <p class="cinema-note">{provider === 'youtube' ? 'Der Film wird erst beim Klick von YouTube geladen (erweiterter Datenschutz).' : 'Der Film wird erst beim Klick von Vimeo geladen – ohne Tracking.'}</p>}
+</div>

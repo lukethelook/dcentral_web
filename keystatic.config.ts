@@ -107,6 +107,7 @@ export default config({
           video: fields.file({ label: 'Video im Browser-Mockup (MP4, statt Desktop-Screenshot)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           vimeo: TEXT('Vimeo-ID (Kino-Bühne mit Film auf Klick)'),
           youtube: TEXT('YouTube-ID (Kino-Bühne, lädt youtube-nocookie auf Klick)'),
+          film: fields.file({ label: 'Film mit Ton (MP4, selbst gehostet – Kino-Bühne spielt ihn auf Klick)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           loop: fields.file({ label: 'Hintergrundfilm der Kino-Bühne (MP4, stumm)', directory: 'public/images/cases', publicPath: '/images/cases/' }),
           vimeoLabel: TEXT('Beschriftung Film-Button (z.B. „Film ansehen · 3:07")'),
           slides: fields.array(

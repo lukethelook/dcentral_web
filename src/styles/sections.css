@@ -33,6 +33,10 @@
 .disc-scope-list strong { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
 .disc-scope-list span { font-size: 15px; line-height: 1.55; color: var(--muted); }
 .disc-work { margin-top: clamp(80px, 10vw, 140px); }
+.disc-reel { margin-top: clamp(80px, 10vw, 140px); }
+.disc-reel-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; isolation: isolate; }
+.disc-reel-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); border-bottom: 1px solid currentColor; padding-bottom: 2px; white-space: nowrap; }
+.disc-reel-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 .disc-work-head { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
 .disc-count { font-size: 12px; letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; }
 .disc-empty { font-size: 18px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 26px; }

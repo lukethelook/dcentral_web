@@ -309,7 +309,7 @@ document.querySelectorAll('[data-signal-loop]').forEach((list) => {
 document.querySelectorAll('video[data-motion-video]').forEach((video) => {
   let visible = false;
   const sync = () => {
-    if (visible && canMove()) video.play().catch(() => {});
+    if (visible && canMove() && !video.closest('.is-playing')) video.play().catch(() => {});
     else video.pause();
   };
   if (!canMove()) { video.removeAttribute('autoplay'); video.pause(); }
@@ -318,10 +318,26 @@ document.querySelectorAll('video[data-motion-video]').forEach((video) => {
   reduced.addEventListener('change', sync);
 });
 
-/* ── 9 · Cinema stage: Vimeo loads only on explicit click (privacy, no autoplay). */
+/* ── 9 · Cinema stage: Vimeo loads only on explicit click (privacy, no autoplay).
+   A self-hosted film (data-provider="file") plays in place, with sound and controls. */
 document.querySelectorAll('[data-cinema]').forEach((stage) => {
   const btn = stage.querySelector('.cinema-play');
   btn?.addEventListener('click', () => {
+    if (stage.dataset.provider === 'file') {
+      const loop = stage.querySelector('.cinema-loop');
+      const film = document.createElement('video');
+      film.className = 'cinema-film';
+      film.src = stage.dataset.cinema;
+      film.controls = true;
+      film.playsInline = true;
+      if (loop?.poster) film.poster = loop.poster;
+      loop?.pause();
+      stage.classList.add('is-playing');
+      stage.append(film);
+      film.play().catch(() => {});
+      film.focus();
+      return;
+    }
     const id = encodeURIComponent(stage.dataset.cinema);
     const frame = document.createElement('iframe');
     frame.src = stage.dataset.provider === 'youtube'

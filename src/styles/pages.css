@@ -55,7 +55,8 @@ html:not(.js-loop) .case-loop li > span { background: var(--lime); border-color:
 /* ── Cinema stage: graded stills cross-fade with a slow Ken Burns drift;
    the Vimeo film loads only on click (privacy: no request before). ──── */
 .case-cinema { background: #06070c; aspect-ratio: 16 / 9; }
-.cinema-slides, .cinema-slides img, .case-cinema iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.cinema-slides, .cinema-slides img, .case-cinema iframe, .cinema-film { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.cinema-film { object-fit: contain; background: #000; }
 .cinema-slides img { object-fit: cover; opacity: 0; animation: cinema calc(var(--n) * 7s) linear infinite; animation-delay: calc(var(--i) * 7s - .01s); }
 .cinema-slides img:first-child { opacity: 1; }
 @keyframes cinema {

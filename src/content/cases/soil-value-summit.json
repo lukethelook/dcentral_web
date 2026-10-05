@@ -1,0 +1,135 @@
+{
+  "title": "Ein Summit, vier Disziplinen",
+  "signal": "vier Disziplinen",
+  "client": "Soil & Value Summit",
+  "clientLabel": "TSHN – The Soil Health Network · FH OÖ Campus Wels",
+  "discipline": "Film & Aerial",
+  "also": [
+    "Foto"
+  ],
+  "year": 2026,
+  "summary": "Zwei Tage Soil & Value Summit an der FH OÖ in Wels, am 10. und 11. März 2026. Für das Soil Health Network entstand alles aus einer Hand: Corporate Design, Eventfotografie, Film und Schnitt – vom Logo auf dem Roll-up bis zum 94-Sekunden-Recap.",
+  "body": "Zwei Tage, ein Thema: gesunder Boden. Der Summit brachte Vorträge, Diskussionen und viele Gespräche in den Pausen an den FH OÖ Campus Wels.\n\nDas Erscheinungsbild trägt den Summit: ein kräftiger Slab-Schriftzug mit verschränktem &, Schiefergrau und Bernstein, dazu Bilder von Erde und Ernte und die Claims „Zukunft ernten.“ und „harvest the future“. Es zieht sich vom Roll-up über Flyer und Plakat bis zum Logo im Film.\n\nVor Ort liefen zwei Kameras: Eine Sony FX3 zeichnete Vorträge und Interviews auf, eine Sony Alpha 7 IV am Gimbal fing in S-Log3 die Momente dazwischen ein. Parallel entstanden 2.147 Fotos, aus denen 474 bearbeitete Bilder wurden.\n\nAus rund 13 Stunden Material wurde ein 94 Sekunden langer Recap-Film – geschnitten und vom flachen S-Log3 auf einen warmen, ruhigen Look gegradet. Die Interviews gibt es als eigenen Schnitt.",
+  "tags": [
+    "Eventfilm",
+    "Recap",
+    "Interviews",
+    "Eventfotografie",
+    "Corporate Design"
+  ],
+  "scope": [
+    "Corporate Design & Logo",
+    "Roll-ups, Flyer & Plakat",
+    "Eventfotografie",
+    "Vortragsaufzeichnung",
+    "Interviews",
+    "Recap-Film",
+    "Schnitt & Color Grading"
+  ],
+  "highlightsTitle": "Was gebaut wurde",
+  "highlights": [
+    {
+      "t": "Ein Zeichen im ganzen Saal",
+      "d": "Logo, Farben und Claims ziehen sich vom Roll-up über Flyer und Plakat bis zum Logo im Film."
+    },
+    {
+      "t": "Von S-Log3 zum Look",
+      "d": "Gimbal-Aufnahmen in S-Log3, im Schnitt auf einen warmen, natürlichen Look gegradet – passend zu Erde und Ernte im Design."
+    },
+    {
+      "t": "13 Stunden, 94 Sekunden",
+      "d": "Vorträge, Interviews und Atmosphäre aus zwei Tagen, verdichtet zu einem Recap, der in eineinhalb Minuten zeigt, worum es ging."
+    },
+    {
+      "t": "2.147 Fotos, 474 Bilder",
+      "d": "Speaker, Fragen aus dem Publikum, Gespräche vor dem Roll-up – ausgewählt und fertig bearbeitet."
+    }
+  ],
+  "loopTitle": "Ein Event, eine Hand",
+  "loop": [
+    {
+      "t": "Design",
+      "d": "Logo, Farben, Roll-ups und Flyer vor dem Event."
+    },
+    {
+      "t": "Dreh",
+      "d": "Zwei Tage mit FX3 und Gimbal-Kamera vor Ort."
+    },
+    {
+      "t": "Foto",
+      "d": "Speaker, Publikum und Pausen – 474 fertige Bilder."
+    },
+    {
+      "t": "Schnitt",
+      "d": "Recap, Interviews und Grading aus einem Guss."
+    }
+  ],
+  "stackTitle": "Werkzeuge",
+  "stack": [
+    "Sony FX3",
+    "Sony Alpha 7 IV",
+    "Gimbal",
+    "Lightroom Classic"
+  ],
+  "showcase": {
+    "loop": "/images/cases/soil-value/loop.mp4",
+    "film": "/images/cases/soil-value/film.mp4",
+    "vimeoLabel": "Film ansehen · 0:30",
+    "slides": [],
+    "poster": "/images/cases/soil-value/poster.webp"
+  },
+  "galleryTitle": "Vom Summit",
+  "gallery": [
+    {
+      "image": "/images/cases/soil-value/foto-dsc07460.webp",
+      "title": "Keynote",
+      "alt": "Speaker mit Mikrofon und ausgestreckter Hand beim Soil & Value Summit"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc07602.webp",
+      "title": "Am Rednerpult",
+      "alt": "Referentin am Pult vor dem Roll-up „Zukunft ernten.“"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc06728.webp",
+      "title": "Frage aus dem Publikum",
+      "alt": "Teilnehmer spricht ins Mikrofon, im Vordergrund das Publikum"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc06931.webp",
+      "title": "Vortrag",
+      "alt": "Referent lacht am Rednerpult vor dem Soil-&-Value-Roll-up"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc07149.webp",
+      "title": "Interview",
+      "alt": "Interview vor dem Soil-&-Value-Roll-up"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc08083.webp",
+      "title": "Diskussion",
+      "alt": "Teilnehmer gestikuliert mit Mikrofon in der Diskussionsrunde"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc07842.webp",
+      "title": "Im Gespräch",
+      "alt": "Referent mit Mikrofon im Gespräch mit dem Publikum"
+    },
+    {
+      "image": "/images/cases/soil-value/foto-dsc06644.webp",
+      "title": "Der Saal",
+      "alt": "Blick über das Publikum im Saal der FH OÖ in Wels"
+    }
+  ],
+  "hue": 35,
+  "format": "landscape",
+  "cover": "/images/cases/soil-value/cover.webp",
+  "coverTone": "dark",
+  "previews": [
+    "/images/cases/soil-value/hover-film.webp",
+    "/images/cases/soil-value/hover-interview.webp"
+  ],
+  "previewDummy": false,
+  "featured": false,
+  "order": 11
+}

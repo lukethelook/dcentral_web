@@ -9,6 +9,7 @@ import Footer from '../components/Footer.astro';
 import CaseList from '../components/CaseList.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
 import Panorama360 from '../components/Panorama360.astro';
+import CinemaStage from '../components/CinemaStage.astro';
 import leistungen from '../content/site/leistungen.json';
 
 type Scope = { group: string; lead?: string; modules: { t: string; d?: string }[] };
@@ -31,6 +32,8 @@ const pal = palettes[index % 4];
 const cases = (await getCollection('cases'))
   .filter((c) => !c.data.previewDummy && !c.data.hidden && [c.data.discipline, ...c.data.also].includes(s.key as never))
   .sort((a, b) => a.data.order - b.data.order);
+// Latest project of this discipline with a self-hosted film → cinema stage above the 360° tour.
+const reel = cases.find((c) => c.data.discipline === s.key && c.data.showcase?.film && c.data.showcase?.loop);
 const others = services.map((o, i) => ({ ...o, i })).filter((o) => o.i !== index);
 const isPhoto = s.key === 'Foto';
 // Film & Aerial: a live 360° drone tour (Almsee + Grafinger scenes) instead of a static reel.
@@ -90,6 +93,18 @@ const arrow = 'M6 18 18 6M6 6h12v12';
     )}
 
     {isPhoto && <div class="shell"><PhotoGallery /></div>}
+    {reel && (
+      <section class="disc-reel shell" aria-labelledby="disc-reel-title">
+        <div class="disc-work-head">
+          <h2 id="disc-reel-title" class="case-h2">Zuletzt <em>gedreht.</em></h2>
+          <a class="disc-reel-link" href={`/arbeiten/${reel.id}`}>
+            {reel.data.client} · {reel.data.year}
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+          </a>
+        </div>
+        <CinemaStage showcase={reel.data.showcase!} client={reel.data.client} class="disc-reel-stage" />
+      </section>
+    )}
     {aerialScenes.length > 0 && <div class="shell"><Panorama360 title="Das Almtal von oben – in 360°" scenes={aerialScenes} /></div>}
 
     <section class="disc-work shell" aria-labelledby="disc-work-title">

@@ -8,6 +8,7 @@ import Panorama360 from '../../components/Panorama360.astro';
 import NetworkFinder from '../../components/NetworkFinder.astro';
 import AtomDemo from '../../components/AtomDemo.astro';
 import ElasticGallery from '../../components/ElasticGallery.astro';
+import CinemaStage from '../../components/CinemaStage.astro';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -37,7 +38,7 @@ const visual = d.cover
     : { src: `/assets/project-lines-${idx % 4}.svg`, dummy: false };
 const showcase = d.showcase?.desktop || d.showcase?.video ? d.showcase : null;
 const slides = (d.showcase?.slides ?? []).filter((s): s is string => !!s);
-const cinema = (d.showcase?.vimeo || d.showcase?.youtube) && (slides.length || d.showcase?.loop) ? d.showcase : null;
+const cinema = (d.showcase?.vimeo || d.showcase?.youtube || d.showcase?.film) && (slides.length || d.showcase?.loop) ? d.showcase : null;
 // Case gallery: library photos (in the chosen order) + uploaded images.
 const library = new Map((await getCollection('photos')).map((p) => [p.id, p.data]));
 const galleryItems = [
@@ -83,18 +84,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
     </p>
 
     {cinema ? (
-      <div class={`case-visual case-cinema`} data-cinema={cinema.vimeo || cinema.youtube} data-provider={cinema.youtube ? 'youtube' : 'vimeo'} style={`--n:${slides.length}`}>
-        {cinema.loop
-          ? <video class="cinema-loop" src={src(cinema.loop)} poster={cinema.poster ? src(cinema.poster) : undefined} autoplay muted loop playsinline preload="metadata" aria-hidden="true" data-motion-video></video>
-          : <div class="cinema-slides" aria-hidden="true">
-              {slides.map((s, i) => <img src={src(s)} alt="" decoding="async" style={`--i:${i}`} loading={i ? 'lazy' : 'eager'} />)}
-            </div>}
-        <button type="button" class="cinema-play" aria-label={`Film abspielen: ${d.client} (lädt ${cinema.youtube ? 'YouTube' : 'Vimeo'})`}>
-          <span class="cinema-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5-13-7.5Z"></path></svg></span>
-          <span class="cinema-label">{cinema.vimeoLabel || 'Film ansehen'}</span>
-        </button>
-        <p class="cinema-note">{cinema.youtube ? 'Der Film wird erst beim Klick von YouTube geladen (erweiterter Datenschutz).' : 'Der Film wird erst beim Klick von Vimeo geladen – ohne Tracking.'}</p>
-      </div>
+      <CinemaStage showcase={cinema} client={d.client} class="case-visual" />
     ) : phones.length > 0 ? (
       <div class={`case-visual case-showcase case-showcase--phones cover-${idx % 4}`} aria-label={`Mockup: ${d.client} auf dem Smartphone`} role="img">
         {phones.map((p, i) => (
