@@ -21,6 +21,17 @@
 .disc-art canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
 /* ── Work list on discipline pages ───────────────────────────────────── */
+.disc-scope { margin-top: clamp(80px, 10vw, 140px); }
+.disc-scope-groups { margin-top: clamp(28px, 4vw, 48px); border-top: 1px solid var(--line); }
+.disc-scope-group { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(24px, 4vw, 64px); padding: clamp(26px, 3.4vw, 44px) 0; border-bottom: 1px solid var(--line); }
+.disc-scope-head { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-content: start; }
+.disc-scope-no { grid-row: span 2; display: inline-grid; place-items: center; width: 30px; height: 30px; margin-top: 2px; border-radius: 99px; background: var(--disc-bg); color: var(--disc-ink); font-size: 11px; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.disc-scope-head h3 { font: 600 clamp(24px, 2.2vw, 32px)/1.1 Manrope, sans-serif; letter-spacing: -.04em; }
+.disc-scope-head p { margin-top: 8px; font: 400 clamp(18px, 1.5vw, 22px)/1.3 'Instrument Serif', Georgia, serif; color: var(--muted); max-width: 30ch; }
+.disc-scope-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(22px, 2.6vw, 34px) clamp(24px, 3vw, 48px); }
+.disc-scope-list li { display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 2px solid var(--disc-bg); }
+.disc-scope-list strong { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+.disc-scope-list span { font-size: 15px; line-height: 1.55; color: var(--muted); }
 .disc-work { margin-top: clamp(80px, 10vw, 140px); }
 .disc-work-head { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
 .disc-count { font-size: 12px; letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -101,10 +112,12 @@
   .disc-hero { grid-template-columns: 1fr; min-height: 0; }
   .disc-art { order: -1; min-height: 46vh; }
   .disc-more-grid { grid-template-columns: 1fr; }
+  .disc-scope-group { grid-template-columns: 1fr; }
   .disc-tile { aspect-ratio: 16 / 9; }
 }
 @media (max-width: 760px) {
   .disc { padding-top: 76px; }
+  .disc-scope-list { grid-template-columns: 1fr; }
   .cl-row { grid-template-columns: 84px 1fr 22px; grid-template-areas: 'thumb client arrow' 'thumb title arrow' 'thumb meta arrow'; gap: 4px 16px; align-items: center; padding: 18px 0; }
   .cl-thumb { display: block; grid-area: thumb; width: 84px; height: 84px; overflow: hidden; }
   .cl-thumb img { width: 100%; height: 100%; object-fit: cover; }

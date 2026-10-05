@@ -6,33 +6,119 @@
       "no": "01",
       "title": "Fotografie",
       "tag": "Bilder, die bleiben.",
-      "body": "Produkt, Manufaktur, Menschen und Landschaft. Von der HiFi-Manufaktur in Linz bis zur Fischzucht im Almtal – Aufnahmen, die wertig wirken, ohne zu inszenieren.",
+      "body": "Produkt, Manufaktur, Menschen und Landschaft. Von der HiFi-Manufaktur in Linz bis zur Fischzucht im Almtal – Aufnahmen, die wertig wirken, ohne zu inszenieren. Geliefert als Content für alle Kanäle und so aufbereitet, dass Google und KI-Suchen sie verstehen.",
       "entry": "Einstieg: ein halber Tag reicht für einen frischen Bildstock.",
       "items": [
         "Produkt & Manufaktur",
         "Business-Porträt",
         "Musik & Kultur",
-        "Landschaft & Aerial"
+        "Landschaft & Aerial",
+        "Content & Bild-SEO"
       ],
       "short": "Fotografie",
       "key": "Foto",
-      "slug": "fotografie"
+      "slug": "fotografie",
+      "scope": [
+        {
+          "group": "Aufnahme",
+          "lead": "Vor Ort, mit Ruhe und Blick fürs Detail.",
+          "modules": [
+            {
+              "t": "Produkt & Manufaktur",
+              "d": "Produkte, Werkstatt und Handwerk – so, dass Qualität sichtbar wird."
+            },
+            {
+              "t": "Business-Porträt",
+              "d": "Menschen hinter dem Betrieb, natürlich statt gestellt."
+            },
+            {
+              "t": "Musik & Kultur",
+              "d": "Konzerte, Ensembles und Veranstaltungen – im Moment, nicht nachgestellt."
+            },
+            {
+              "t": "Landschaft & Aerial",
+              "d": "Region und Betrieb von oben, mit zertifizierter Drohne."
+            }
+          ]
+        },
+        {
+          "group": "Content & Sichtbarkeit",
+          "lead": "Damit gute Bilder auch gefunden werden.",
+          "modules": [
+            {
+              "t": "Content-Pakete",
+              "d": "Ein Shooting, alle Formate: Website, Social Media und Druck – fertig zugeschnitten."
+            },
+            {
+              "t": "Bild-SEO & GEO",
+              "d": "Dateinamen, Alt-Texte und Bilddaten so aufbereitet, dass Suchmaschinen und KI-Suchen deine Bilder richtig zuordnen."
+            },
+            {
+              "t": "Content-Marketing",
+              "d": "Bildserien für deine laufenden Kanäle – geplant statt zufällig."
+            }
+          ]
+        }
+      ]
     },
     {
       "no": "02",
       "title": "Film & Aerial",
       "tag": "Bewegtbild mit Höhe.",
-      "body": "Imagefilm, Social-Reels, Eventdoku und Luftaufnahmen mit zertifizierter Drohne. Seen, Berge und Betriebe aus einer Perspektive, die man sonst nur vom Sessellift kennt.",
+      "body": "Imagefilm, Social-Reels, Eventdoku und Luftaufnahmen mit zertifizierter Drohne. Seen, Berge und Betriebe aus einer Perspektive, die man sonst nur vom Sessellift kennt – geschnitten für jeden Kanal und auffindbar gemacht.",
       "entry": "Einstieg: vom schnellen Reel bis zum kompletten Imagefilm.",
       "items": [
         "Imagefilm",
         "Social-Reels",
         "Aerial / Drohne",
-        "Eventdoku"
+        "Eventdoku",
+        "Content & Video-SEO"
       ],
       "short": "Film & Aerial",
       "key": "Film & Aerial",
-      "slug": "film-aerial"
+      "slug": "film-aerial",
+      "scope": [
+        {
+          "group": "Produktion",
+          "lead": "Vom Konzept über den Dreh bis zum fertigen Schnitt.",
+          "modules": [
+            {
+              "t": "Imagefilm",
+              "d": "Dein Betrieb in wenigen Minuten erzählt – ehrlich und mit Haltung."
+            },
+            {
+              "t": "Social-Reels",
+              "d": "Kurze Formate im Hochformat, gebaut für die ersten drei Sekunden."
+            },
+            {
+              "t": "Aerial / Drohne",
+              "d": "Luftaufnahmen mit zertifizierter Drohne – Seen, Berge, Betriebe."
+            },
+            {
+              "t": "Eventdoku",
+              "d": "Veranstaltungen festgehalten, als Film und als Clips für danach."
+            }
+          ]
+        },
+        {
+          "group": "Content & Sichtbarkeit",
+          "lead": "Damit ein Film nicht nach dem ersten Post verschwindet.",
+          "modules": [
+            {
+              "t": "Schnittfassungen für jeden Kanal",
+              "d": "Aus einem Dreh: Langfassung, Reels, Stories und Website-Loops."
+            },
+            {
+              "t": "Video-SEO & GEO",
+              "d": "Untertitel, Transkript, Kapitel und strukturierte Daten – damit Google, YouTube und KI-Suchen den Inhalt erfassen."
+            },
+            {
+              "t": "Content-Marketing",
+              "d": "Drehtage so geplant, dass sie Material für einen ganzen Redaktionsplan liefern."
+            }
+          ]
+        }
+      ]
     },
     {
       "no": "03",
@@ -55,18 +141,65 @@
     {
       "no": "04",
       "title": "AI-Solutions",
-      "tag": "Ideen, schneller gedacht.",
-      "body": "KI-Bildwelten, Moodboards, Kampagnen-Konzeption und Automatisierung. Als Beschleuniger fürs Handwerk gedacht — nie als Ersatz. Du bekommst Vorsprung, kein Stockfoto-Gefühl.",
-      "entry": "Einstieg: vom Konzept-Sprint bis zur fertigen Bildkampagne.",
+      "tag": "Programmiert für deinen Vorsprung.",
+      "body": "Maßgeschneiderte Programmierung, automatisiertes Marketing und KI-Bildwelten. Lösungen, die für deinen Betrieb gebaut sind und im Hintergrund mitarbeiten – als Beschleuniger fürs Handwerk gedacht, nie als Ersatz.",
+      "entry": "Einstieg: vom Konzept-Sprint bis zur eigenen Software-Lösung.",
       "items": [
-        "KI-Bildwelten",
-        "Moodboards",
-        "Kampagne",
-        "Automatisierung"
+        "Individuelle Entwicklung",
+        "Marketing-Automation",
+        "SEO & GEO",
+        "Content-Marketing",
+        "KI-Bildwelten"
       ],
       "short": "AI-Solutions",
       "key": "KI",
-      "slug": "ki"
+      "slug": "ki",
+      "scope": [
+        {
+          "group": "Entwicklung",
+          "lead": "Maßgeschneiderte Kundenprojekte und Programmierlösungen.",
+          "modules": [
+            {
+              "t": "Maßgeschneiderte Lösungen",
+              "d": "Tools, Schnittstellen und Anwendungen, gebaut für genau deinen Ablauf – statt Standardsoftware, die fast passt."
+            },
+            {
+              "t": "Automatisiertes Marketing",
+              "d": "Newsletter, Social-Posts und Anfragen laufen automatisch weiter – du behältst die Kontrolle."
+            },
+            {
+              "t": "Automatisierte SEO",
+              "d": "Technik, Metadaten und strukturierte Daten werden laufend geprüft und gepflegt, nicht einmal eingerichtet und vergessen."
+            },
+            {
+              "t": "GEO – sichtbar in KI-Suchen",
+              "d": "Inhalte und Daten so aufbereitet, dass ChatGPT, Perplexity und Googles KI-Antworten dein Angebot finden und richtig wiedergeben."
+            },
+            {
+              "t": "Content-Marketing",
+              "d": "Themenplanung und Texte, KI-gestützt erstellt und von Hand redigiert – in deinem Ton."
+            }
+          ]
+        },
+        {
+          "group": "Kreation",
+          "lead": "KI als Werkzeug für Ideen und Bildwelten.",
+          "modules": [
+            {
+              "t": "KI-Bildwelten",
+              "d": "Visuelle Welten für Kampagnen und Konzepte, ohne Stockfoto-Gefühl."
+            },
+            {
+              "t": "Moodboards",
+              "d": "Richtung finden, bevor gedreht oder fotografiert wird."
+            },
+            {
+              "t": "Kampagne",
+              "d": "Von der Idee bis zum fertigen Kampagnenkonzept."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

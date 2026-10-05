@@ -11,7 +11,8 @@ import PhotoGallery from '../components/PhotoGallery.astro';
 import Panorama360 from '../components/Panorama360.astro';
 import leistungen from '../content/site/leistungen.json';
 
-type Service = (typeof leistungen.services)[number] & { key: string; slug: string; short?: string };
+type Scope = { group: string; lead?: string; modules: { t: string; d?: string }[] };
+type Service = (typeof leistungen.services)[number] & { key: string; slug: string; short?: string; scope?: Scope[] };
 const services = leistungen.services as Service[];
 
 export function getStaticPaths() {
@@ -65,6 +66,28 @@ const arrow = 'M6 18 18 6M6 6h12v12';
         <canvas aria-hidden="true"></canvas>
       </div>
     </section>
+
+    {s.scope && s.scope.length > 0 && (
+      <section class="disc-scope shell" aria-labelledby="disc-scope-title">
+        <h2 id="disc-scope-title" class="case-h2">Was <em>dazugehört.</em></h2>
+        <div class="disc-scope-groups">
+          {s.scope.map((g, gi) => (
+            <div class="disc-scope-group">
+              <div class="disc-scope-head">
+                <span class="disc-scope-no">{String(gi + 1).padStart(2, '0')}</span>
+                <h3>{g.group}</h3>
+                {g.lead && <p>{g.lead}</p>}
+              </div>
+              <ul class="disc-scope-list">
+                {g.modules.map((m) => (
+                  <li><strong>{m.t}</strong>{m.d && <span>{m.d}</span>}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
 
     {isPhoto && <div class="shell"><PhotoGallery /></div>}
     {aerialScenes.length > 0 && <div class="shell"><Panorama360 title="Das Almtal von oben – in 360°" scenes={aerialScenes} /></div>}

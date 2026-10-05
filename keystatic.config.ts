@@ -250,6 +250,17 @@ export default config({
             body: TEXT('Beschreibung', { multiline: true }),
             entry: TEXT('Einstieg-Zeile'),
             items: fields.array(fields.text({ label: 'Stichwort' }), { label: 'Stichworte', itemLabel: (p) => p.value }),
+            scope: fields.array(
+              fields.object({
+                group: TEXT('Gruppe (z.B. Entwicklung)'),
+                lead: TEXT('Unterzeile'),
+                modules: fields.array(
+                  fields.object({ t: TEXT('Leistung'), d: TEXT('Kurzbeschreibung', { multiline: true }) }),
+                  { label: 'Leistungen', itemLabel: (p) => p.fields.t.value },
+                ),
+              }),
+              { label: 'Leistungsumfang (Unterseite, Block „Was dazugehört“)', itemLabel: (p) => p.fields.group.value },
+            ),
           }),
           { label: 'Disziplinen', itemLabel: (p) => p.fields.title.value },
         ),
