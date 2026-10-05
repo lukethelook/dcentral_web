@@ -146,8 +146,10 @@ export const GET: APIRoute = async ({ params, request }) => {
 
 export const POST: APIRoute = async ({ params, request, url }) => {
   // only the editor itself may post (cookies are SameSite=lax, this is a second fence)
+  // (behind Vercel's proxy url.host is internal — compare with the forwarded public host)
   const origin = request.headers.get('origin');
-  if (origin && new URL(origin).host !== url.host) return fail('forbidden', 403);
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || url.host;
+  if (origin && new URL(origin).host !== host) return fail('forbidden', 403);
   const store = storeFor(request);
   if (!store) return fail('login', 401);
   const action = params.action;
