@@ -1,19 +1,27 @@
 ---
-// „Brief an Lukas" — every contact CTA (data-contact="start|purpose|question|talk")
-// opens this sheet instead of jumping to the footer. The visitor fills two or three
-// blanks in a short letter; it leaves the browser only through their own mail
-// client (mailto) — nothing is stored. Logic: src/scripts/brief.js.
+// Contact sheet — every contact CTA (data-contact="start|purpose|question|talk")
+// opens this form instead of jumping to the footer. Topic switch, name, contact and
+// a free message; it leaves the browser only through the visitor's own mail client
+// (mailto) — nothing is stored. Logic: src/scripts/brief.js.
 import c from '../content/site/contact.json';
+import leistungen from '../content/site/leistungen.json';
 
+const disciplines = leistungen.services.map((s) => s.key as string);
 const tel = c.phoneHref.replace(/\s+/g, '');
 const arrow = 'M6 18 18 6M6 6h12v12';
+const topics = [
+  { id: 'start', label: 'Projekt' },
+  { id: 'purpose', label: 'Impact' },
+  { id: 'question', label: 'Frage' },
+  { id: 'talk', label: 'Rückruf' },
+];
 ---
 
 <dialog class="brief" id="brief" aria-labelledby="brief-title" data-email={c.email}>
   <div class="brief-panel">
     <div class="brief-inner">
       <header class="brief-head">
-        <p class="brief-eyebrow"><span></span>Brief an Lukas</p>
+        <p class="brief-eyebrow"><span></span>Kontakt</p>
         <button type="button" class="brief-close" aria-label="Schließen">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg>
         </button>
@@ -22,36 +30,47 @@ const arrow = 'M6 18 18 6M6 6h12v12';
       <form class="brief-form" novalidate>
         <h2 id="brief-title" class="brief-title" data-title-start="Projekt starten." data-title-purpose="Projekt vorschlagen." data-title-question="Frage stellen." data-title-talk="Reden wir."></h2>
 
-        <div class="brief-letter" data-for="start">
-          <p>Hallo Lukas, ich bin <input data-field="name" placeholder="Name" autocomplete="name" enterkeyhint="next" /> und plane <input data-field="what" placeholder="worum geht's?" enterkeyhint="next" data-main />.</p>
-          <p>Erreichbar bin ich unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" enterkeyhint="send" />.</p>
+        <div class="brief-topics" role="radiogroup" aria-label="Anliegen">
+          {topics.map((t) => <button type="button" role="radio" aria-checked="false" data-topic={t.id}>{t.label}</button>)}
         </div>
 
-        <div class="brief-letter" data-for="purpose">
-          <p>Hallo Lukas, wir sind <input data-field="org" placeholder="Initiative oder Verein" autocomplete="organization" enterkeyhint="next" /> und wollen <input data-field="impact" placeholder="was bewegen?" enterkeyhint="next" data-main />.</p>
-          <p>Erreichbar bin ich unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" enterkeyhint="send" />.</p>
+        <div class="brief-direct" data-show="talk">
+          <a href={`tel:${tel}`}><span>Anrufen</span>{c.phone}</a>
+          <a href={`mailto:${c.email}`}><span>E-Mail</span>{c.email}</a>
+        </div>
+        <p class="brief-sub" data-show="talk">Oder Rückruf vereinbaren:</p>
+
+        <div class="brief-grid">
+          <label class="brief-field">
+            <span>Name</span>
+            <input name="name" placeholder="Vor- und Nachname" autocomplete="name" enterkeyhint="next" />
+          </label>
+          <label class="brief-field" data-show="start purpose question">
+            <span>E-Mail oder Telefon</span>
+            <input name="contact" placeholder="name@firma.at" autocomplete="email" enterkeyhint="next" />
+          </label>
+          <label class="brief-field" data-show="talk">
+            <span>Telefonnummer</span>
+            <input name="phone" type="tel" placeholder="+43 …" autocomplete="tel" inputmode="tel" enterkeyhint="send" />
+          </label>
         </div>
 
-        <div class="brief-letter" data-for="question">
-          <p>Hallo Lukas, meine Frage:</p>
-          <textarea data-field="question" placeholder="Was möchtest du wissen?" rows="2" data-main></textarea>
-          <p>Antwort bitte an <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" enterkeyhint="send" />.</p>
-        </div>
+        <fieldset class="brief-areas" data-show="start">
+          <legend>Bereich <small>optional</small></legend>
+          {disciplines.map((d) => <button type="button" class="brief-chip" data-area={d} aria-pressed="false">{d}</button>)}
+        </fieldset>
 
-        <div class="brief-letter" data-for="talk">
-          <div class="brief-direct">
-            <a href={`tel:${tel}`}><span>Anrufen</span>{c.phone}</a>
-            <a href={`mailto:${c.email}`}><span>E-Mail</span>{c.email}</a>
-          </div>
-          <p>Oder ich rufe zurück unter <input type="tel" data-field="phone" placeholder="deiner Nummer" autocomplete="tel" inputmode="tel" enterkeyhint="send" data-main />.</p>
-        </div>
+        <label class="brief-field" data-show="start purpose question">
+          <span>Nachricht</span>
+          <textarea name="message" rows="4" data-placeholder-start="Worum geht es? Ziel, Zeitraum und Budget – soweit schon bekannt." data-placeholder-purpose="Wer seid ihr, was wollt ihr bewegen und wobei braucht ihr Unterstützung?" data-placeholder-question="Deine Frage"></textarea>
+        </label>
 
         <footer class="brief-actions">
           <button type="submit" class="action brief-send">
-            <span class="brief-send-label" data-label-default="Brief abschicken" data-label-talk="Rückruf anfragen">Brief abschicken</span>
+            <span class="brief-send-label" data-label-start="Anfrage senden" data-label-purpose="Vorschlag senden" data-label-question="Frage senden" data-label-talk="Rückruf anfragen">Anfrage senden</span>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
           </button>
-          <p class="brief-alt">Lieber direkt: <a href={`tel:${tel}`}>{c.phone}</a> · <a href={`mailto:${c.email}`}>{c.email}</a></p>
+          <p class="brief-alt" data-show="start purpose question">Direkt: <a href={`tel:${tel}`}>{c.phone}</a> · <a href={`mailto:${c.email}`}>{c.email}</a></p>
           <p class="brief-note" aria-live="polite"></p>
         </footer>
       </form>
