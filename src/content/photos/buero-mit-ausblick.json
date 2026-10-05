@@ -6,7 +6,7 @@
   "project": "grafinger",
   "width": 1920,
   "height": 1280,
-  "featured": false,
-  "order": 24,
+  "featured": true,
+  "order": 6,
   "title": "Raum mit Ausblick"
 }
