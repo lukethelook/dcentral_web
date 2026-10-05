@@ -1,0 +1,28 @@
+---
+// „Echt zuerst. Hybrid, wo es trägt.“ — stance between authentic production
+// and AI image work, shown as a scale from real to generated.
+import h from '../content/site/haltung.json';
+import { hl } from '../lib/text';
+const arrow = 'M6 18 18 6M6 6h12v12';
+---
+
+<section class="haltung shell section" id="haltung" aria-labelledby="haltung-title">
+  <div class="haltung-head">
+    <div>
+      <p class="haltung-eyebrow">{h.eyebrow}</p>
+      <h2 id="haltung-title" set:html={hl(h.title)} />
+    </div>
+    <p class="haltung-lead">{h.lead}</p>
+  </div>
+  <ol class="haltung-scale">
+    {h.stages.map((s, i) => (
+      <li class={`haltung-stage stage-${i}`}>
+        <span class="haltung-node" aria-hidden="true"></span>
+        <h3>{s.t}<em>{s.tag}</em></h3>
+        <p>{s.d}</p>
+        {s.link && <a class="haltung-link" href={s.link} aria-label={`Mehr zu ${s.t}`}><svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a>}
+      </li>
+    ))}
+  </ol>
+  {h.principle && <p class="haltung-principle">{h.principle}</p>}
+</section>

@@ -195,3 +195,31 @@
 .studio-frame .sl-words:focus-visible { outline: 2px solid #d4ff3f; outline-offset: 2px; }
 .studio-frame .sl-count { right: 16px; color: rgba(243,244,236,.6); font: 500 11px/1 Manrope, sans-serif; letter-spacing: .08em; font-variant-numeric: tabular-nums; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .studio-frame .sl-canvas, .studio-frame .sl-words, .studio-frame .sl-count { transition: none; } }
+
+/* Haltung — Echt → Hybrid → Generiert */
+.haltung-head { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(28px, 6vw, 100px); align-items: end; }
+.haltung-eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+.haltung h2 { font-size: clamp(44px, 5.6vw, 88px); line-height: 1.02; letter-spacing: -.05em; }
+.haltung-lead { font-size: 18px; line-height: 1.65; max-width: 54ch; }
+.haltung-scale { list-style: none; margin: clamp(56px, 7vw, 96px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3.4vw, 56px); position: relative; }
+.haltung-scale::before { content: ''; position: absolute; top: 9px; left: 10px; right: 0; height: 0; border-top: 1px solid var(--ink); -webkit-mask-image: linear-gradient(90deg, #000 40%, rgba(0,0,0,.25)); mask-image: linear-gradient(90deg, #000 40%, rgba(0,0,0,.25)); }
+.haltung-stage { position: relative; display: flex; flex-direction: column; gap: 14px; padding-top: 44px; }
+.haltung-node { position: absolute; top: 0; left: 0; width: 20px; height: 20px; border-radius: 99px; border: 1px solid var(--ink); background: var(--bg, #f3f4ec); }
+.stage-0 .haltung-node { background: var(--lime); box-shadow: 0 0 0 5px color-mix(in srgb, var(--lime) 35%, transparent); }
+.stage-1 .haltung-node { background: linear-gradient(90deg, var(--lime) 50%, var(--bg, #f3f4ec) 50%); }
+.stage-2 .haltung-node { border-style: dashed; }
+.haltung-stage h3 { display: flex; flex-direction: column; gap: 4px; font: 600 clamp(34px, 3.4vw, 52px)/1 Manrope, sans-serif; letter-spacing: -.05em; }
+.haltung-stage h3 em { font: 400 clamp(20px, 1.7vw, 26px)/1.2 'Instrument Serif', Georgia, serif; letter-spacing: 0; color: var(--muted); }
+.haltung-stage p { font-size: 16px; line-height: 1.6; max-width: 40ch; }
+.stage-2 h3, .stage-2 p { color: color-mix(in srgb, var(--ink) 62%, transparent); }
+.haltung-link { position: absolute; top: 40px; right: 0; width: 22px; height: 22px; color: var(--ink); }
+.haltung-link svg { width: 100%; height: 100%; transition: transform 240ms cubic-bezier(.23, 1, .32, 1); }
+.haltung-principle { margin-top: clamp(48px, 6vw, 80px); padding-top: 24px; border-top: 1px solid var(--line); font: 400 clamp(22px, 2vw, 30px)/1.3 'Instrument Serif', Georgia, serif; max-width: 60ch; }
+@media (hover: hover) and (pointer: fine) { .haltung-link:hover svg { transform: translate(3px, -3px); } }
+@media (max-width: 900px) {
+  .haltung-head { grid-template-columns: 1fr; align-items: start; }
+  .haltung-scale { grid-template-columns: 1fr; gap: 40px; }
+  .haltung-scale::before { top: 10px; bottom: 0; left: 9px; right: auto; width: 0; height: auto; border-top: 0; border-left: 1px solid var(--ink); -webkit-mask-image: linear-gradient(180deg, #000 40%, rgba(0,0,0,.25)); mask-image: linear-gradient(180deg, #000 40%, rgba(0,0,0,.25)); }
+  .haltung-stage { padding: 0 0 0 44px; }
+  .haltung-link { top: 4px; }
+}

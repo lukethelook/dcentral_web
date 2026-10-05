@@ -6,7 +6,7 @@
       "no": "01",
       "title": "Fotografie",
       "tag": "Bilder, die bleiben.",
-      "body": "Produkt, Manufaktur, Menschen und Landschaft. Von der HiFi-Manufaktur in Linz bis zur Fischzucht im Almtal – Aufnahmen, die wertig wirken, ohne zu inszenieren. Geliefert als Content für alle Kanäle und so aufbereitet, dass Google und KI-Suchen sie verstehen.",
+      "body": "Echte Menschen, echte Orte, echte Produkte. Von der HiFi-Manufaktur in Linz bis zur Fischzucht im Almtal – Aufnahmen, die wertig wirken, ohne zu inszenieren. Geliefert als Content für alle Kanäle und so aufbereitet, dass Google und KI-Suchen sie verstehen.",
       "entry": "Einstieg: ein halber Tag reicht für einen frischen Bildstock.",
       "items": [
         "Produkt & Manufaktur",
@@ -21,7 +21,7 @@
       "scope": [
         {
           "group": "Aufnahme",
-          "lead": "Vor Ort, mit Ruhe und Blick fürs Detail.",
+          "lead": "Echt, vor Ort, ungestellt.",
           "modules": [
             {
               "t": "Produkt & Manufaktur",
@@ -50,6 +50,10 @@
               "d": "Ein Shooting, alle Formate: Website, Social Media und Druck – fertig zugeschnitten."
             },
             {
+              "t": "Bildwelterweiterung mit KI",
+              "d": "Aus einem Shooting mehr Motive: Formate, Hintergründe und Varianten mit KI erweitert – das Echte bleibt echt."
+            },
+            {
               "t": "Bild-SEO & GEO",
               "d": "Dateinamen, Alt-Texte und Bilddaten so aufbereitet, dass Suchmaschinen und KI-Suchen deine Bilder richtig zuordnen."
             },
@@ -65,7 +69,7 @@
       "no": "02",
       "title": "Film & Aerial",
       "tag": "Bewegtbild mit Höhe.",
-      "body": "Imagefilm, Social-Reels, Eventdoku und Luftaufnahmen mit zertifizierter Drohne. Seen, Berge und Betriebe aus einer Perspektive, die man sonst nur vom Sessellift kennt – geschnitten für jeden Kanal und auffindbar gemacht.",
+      "body": "Imagefilm, Social-Reels, Eventdoku und Luftaufnahmen mit zertifizierter Drohne – echt gedreht, nicht generiert. Seen, Berge und Betriebe aus einer Perspektive, die man sonst nur vom Sessellift kennt, geschnitten für jeden Kanal.",
       "entry": "Einstieg: vom schnellen Reel bis zum kompletten Imagefilm.",
       "items": [
         "Imagefilm",
@@ -80,7 +84,7 @@
       "scope": [
         {
           "group": "Produktion",
-          "lead": "Vom Konzept über den Dreh bis zum fertigen Schnitt.",
+          "lead": "Echt gedreht – vom Konzept bis zum fertigen Schnitt.",
           "modules": [
             {
               "t": "Imagefilm",
@@ -142,14 +146,14 @@
       "no": "04",
       "title": "AI-Solutions",
       "tag": "Programmiert für deinen Vorsprung.",
-      "body": "Maßgeschneiderte Programmierung, automatisiertes Marketing und KI-Bildwelten. Lösungen, die für deinen Betrieb gebaut sind und im Hintergrund mitarbeiten – als Beschleuniger fürs Handwerk gedacht, nie als Ersatz.",
+      "body": "Maßgeschneiderte Programmierung, automatisiertes Marketing und hybride Bildwelten aus echter Fotografie und KI. Lösungen, die für deinen Betrieb gebaut sind und im Hintergrund mitarbeiten – als Beschleuniger fürs Handwerk gedacht, nie als Ersatz.",
       "entry": "Einstieg: vom Konzept-Sprint bis zur eigenen Software-Lösung.",
       "items": [
         "Individuelle Entwicklung",
         "Marketing-Automation",
         "SEO & GEO",
         "Content-Marketing",
-        "KI-Bildwelten"
+        "Hybride Bildwelten"
       ],
       "short": "AI-Solutions",
       "key": "KI",
@@ -183,19 +187,19 @@
         },
         {
           "group": "Kreation",
-          "lead": "KI als Werkzeug für Ideen und Bildwelten.",
+          "lead": "Echte Fotografie, mit KI weitergedacht.",
           "modules": [
             {
-              "t": "KI-Bildwelten",
-              "d": "Visuelle Welten für Kampagnen und Konzepte, ohne Stockfoto-Gefühl."
+              "t": "Bildwelterweiterung",
+              "d": "Echte Fotos als Fundament, mit KI erweitert: neue Formate, Hintergründe, Jahreszeiten und Varianten. Produkt und Menschen bleiben echt."
             },
             {
-              "t": "Moodboards",
-              "d": "Richtung finden, bevor gedreht oder fotografiert wird."
+              "t": "Hybride Kampagnen",
+              "d": "Echte Aufnahme trifft KI-Bildwelt – eine Bildsprache aus beidem, glaubwürdig statt glattpoliert."
             },
             {
-              "t": "Kampagne",
-              "d": "Von der Idee bis zum fertigen Kampagnenkonzept."
+              "t": "KI-Bildwelten & Moodboards",
+              "d": "Ideen sichtbar machen und Richtung finden, bevor gedreht oder fotografiert wird."
             }
           ]
         }

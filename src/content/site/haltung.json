@@ -1,0 +1,26 @@
+{
+  "eyebrow": "Haltung",
+  "title": "Alles ist makellos.\n*Echt wird wertvoll.*",
+  "lead": "Hochglanz gibt es heute auf Knopfdruck – perfekt, glatt und austauschbar. Gerade deshalb gewinnt das Echte an Wert: reale Menschen, reale Orte, reale Produkte. Sie machen eine Marke glaubwürdig. Darum steht bei mir die echte Aufnahme im Zentrum – und KI dort, wo sie das Echte erweitert, statt es zu ersetzen.",
+  "stages": [
+    {
+      "t": "Echt",
+      "tag": "Der Kern.",
+      "d": "Fotografie, Film und Aerial – vor Ort, ungestellt, mit echten Menschen, Produkten und Orten. Das Fundament jeder Marke.",
+      "link": "/fotografie"
+    },
+    {
+      "t": "Hybrid",
+      "tag": "Die Erweiterung.",
+      "d": "Echte Aufnahmen als Basis, mit KI weitergedacht: neue Formate, Hintergründe, Stimmungen und Varianten – aus einem Shooting eine ganze Bildwelt.",
+      "link": "/ki"
+    },
+    {
+      "t": "Generiert",
+      "tag": "Die Skizze.",
+      "d": "KI-Bildwelten und Moodboards, um Ideen sichtbar zu machen, bevor eine Kamera läuft.",
+      "link": "/ki"
+    }
+  ],
+  "principle": "Was echt ist, bleibt echt: Produkte, Menschen und Orte werden nicht erfunden – KI erweitert nur den Rahmen."
+}

@@ -21,7 +21,7 @@ export default config({
     navigation: {
       Arbeiten: ['cases'],
       Fotografie: ['photos', 'fotografie'],
-      Seiteninhalte: ['hero', 'manifest', 'leistungen', 'work', 'studio', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
+      Seiteninhalte: ['hero', 'manifest', 'leistungen', 'work', 'studio', 'haltung', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
       Rechtliches: ['impressum', 'datenschutz'],
       'SEO & Firma': ['seo'],
     },
@@ -264,6 +264,20 @@ export default config({
           }),
           { label: 'Disziplinen', itemLabel: (p) => p.fields.title.value },
         ),
+      },
+    }),
+
+    haltung: singleton({
+      label: 'Haltung (Echt & Hybrid)', path: 'src/content/site/haltung', format: { data: 'json' },
+      schema: {
+        eyebrow: TEXT('Label'),
+        title: TEXT('Überschrift', { multiline: true, description: RICH }),
+        lead: TEXT('Fließtext', { multiline: true }),
+        stages: fields.array(
+          fields.object({ t: TEXT('Stufe'), tag: TEXT('Zusatz (kursiv)'), d: TEXT('Beschreibung', { multiline: true }), link: TEXT('Link (optional, z.B. /fotografie)') }),
+          { label: 'Skala Echt → Generiert', itemLabel: (p) => p.fields.t.value },
+        ),
+        principle: TEXT('Grundsatz', { multiline: true }),
       },
     }),
 
