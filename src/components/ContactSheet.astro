@@ -1,102 +1,60 @@
 ---
-// „Brief an Lukas" — every contact CTA (data-contact="start|team|purpose|question|talk")
-// opens this sheet instead of jumping to the footer. The visitor completes a letter
-// rather than a form; it leaves the browser only through their own mail client
-// (mailto) — nothing is stored. Logic: src/scripts/brief.js.
+// „Brief an Lukas" — every contact CTA (data-contact="start|purpose|question|talk")
+// opens this sheet instead of jumping to the footer. The visitor fills two or three
+// blanks in a short letter; it leaves the browser only through their own mail
+// client (mailto) — nothing is stored. Logic: src/scripts/brief.js.
 import c from '../content/site/contact.json';
-import leistungen from '../content/site/leistungen.json';
 
-const disciplines = leistungen.services.map((s) => s.key as string);
 const tel = c.phoneHref.replace(/\s+/g, '');
 const arrow = 'M6 18 18 6M6 6h12v12';
-const tabs = [
-  { id: 'start', label: 'Projekt' },
-  { id: 'team', label: 'Team' },
-  { id: 'purpose', label: 'Impact' },
-  { id: 'question', label: 'Frage' },
-  { id: 'talk', label: 'Reden' },
-];
 ---
 
 <dialog class="brief" id="brief" aria-labelledby="brief-title" data-email={c.email}>
   <div class="brief-panel">
-    <header class="brief-head">
-      <p class="brief-eyebrow"><span></span>Brief an Lukas</p>
-      <div class="brief-tabs" aria-label="Worum geht's?">
-        {tabs.map((t) => <button type="button" data-tab={t.id} aria-pressed="false">{t.label}</button>)}
-      </div>
-      <button type="button" class="brief-close" aria-label="Schließen">
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-      </button>
-    </header>
+    <div class="brief-inner">
+      <header class="brief-head">
+        <p class="brief-eyebrow"><span></span>Brief an Lukas</p>
+        <button type="button" class="brief-close" aria-label="Schließen">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        </button>
+      </header>
 
-    <form class="brief-form" novalidate>
-      <div class="brief-main">
-        <h2 id="brief-title" class="brief-title" data-title-start="Projekt starten." data-title-team="Team zusammenstellen." data-title-purpose="Projekt vorschlagen." data-title-question="Frage stellen." data-title-talk="Reden wir."></h2>
+      <form class="brief-form" novalidate>
+        <h2 id="brief-title" class="brief-title" data-title-start="Projekt starten." data-title-purpose="Projekt vorschlagen." data-title-question="Frage stellen." data-title-talk="Reden wir."></h2>
 
         <div class="brief-letter" data-for="start">
-          <p>Hallo Lukas, ich bin <input data-field="name" placeholder="Name" autocomplete="name" /> von <input data-field="org" placeholder="Firma oder Projekt" autocomplete="organization" />.</p>
-          <p>Wir planen <input data-field="what" placeholder="worum geht's?" data-main /> und brauchen dafür
-            {disciplines.map((d) => <button type="button" class="brief-chip" data-pick="disc" data-value={d} aria-pressed="false">{d}</button>)}.</p>
-          <p>Starten würden wir gern
-            {['so bald wie möglich', 'in den nächsten Monaten', 'wann es passt'].map((w) => <button type="button" class="brief-chip" data-pick="when" data-single data-value={w} aria-pressed="false">{w}</button>)}.</p>
-          <p>Erreichbar bin ich unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" />.</p>
-        </div>
-
-        <div class="brief-letter" data-for="team">
-          <p>Hallo Lukas, für <input data-field="what" placeholder="unser Vorhaben" data-main /> suche ich ein Team aus
-            {disciplines.map((d) => <button type="button" class="brief-chip" data-pick="disc" data-value={d} aria-pressed="false">{d}</button>)}.</p>
-          <p>Ich bin <input data-field="name" placeholder="Name" autocomplete="name" /> von <input data-field="org" placeholder="Firma oder Projekt" autocomplete="organization" />, erreichbar unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" />.</p>
+          <p>Hallo Lukas, ich bin <input data-field="name" placeholder="Name" autocomplete="name" enterkeyhint="next" /> und plane <input data-field="what" placeholder="worum geht's?" enterkeyhint="next" data-main />.</p>
+          <p>Erreichbar bin ich unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" enterkeyhint="send" />.</p>
         </div>
 
         <div class="brief-letter" data-for="purpose">
-          <p>Hallo Lukas, wir sind <input data-field="org" placeholder="Initiative oder Verein" autocomplete="organization" /> und wollen <input data-field="impact" placeholder="was soll sich verändern?" data-main />.</p>
-          <p>Helfen würde uns
-            {[...disciplines, 'Netzwerk'].map((d) => <button type="button" class="brief-chip" data-pick="disc" data-value={d} aria-pressed="false">{d}</button>)}.</p>
-          <p>Ich bin <input data-field="name" placeholder="Name" autocomplete="name" />, erreichbar unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" />.</p>
+          <p>Hallo Lukas, wir sind <input data-field="org" placeholder="Initiative oder Verein" autocomplete="organization" enterkeyhint="next" /> und wollen <input data-field="impact" placeholder="was bewegen?" enterkeyhint="next" data-main />.</p>
+          <p>Erreichbar bin ich unter <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" enterkeyhint="send" />.</p>
         </div>
 
         <div class="brief-letter" data-for="question">
-          <p>Hallo Lukas, ich hätte eine Frage:</p>
-          <textarea data-field="question" placeholder="Was möchtest du wissen?" rows="3" data-main></textarea>
-          <p>Antwort bitte an <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" />. Danke, <input data-field="name" placeholder="Name" autocomplete="name" /></p>
+          <p>Hallo Lukas, meine Frage:</p>
+          <textarea data-field="question" placeholder="Was möchtest du wissen?" rows="2" data-main></textarea>
+          <p>Antwort bitte an <input data-field="contact" placeholder="E-Mail oder Telefon" autocomplete="email" enterkeyhint="send" />.</p>
         </div>
 
         <div class="brief-letter" data-for="talk">
           <div class="brief-direct">
             <a href={`tel:${tel}`}><span>Anrufen</span>{c.phone}</a>
-            <a href={`mailto:${c.email}`}><span>Schreiben</span>{c.email}</a>
+            <a href={`mailto:${c.email}`}><span>E-Mail</span>{c.email}</a>
           </div>
-          <p>Oder ich rufe zurück: Hallo Lukas, ruf mich bitte unter <input data-field="phone" placeholder="Telefonnummer" autocomplete="tel" inputmode="tel" data-main /> an, am besten
-            {['vormittags', 'nachmittags', 'abends'].map((w) => <button type="button" class="brief-chip" data-pick="slot" data-single data-value={w} aria-pressed="false">{w}</button>)}. Danke, <input data-field="name" placeholder="Name" autocomplete="name" /></p>
+          <p>Oder ich rufe zurück unter <input type="tel" data-field="phone" placeholder="deiner Nummer" autocomplete="tel" inputmode="tel" enterkeyhint="send" data-main />.</p>
         </div>
-      </div>
 
-      <aside class="brief-side">
-        <div class="brief-team" aria-live="polite">
-          <p class="brief-side-label">Dein Team</p>
-          <ol class="brief-crew">
-            <li class="is-lead"><b>L</b><span>Lukas<small>Ansprechpartner</small></span></li>
-            {disciplines.map((d) => <li data-crew={d}><b>{d.slice(0, 1)}</b><span>{d}<small>aus dem Netzwerk</small></span></li>)}
-          </ol>
-          <p class="brief-count">Tipp an, was du brauchst – das Team setzt sich zusammen.</p>
-        </div>
-        <div class="brief-contact">
-          <p class="brief-side-label">Direkt</p>
-          <a href={`tel:${tel}`}>{c.phone}</a>
-          <a href={`mailto:${c.email}`}>{c.email}</a>
-          <p>{c.response.join(' · ')}</p>
-        </div>
-      </aside>
-
-      <footer class="brief-actions">
-        <button type="submit" class="action brief-send">
-          Brief abschicken
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
-        </button>
-        <button type="button" class="brief-copy">Text kopieren</button>
-        <p class="brief-note" aria-live="polite">Öffnet dein Mailprogramm mit dem fertigen Brief. Hier wird nichts gespeichert.</p>
-      </footer>
-    </form>
+        <footer class="brief-actions">
+          <button type="submit" class="action brief-send">
+            <span class="brief-send-label" data-label-default="Brief abschicken" data-label-talk="Rückruf anfragen">Brief abschicken</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+          </button>
+          <p class="brief-alt">Lieber direkt: <a href={`tel:${tel}`}>{c.phone}</a> · <a href={`mailto:${c.email}`}>{c.email}</a></p>
+          <p class="brief-note" aria-live="polite"></p>
+        </footer>
+      </form>
+    </div>
   </div>
 </dialog>
