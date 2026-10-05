@@ -1,7 +1,8 @@
 ---
-// Gallery editor (/cms/galerien). Project galleries and the homepage photo module,
-// visual and drag & drop. Local: writes files; online: commits via GitHub with the
-// Keystatic login (see src/cms/api.ts). Same JSON as Keystatic.
+// dcentral CMS editor (/cms/galerien): project galleries + screens, project order and
+// topics, the photography archive and the homepage photo module — visual, drag & drop.
+// Local: writes files; online: commits via GitHub with the Keystatic login
+// (see src/cms/api.ts). Same JSON as Keystatic.
 import '../styles/fonts.css';
 export const prerender = false;
 ---
@@ -12,7 +13,7 @@ export const prerender = false;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="robots" content="noindex" />
-  <title>Galerien · dcentral CMS</title>
+  <title>Editor · dcentral CMS</title>
   <!-- global: most of the UI is rendered from JS and would miss Astro's scoped styles -->
   <style is:global>
     :root { --paper:#f3f4ec; --ink:#153e35; --muted:#52685c; --line:#cbd4c6; --soft:#e8ece0; --lime:#d4ff3f; --forest:#102f28; --red:#a3352a; --ease:cubic-bezier(.23,1,.32,1); }
@@ -22,10 +23,10 @@ export const prerender = false;
     button { cursor: pointer; }
     [hidden] { display: none !important; }
 
-    header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 18px; padding: 12px 28px; background: var(--forest); color: var(--paper); }
+    header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 18px; padding: 12px 28px; background: var(--forest); color: var(--paper); flex-wrap: wrap; }
     .brand { font-weight: 800; font-size: 20px; letter-spacing: -.05em; white-space: nowrap; }
     .brand span { color: var(--lime); }
-    .tabs { display: flex; gap: 4px; }
+    .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
     .tabs button { background: none; border: 1px solid transparent; color: inherit; padding: 7px 15px; border-radius: 99px; }
     .tabs button[aria-pressed=true] { border-color: var(--lime); color: var(--lime); }
     header .grow { flex: 1; }
@@ -36,6 +37,7 @@ export const prerender = false;
     section + section { margin-top: 48px; }
     .head { display: flex; flex-wrap: wrap; align-items: end; gap: 16px 24px; margin-bottom: 14px; }
     h1 { font-size: 30px; font-weight: 600; letter-spacing: -.04em; margin: 0; line-height: 1.1; }
+    h1 small { font-size: 16px; color: var(--muted); font-weight: 500; }
     h2 { font-size: 22px; font-weight: 600; letter-spacing: -.03em; margin: 0; }
     .field { display: grid; gap: 5px; }
     .field label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
@@ -44,35 +46,38 @@ export const prerender = false;
     #gtitle { min-width: 300px; }
     textarea { min-height: 80px; resize: vertical; width: 100%; }
     .hint { color: var(--muted); font-size: 13.5px; margin: 0 0 16px; }
+    .note { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 16px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .note p { margin: 0; flex: 1; min-width: 240px; }
 
-    /* gallery: the photos of this project, in order */
-    .gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; padding: 16px; background: var(--soft); border-radius: 14px; min-height: 180px; }
-    .gal-empty { grid-column: 1/-1; align-self: center; text-align: center; color: var(--muted); padding: 40px 10px; }
+    .gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; padding: 16px; background: var(--soft); border-radius: 14px; min-height: 160px; }
+    .gal-empty { grid-column: 1/-1; align-self: center; text-align: center; color: var(--muted); padding: 34px 10px; }
     .card { position: relative; background: #fff; border-radius: 11px; overflow: hidden; box-shadow: 0 1px 0 rgba(16,47,40,.08); transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), opacity 180ms ease; }
     .card .img { position: relative; aspect-ratio: 4/3; background: #ccd3c4; }
     .gal .card .img { cursor: grab; }
     .card .img img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .screens .card .img img { object-fit: contain; background: #e9ece4; }
     .card .no { position: absolute; left: 9px; top: 9px; background: var(--lime); color: var(--forest); font-weight: 800; font-size: 13px; min-width: 26px; text-align: center; padding: 2px 8px; border-radius: 99px; }
     .card .grip { position: absolute; right: 9px; top: 9px; background: rgba(16,47,40,.7); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 99px; }
-    .card .meta { padding: 9px 11px 11px; }
+    .card .meta { padding: 9px 11px 11px; display: grid; gap: 6px; }
     .card .title { font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card .sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card .actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .card .meta select, .card .meta input { padding: 6px 9px; font-size: 13px; width: 100%; }
+    .card .actions { display: flex; gap: 6px; flex-wrap: wrap; }
     .btn { border: 1px solid var(--line); background: #fff; padding: 5px 11px; border-radius: 99px; font-size: 12.5px; }
     .btn:hover:not(:disabled) { border-color: var(--ink); }
     .btn:disabled { opacity: .35; cursor: default; }
     .btn.danger { color: var(--red); }
     .btn.danger:hover { border-color: var(--red); background: #fbeeec; }
     .btn.icon { padding: 5px 10px; }
+    .btn.primary { background: var(--forest); color: var(--lime); border-color: var(--forest); }
     .card.dragging { opacity: .35; }
     .card.over { box-shadow: 0 0 0 3px var(--lime); transform: scale(.97); }
-    .card.hidden-home { opacity: .5; }
+    .card.dim { opacity: .5; }
     .card .flag { position: absolute; left: 9px; bottom: 9px; background: rgba(16,47,40,.82); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
     .warn { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #e59a2f; margin-left: 6px; vertical-align: middle; }
 
-    /* add photos */
-    .dropzone { display: grid; place-items: center; text-align: center; border: 2px dashed var(--ink); border-radius: 14px; padding: 26px; margin-bottom: 22px; background: #fff; cursor: pointer; transition: background 160ms ease, border-color 160ms ease; }
-    .dropzone:hover { background: #f6ffd6; border-color: var(--forest); }
+    .dropzone { display: grid; place-items: center; text-align: center; border: 2px dashed var(--ink); border-radius: 14px; padding: 22px; margin-bottom: 22px; background: #fff; cursor: pointer; transition: background 160ms ease; }
+    .dropzone:hover { background: #f6ffd6; }
     .dropzone strong { font-size: 17px; }
     .dropzone span { color: var(--muted); font-size: 13.5px; }
     .tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
@@ -86,7 +91,28 @@ export const prerender = false;
     .add.on { background: var(--lime); color: var(--forest); }
     .lib .card.on { box-shadow: 0 0 0 3px var(--lime); }
 
-    /* save bar */
+    /* projects: order, topics, visibility */
+    .rows { display: grid; gap: 10px; }
+    .row { display: grid; grid-template-columns: 34px 92px minmax(0, 1fr) auto; gap: 16px; align-items: center; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 0 rgba(16,47,40,.08); transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), opacity 180ms ease; }
+    .row.dragging { opacity: .35; }
+    .row.over { box-shadow: 0 0 0 3px var(--lime); }
+    .row.is-hidden { opacity: .55; }
+    .row .pos { font-weight: 800; font-size: 13px; background: var(--lime); color: var(--forest); border-radius: 99px; text-align: center; padding: 3px 0; cursor: grab; }
+    .row .thumb { width: 92px; aspect-ratio: 4/3; border-radius: 8px; background: #ccd3c4 center/cover no-repeat; }
+    .row .name { font-weight: 700; }
+    .row .name small { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row .topics { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+    .topic { border: 1px solid var(--line); background: none; padding: 4px 10px; border-radius: 99px; font-size: 12.5px; }
+    .topic.on { background: var(--soft); border-color: var(--ink); }
+    .topic.main { background: var(--forest); color: var(--lime); border-color: var(--forest); }
+    .topic-hint { font-size: 11.5px; color: var(--muted); }
+    .row .ctl { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: end; }
+    .switch { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+    .switch input { width: 36px; height: 20px; appearance: none; background: var(--line); border-radius: 99px; position: relative; cursor: pointer; transition: background 160ms ease; }
+    .switch input::after { content: ''; position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 160ms var(--ease); }
+    .switch input:checked { background: var(--forest); }
+    .switch input:checked::after { transform: translateX(16px); }
+
     .savebar { position: fixed; left: 50%; bottom: 18px; z-index: 30; display: flex; align-items: center; gap: 14px; padding: 10px 12px 10px 20px; border-radius: 99px; background: var(--forest); color: var(--paper); box-shadow: 0 16px 40px rgba(16,47,40,.35); transform: translate(-50%, 160%); transition: transform 260ms var(--ease); max-width: calc(100vw - 32px); }
     .savebar.show { transform: translate(-50%, 0); }
     .savebar .what { font-size: 14px; }
@@ -114,17 +140,21 @@ export const prerender = false;
     .login h1 { font-size: clamp(30px, 4vw, 44px); margin: 14px 0 10px; }
     .login p { max-width: 46ch; margin: 0 auto 22px; color: rgba(243,244,236,.75); }
     .login a { display: inline-block; background: var(--lime); color: var(--forest); font-weight: 700; padding: 11px 20px; border-radius: 99px; text-decoration: none; }
-    .home-only { display: none; }
-    body.home .home-only { display: revert; }
-    body.home .case-only { display: none; }
-    @media (prefers-reduced-motion: reduce) { .card, .savebar, .toast { transition: none; } }
+
+    /* which blocks each area shows */
+    body[data-mode=case] [data-show]:not([data-show~=case]), body[data-mode=projects] [data-show]:not([data-show~=projects]),
+    body[data-mode=archive] [data-show]:not([data-show~=archive]), body[data-mode=home] [data-show]:not([data-show~=home]) { display: none !important; }
+    @media (max-width: 760px) { .row { grid-template-columns: 30px 64px minmax(0, 1fr); } .row .thumb { width: 64px; } .row .ctl { grid-column: 1/-1; justify-content: start; } }
+    @media (prefers-reduced-motion: reduce) { .card, .row, .savebar, .toast { transition: none; } }
   </style>
 </head>
-<body>
+<body data-mode="case">
   <header>
-    <div class="brand">dcentral<span>.</span> Galerien</div>
+    <div class="brand">dcentral<span>.</span> Editor</div>
     <nav class="tabs" aria-label="Bereich">
-      <button type="button" data-mode="case" aria-pressed="true">Projekt-Galerien</button>
+      <button type="button" data-mode="case" aria-pressed="true">Galerie &amp; Screens</button>
+      <button type="button" data-mode="projects" aria-pressed="false">Projekte</button>
+      <button type="button" data-mode="archive" aria-pressed="false">Fotografie-Seite</button>
       <button type="button" data-mode="home" aria-pressed="false">Startseite</button>
     </nav>
     <div class="grow"></div>
@@ -133,28 +163,52 @@ export const prerender = false;
   </header>
 
   <main>
-    <!-- 1 · the gallery itself -->
-    <section aria-labelledby="g-h">
-      <div class="head case-only">
+    <!-- PROJECTS: order, topics, visibility -->
+    <section data-show="projects" aria-labelledby="p-h">
+      <div class="head"><h1 id="p-h">Projekte <small id="pcount"></small></h1></div>
+      <p class="hint">Die Reihenfolge gilt für die Startseite („Was daraus entsteht“) und für jede Themenseite. Ziehen an der Nummer oder ‹ › ändert sie. Themen per Klick zuordnen – das <b>dunkle</b> Thema ist das Hauptthema (Klick auf ein aktives Thema macht es zum Hauptthema, zweiter Klick entfernt es). <b>Sichtbar</b> aus = Projekt erscheint in keiner Liste, die Seite bleibt erreichbar.</p>
+      <div class="rows" id="rows"></div>
+    </section>
+
+    <!-- GALLERY (case) / ARCHIVE / HOME: an ordered photo selection -->
+    <section data-show="case archive home" aria-labelledby="g-h">
+      <div class="head" data-show="case">
         <div class="field"><label for="case">Projekt</label><select id="case"></select></div>
         <div class="field"><label for="gtitle">Überschrift über der Galerie</label><input id="gtitle" type="text" placeholder="z. B. Aus der Bildwelt" /></div>
       </div>
       <div class="head">
-        <h1 id="g-h"><span class="case-only">Galerie</span><span class="home-only">Startseite · „Bilder, die bleiben.“</span> <small id="count" style="font-size:16px;color:var(--muted);font-weight:500"></small></h1>
+        <h1 id="g-h"><span data-show="case">Galerie</span><span data-show="archive">Fotografie-Seite · „Aus dem Archiv.“</span><span data-show="home">Startseite · „Bilder, die bleiben.“</span> <small id="count"></small></h1>
       </div>
-      <p class="hint case-only">So erscheinen die Fotos auf der Projektseite. Reihenfolge per Ziehen oder mit ‹ › ändern. <b>Entfernen</b> nimmt ein Foto nur aus dieser Galerie – es bleibt in der Bibliothek.</p>
-      <p class="hint home-only">Die Startseite zeigt die ersten 7 Fotos in dieser Reihenfolge. Reihenfolge per Ziehen oder mit ‹ › ändern.</p>
+      <p class="hint" data-show="case">Die Fotos aus der Bibliothek, wie sie auf der Projektseite erscheinen. Reihenfolge per Ziehen oder ‹ ›. <b>Entfernen</b> nimmt ein Foto nur aus dieser Galerie.</p>
+      <p class="hint" data-show="archive">Diese Fotos zeigt die Seite <a href="/fotografie" target="_blank">/fotografie</a>, in dieser Reihenfolge. Die Filter dort entstehen automatisch aus den Serien.</p>
+      <p class="hint" data-show="home">Die Startseite zeigt die ersten 7 Fotos in dieser Reihenfolge.</p>
+      <div class="note" id="autonote" hidden>
+        <p><b>Automatisch:</b> Die Fotografie-Seite zeigt derzeit einfach alle <span id="autocount"></span> Fotos der Bibliothek. Willst du auswählen und sortieren, übernimm sie als eigene Liste.</p>
+        <button type="button" class="btn primary" id="takeover">Auswahl selbst festlegen</button>
+      </div>
+      <div class="note" id="manualnote" hidden>
+        <p>Eigene Auswahl aktiv. Neue Fotos erscheinen erst, wenn du sie hier hinzufügst.</p>
+        <button type="button" class="btn" id="backauto">Wieder automatisch alle zeigen</button>
+      </div>
       <div class="gal" id="gal"></div>
     </section>
 
-    <!-- 2 · add photos -->
-    <section aria-labelledby="a-h">
+    <!-- SCREENS (case only): screenshots, mockups, posters stored with the project -->
+    <section data-show="case" aria-labelledby="s-h" class="screens">
+      <div class="head"><h2 id="s-h">Screens &amp; Bilder des Projekts <small id="scount" style="font-size:14px;color:var(--muted);font-weight:500"></small></h2></div>
+      <p class="hint">Screenshots, Mockups, Plakate – erscheinen auf der Projektseite unter dem Text. <b>Typ</b> bestimmt die Darstellung: Desktop/Handy im Geräte-Rahmen, Bild (nebeneinander), volle Breite, Plakat (ungeschnitten).</p>
+      <div class="gal" id="screens"></div>
+      <label class="dropzone" for="sfile" style="margin-top:14px">
+        <div><strong>Screens hochladen</strong><br /><span>Klicken und Bilder wählen – landen bei diesem Projekt</span></div>
+      </label>
+      <input id="sfile" type="file" accept="image/*" multiple hidden />
+    </section>
+
+    <!-- ADD PHOTOS -->
+    <section data-show="case archive home" aria-labelledby="a-h">
       <div class="head"><h2 id="a-h">Fotos hinzufügen</h2></div>
       <label class="dropzone" for="file">
-        <div>
-          <strong>Neue Fotos hochladen</strong><br />
-          <span id="dzinfo">Hierher ziehen oder klicken</span>
-        </div>
+        <div><strong>Neue Fotos hochladen</strong><br /><span id="dzinfo">Hierher ziehen oder klicken</span></div>
       </label>
       <input id="file" type="file" accept="image/*" multiple hidden />
       <div class="tools">
@@ -174,9 +228,9 @@ export const prerender = false;
   <div class="drop-all" id="dropall"><div>Loslassen zum Hochladen<small id="dropinfo"></small></div></div>
   <div class="login" id="login" hidden>
     <div>
-      <div class="brand">dcentral<span>.</span> Galerien</div>
+      <div class="brand">dcentral<span>.</span> Editor</div>
       <h1>Bitte zuerst anmelden.</h1>
-      <p>Der Galerie-Editor nutzt deine Keystatic-Anmeldung über GitHub. Nur wer im Repository schreiben darf, kann speichern.</p>
+      <p>Der Editor nutzt deine Keystatic-Anmeldung über GitHub. Nur wer im Repository schreiben darf, kann speichern.</p>
       <a href="/keystatic">In Keystatic mit GitHub anmelden</a>
       <p style="margin-top:16px;font-size:13px">Danach diese Seite neu laden.</p>
     </div>
@@ -203,18 +257,26 @@ export const prerender = false;
 
   <script>
     type Photo = { id: string; image: string; thumb?: string; title?: string; alt?: string; series?: string; project?: string | null; featured?: boolean; order?: number; width?: number; height?: number; preview?: string };
-    type Case = { id: string; title: string; client: string; galleryTitle: string; galleryPhotos: string[] };
+    type Screen = { image: string; device: string; caption: string; preview?: string };
+    type Case = { id: string; title: string; client: string; year?: number; order: number; discipline: string; also: string[]; hidden: boolean; thumb: string | null; galleryTitle: string; galleryPhotos: string[]; screens: Screen[] };
     type NewPhoto = { id: string; json: Photo; big: string; sm: string };
+    type Mode = 'case' | 'projects' | 'archive' | 'home';
+    const TOPICS = ['Foto', 'Film & Aerial', 'Web', 'KI'];
+    const DEVICES: [string, string][] = [['desktop', 'Desktop (Browser)'], ['mobile', 'Handy'], ['image', 'Bild'], ['wide', 'Volle Breite'], ['poster', 'Plakat / Hochformat']];
     const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector(s) as T;
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
-    let cases: Case[] = [], photos: Photo[] = [], byId = new Map<string, Photo>();
-    let mode: 'case' | 'home' = 'case', current = '', selection: string[] = [], seriesFilter = 'Alle', query = '';
+    let cases: Case[] = [], photos: Photo[] = [], byId = new Map<string, Photo>(), archiveList: string[] = [];
+    let mode: Mode = 'case', current = '', seriesFilter = 'Alle', query = '';
     let store: 'local' | 'github' = 'local', branch = '', imageBase = '';
-    // everything waits here until "Speichern" (online that is one commit)
-    let newPhotos = new Map<string, NewPhoto>(), photoEdits: Record<string, Partial<Photo>> = {}, deletes = new Set<string>();
-    let baseline = '', titleBase = '';
+    // edits wait here until "Speichern" (online that is one commit)
+    let selection: string[] = [], screens: Screen[] = [], rows: Case[] = [], archiveAuto = false;
+    let newPhotos = new Map<string, NewPhoto>(), newScreens = new Map<string, string>(), photoEdits: Record<string, Partial<Photo>> = {}, deletes = new Set<string>();
+    let base = { sel: '', title: '', screens: '', rows: '', auto: false };
     const src = (p: Photo) => p.preview || imageBase + (p.thumb || p.image);
+    const imgSrc = (path: string | null | undefined) => (path ? (/^https?:/.test(path) ? path : imageBase + path) : '');
+    const screensKey = () => JSON.stringify(screens.map(({ image, device, caption }) => ({ image, device, caption })));
+    const rowsKey = () => JSON.stringify(rows.map((r) => [r.id, r.discipline, r.also, r.hidden]));
 
     /* ── server ── */
     class LoginNeeded extends Error {}
@@ -230,15 +292,19 @@ export const prerender = false;
       return d;
     }
     const postJson = (action: string, body: unknown) => call(action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-
     let toastTimer = 0;
     function toast(msg: string, ms = 2800) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = window.setTimeout(() => t.classList.remove('show'), ms); }
 
     /* ── state ── */
     function changes() {
       const out: string[] = [];
-      if (selection.join(',') !== baseline) out.push(mode === 'case' ? 'Galerie geändert' : 'Startseite geändert');
-      if (mode === 'case' && $<HTMLInputElement>('#gtitle').value !== titleBase) out.push('Überschrift');
+      if (mode === 'projects') { if (rowsKey() !== base.rows) out.push('Projekte geändert'); }
+      else {
+        if (mode === 'archive' && archiveAuto !== base.auto) out.push(archiveAuto ? 'wieder automatisch' : 'eigene Auswahl');
+        else if (selection.join(',') !== base.sel) out.push({ case: 'Galerie geändert', archive: 'Fotografie-Seite geändert', home: 'Startseite geändert' }[mode]);
+        if (mode === 'case' && $<HTMLInputElement>('#gtitle').value !== base.title) out.push('Überschrift');
+        if (mode === 'case' && screensKey() !== base.screens) out.push('Screens');
+      }
       if (newPhotos.size) out.push(`${newPhotos.size} neue${newPhotos.size === 1 ? 's Foto' : ' Fotos'}`);
       const e = Object.keys(photoEdits).length; if (e) out.push(`${e} Foto-Info${e === 1 ? '' : 's'}`);
       if (deletes.size) out.push(`${deletes.size} gelöscht`);
@@ -256,12 +322,13 @@ export const prerender = false;
       try { s = await call('state'); } catch (e) { if (e instanceof LoginNeeded) { $('#login').hidden = false; return; } toast(String((e as Error).message), 6000); return; }
       store = s.mode; branch = s.branch || ''; imageBase = s.imageBase || '';
       $('#modebadge').textContent = store === 'github' ? `Online · speichert auf ${branch}` : 'Lokal';
-      cases = s.cases; photos = s.photos; byId = new Map(photos.map((p: Photo) => [p.id, p]));
-      newPhotos = new Map(); photoEdits = {}; deletes = new Set();
+      cases = s.cases; photos = s.photos; archiveList = s.archive || []; byId = new Map(photos.map((p: Photo) => [p.id, p]));
+      newPhotos = new Map(); newScreens = new Map(); photoEdits = {}; deletes = new Set();
       $('#case').innerHTML = cases.map((c) => `<option value="${c.id}">${esc(c.client)} — ${esc(c.title)}</option>`).join('');
       $('#dproject').innerHTML = '<option value="">– keinem Projekt –</option>' + cases.map((c) => `<option value="${c.id}">${esc(c.client)}</option>`).join('');
-      const wanted = new URLSearchParams(location.search).get('projekt');
+      const params = new URLSearchParams(location.search), wanted = params.get('projekt'), wantedMode = params.get('bereich') as Mode | null;
       current = cases.some((c) => c.id === wanted) ? wanted! : cases.some((c) => c.id === current) ? current : cases[0]?.id || '';
+      if (wantedMode && ['case', 'projects', 'archive', 'home'].includes(wantedMode)) setMode(wantedMode, false);
       $<HTMLSelectElement>('#case').value = current;
       $('#serieslist').innerHTML = [...new Set(photos.map((p) => p.series).filter(Boolean))].map((x) => `<option value="${esc(x)}">`).join('');
       pick();
@@ -270,29 +337,39 @@ export const prerender = false;
       if (mode === 'case') {
         const c = cases.find((x) => x.id === current)!;
         selection = c.galleryPhotos.filter((id) => byId.has(id));
-        $<HTMLInputElement>('#gtitle').value = titleBase = c.galleryTitle || '';
-      } else selection = photos.filter((p) => p.featured).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((p) => p.id);
-      baseline = selection.join(',');
+        screens = c.screens.map((x) => ({ image: x.image, device: x.device || 'image', caption: x.caption || '' }));
+        $<HTMLInputElement>('#gtitle').value = c.galleryTitle || '';
+      } else if (mode === 'home') selection = photos.filter((p) => p.featured).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((p) => p.id);
+      else if (mode === 'archive') { archiveAuto = archiveList.length === 0; selection = archiveAuto ? photos.map((p) => p.id) : archiveList.filter((id) => byId.has(id)); }
+      else rows = cases.map((c) => ({ ...c, also: [...c.also] }));
+      base = { sel: selection.join(','), title: $<HTMLInputElement>('#gtitle').value, screens: screensKey(), rows: rowsKey(), auto: archiveAuto };
       const c = cases.find((x) => x.id === current);
-      $('#dzinfo').textContent = mode === 'case' && c ? `Hierher ziehen oder klicken – landen direkt in der Galerie von ${c.client}` : 'Hierher ziehen oder klicken – landen in der Bibliothek und auf der Startseite';
+      $('#dzinfo').textContent = mode === 'case' && c ? `Hierher ziehen oder klicken – landen direkt in der Galerie von ${c.client}` : mode === 'archive' ? 'Hierher ziehen oder klicken – landen in der Bibliothek und auf der Fotografie-Seite' : 'Hierher ziehen oder klicken – landen in der Bibliothek und auf der Startseite';
       render();
     }
 
     /* ── render ── */
     function render() {
-      $('#count').textContent = `${selection.length} ${selection.length === 1 ? 'Foto' : 'Fotos'}`;
+      if (mode === 'projects') return renderRows();
+      const locked = mode === 'archive' && archiveAuto;
+      $('#autonote').hidden = !(mode === 'archive' && archiveAuto);
+      $('#manualnote').hidden = !(mode === 'archive' && !archiveAuto);
+      $('#autocount').textContent = String(photos.length);
+      $('#count').textContent = `${selection.length} ${selection.length === 1 ? 'Foto' : 'Fotos'}${locked ? ' (automatisch)' : ''}`;
       $('#gal').innerHTML = selection.length ? selection.map((id, i) => {
         const p = byId.get(id)!, hidden = mode === 'home' && i >= 7;
-        return `<article class="card${hidden ? ' hidden-home' : ''}" draggable="true" data-id="${id}">
-          <div class="img"><img src="${src(p)}" alt="" loading="lazy"><span class="no">${i + 1}</span><span class="grip" aria-hidden="true">⋮⋮ ziehen</span>${hidden ? '<span class="flag">nicht sichtbar (nur 7)</span>' : ''}</div>
+        return `<article class="card${hidden || locked ? ' dim' : ''}"${locked ? '' : ' draggable="true"'} data-id="${id}" data-list="sel">
+          <div class="img"><img src="${src(p)}" alt="" loading="lazy"><span class="no">${i + 1}</span>${locked ? '' : '<span class="grip" aria-hidden="true">⋮⋮ ziehen</span>'}${hidden ? '<span class="flag">nicht sichtbar (nur 7)</span>' : ''}</div>
           <div class="meta"><div class="title">${esc(p.title || id)}${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}</div><div class="sub">${esc(p.series)}</div>
-            <div class="actions">
+            ${locked ? '' : `<div class="actions">
               <button type="button" class="btn icon" data-move="-1" data-id="${id}" aria-label="Nach vorne"${i === 0 ? ' disabled' : ''}>‹</button>
               <button type="button" class="btn icon" data-move="1" data-id="${id}" aria-label="Nach hinten"${i === selection.length - 1 ? ' disabled' : ''}>›</button>
               <button type="button" class="btn" data-edit="${id}">Bearbeiten</button>
               <button type="button" class="btn danger" data-remove="${id}">Entfernen</button>
-            </div></div></article>`;
-      }).join('') : `<div class="gal-empty">${mode === 'case' ? 'Diese Galerie ist noch leer.<br>Unten Fotos hinzufügen oder neue hochladen.' : 'Noch keine Fotos für die Startseite gewählt.'}</div>`;
+            </div>`}</div></article>`;
+      }).join('') : `<div class="gal-empty">${mode === 'case' ? 'Diese Galerie ist noch leer.<br>Unten Fotos hinzufügen oder neue hochladen.' : 'Noch keine Fotos gewählt.'}</div>`;
+
+      if (mode === 'case') renderScreens();
 
       const all = ['Alle', ...(mode === 'case' ? ['Dieses Projekt'] : []), ...new Set(photos.map((p) => p.series || 'Fotografie'))];
       $('#series').innerHTML = all.map((x) => `<button type="button" aria-pressed="${x === seriesFilter}" data-s="${esc(x)}">${esc(x)}</button>`).join('');
@@ -301,26 +378,57 @@ export const prerender = false;
         if (seriesFilter === 'Dieses Projekt' ? p.project !== current : seriesFilter !== 'Alle' && (p.series || 'Fotografie') !== seriesFilter) return false;
         return !q || [p.id, p.title, p.alt, p.series].join(' ').toLowerCase().includes(q);
       });
+      const where = { case: 'Galerie', archive: 'Fotografie-Seite', home: 'Auswahl' }[mode as 'case' | 'archive' | 'home'];
       $('#lib').innerHTML = list.map((p) => {
         const at = selection.indexOf(p.id);
         return `<article class="card${at >= 0 ? ' on' : ''}">
           <div class="img" data-toggle="${p.id}"><img src="${src(p)}" alt="" loading="lazy">${newPhotos.has(p.id) ? '<span class="no">neu</span>' : ''}</div>
           <div class="meta"><div class="title">${esc(p.title || p.id)}${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}</div><div class="sub">${esc(p.series)} · <a href="#" data-edit="${p.id}" style="color:inherit">Bearbeiten</a></div></div>
-          <button type="button" class="add${at >= 0 ? ' on' : ''}" data-toggle="${p.id}">${at >= 0 ? `✓ In der ${mode === 'case' ? 'Galerie' : 'Auswahl'} (Nr. ${at + 1})` : '+ Hinzufügen'}</button>
+          <button type="button" class="add${at >= 0 ? ' on' : ''}" data-toggle="${p.id}"${locked ? ' disabled' : ''}>${at >= 0 ? `✓ ${where} (Nr. ${at + 1})` : '+ Hinzufügen'}</button>
         </article>`;
       }).join('') || '<p class="hint">Keine Fotos gefunden.</p>';
       refreshBar();
     }
+    function renderScreens() {
+      $('#scount').textContent = `${screens.length}`;
+      $('#screens').innerHTML = screens.length ? screens.map((sc, i) => `<article class="card" draggable="true" data-i="${i}" data-list="screens">
+          <div class="img"><img src="${sc.preview || imgSrc(sc.image)}" alt="" loading="lazy"><span class="no">${i + 1}</span><span class="grip" aria-hidden="true">⋮⋮ ziehen</span></div>
+          <div class="meta">
+            <select data-sdev="${i}" aria-label="Typ">${DEVICES.map(([v, l]) => `<option value="${v}"${sc.device === v ? ' selected' : ''}>${l}</option>`).join('')}</select>
+            <input type="text" data-scap="${i}" value="${esc(sc.caption)}" placeholder="Bildunterschrift (optional)" aria-label="Bildunterschrift" />
+            <div class="actions">
+              <button type="button" class="btn icon" data-smove="-1" data-i="${i}" aria-label="Nach vorne"${i === 0 ? ' disabled' : ''}>‹</button>
+              <button type="button" class="btn icon" data-smove="1" data-i="${i}" aria-label="Nach hinten"${i === screens.length - 1 ? ' disabled' : ''}>›</button>
+              <button type="button" class="btn danger" data-sremove="${i}">Entfernen</button>
+            </div>
+          </div></article>`).join('') : '<div class="gal-empty">Noch keine Screens. Unten hochladen.</div>';
+    }
+    function renderRows() {
+      $('#pcount').textContent = `${rows.filter((r) => !r.hidden).length} sichtbar · ${rows.length} gesamt`;
+      $('#rows').innerHTML = rows.map((r, i) => `<div class="row${r.hidden ? ' is-hidden' : ''}" draggable="true" data-row="${i}">
+          <span class="pos" title="Ziehen zum Sortieren">${i + 1}</span>
+          <span class="thumb" style="${r.thumb ? `background-image:url('${imgSrc(r.thumb)}')` : ''}"></span>
+          <div>
+            <div class="name">${esc(r.client)}<small>${esc(r.title)}${r.year ? ` · ${r.year}` : ''}</small></div>
+            <div class="topics">${TOPICS.map((t) => `<button type="button" class="topic${t === r.discipline ? ' main' : r.also.includes(t) ? ' on' : ''}" data-topic="${esc(t)}" data-row="${i}">${esc(t)}</button>`).join('')}</div>
+          </div>
+          <div class="ctl">
+            <label class="switch"><input type="checkbox" data-vis="${i}"${r.hidden ? '' : ' checked'} /> Sichtbar</label>
+            <button type="button" class="btn icon" data-rmove="-1" data-row="${i}" aria-label="Nach oben"${i === 0 ? ' disabled' : ''}>↑</button>
+            <button type="button" class="btn icon" data-rmove="1" data-row="${i}" aria-label="Nach unten"${i === rows.length - 1 ? ' disabled' : ''}>↓</button>
+            <button type="button" class="btn" data-open="${r.id}">Galerie &amp; Screens</button>
+            <a class="btn" href="/arbeiten/${r.id}" target="_blank" style="text-decoration:none">Ansehen ↗</a>
+          </div>
+        </div>`).join('');
+      refreshBar();
+    }
     function toggle(id: string) {
+      if (mode === 'archive' && archiveAuto) return;
       const i = selection.indexOf(id);
       if (i >= 0) selection.splice(i, 1); else { selection.push(id); toast(`Hinzugefügt als Nr. ${selection.length}`, 1400); }
       render();
     }
-    function move(id: string, d: number) {
-      const i = selection.indexOf(id), j = i + d;
-      if (i < 0 || j < 0 || j >= selection.length) return;
-      selection.splice(j, 0, selection.splice(i, 1)[0]); render();
-    }
+    const moveIn = <T,>(list: T[], i: number, d: number) => { const j = i + d; if (i < 0 || j < 0 || j >= list.length) return; list.splice(j, 0, list.splice(i, 1)[0]); };
 
     /* ── save / discard ── */
     async function save() {
@@ -332,14 +440,30 @@ export const prerender = false;
         const chunks: NewPhoto[][] = [[]]; let used = 0;
         for (const n of pending) { if (used + size(n) > 3_200_000 && chunks.at(-1)!.length) { chunks.push([]); used = 0; } chunks.at(-1)!.push(n); used += size(n); }
         for (const chunk of chunks.slice(0, -1)) await postJson('save', { kind: 'files', newPhotos: chunk });
-        const base = { photoEdits, newPhotos: chunks.at(-1), deletePhotos: [...deletes], photos: selection };
-        if (mode === 'case') await postJson('save', { ...base, kind: 'gallery', case: current, galleryTitle: $<HTMLInputElement>('#gtitle').value });
-        else await postJson('save', { ...base, kind: 'home' });
-        if (mode === 'case') { const c = cases.find((x) => x.id === current)!; c.galleryPhotos = [...selection]; c.galleryTitle = titleBase = $<HTMLInputElement>('#gtitle').value; }
-        else photos.forEach((p) => { const at = selection.indexOf(p.id); p.featured = at >= 0; if (at >= 0) p.order = at; });
-        for (const id of deletes) cases.forEach((c) => { c.galleryPhotos = c.galleryPhotos.filter((x) => x !== id); });
+        const common = { photoEdits, newPhotos: chunks.at(-1), deletePhotos: [...deletes] };
+        if (mode === 'case') {
+          // screen uploads: same limit, sent first in their own requests if large
+          const ns = [...newScreens.entries()].filter(([p]) => screens.some((x) => x.image === p)).map(([path, data]) => ({ path, data }));
+          const sChunks: { path: string; data: string }[][] = [[]]; let su = 0;
+          for (const n of ns) { if (su + n.data.length > 3_200_000 && sChunks.at(-1)!.length) { sChunks.push([]); su = 0; } sChunks.at(-1)!.push(n); su += n.data.length; }
+          const c = cases.find((x) => x.id === current)!;
+          for (const chunk of sChunks.slice(0, -1)) await postJson('save', { kind: 'gallery', case: current, photos: c.galleryPhotos, newScreens: chunk });
+          await postJson('save', { ...common, kind: 'gallery', case: current, galleryTitle: $<HTMLInputElement>('#gtitle').value, photos: selection, screens: screens.map(({ image, device, caption }) => ({ image, device, caption })), newScreens: sChunks.at(-1) });
+          c.galleryPhotos = [...selection]; c.galleryTitle = $<HTMLInputElement>('#gtitle').value; c.screens = screens.map(({ image, device, caption, preview }) => ({ image, device, caption, preview }));
+        } else if (mode === 'projects') {
+          await postJson('save', { ...common, kind: 'projects', projects: rows.map((r) => ({ id: r.id, discipline: r.discipline, also: r.also, hidden: r.hidden })) });
+          cases = rows.map((r, i) => ({ ...r, order: i }));
+        } else if (mode === 'archive') {
+          await postJson('save', { ...common, kind: 'archive', photos: archiveAuto ? [] : selection });
+          archiveList = archiveAuto ? [] : [...selection];
+        } else {
+          await postJson('save', { ...common, kind: 'home', photos: selection });
+          photos.forEach((p) => { const at = selection.indexOf(p.id); p.featured = at >= 0; if (at >= 0) p.order = at; });
+        }
+        for (const id of deletes) { cases.forEach((c) => { c.galleryPhotos = c.galleryPhotos.filter((x) => x !== id); }); archiveList = archiveList.filter((x) => x !== id); }
         newPhotos.forEach((n) => { const p = byId.get(n.id); if (p) delete p.preview; });
-        baseline = selection.join(','); newPhotos = new Map(); photoEdits = {}; deletes = new Set();
+        newPhotos = new Map(); newScreens = new Map(); photoEdits = {}; deletes = new Set();
+        base = { sel: selection.join(','), title: $<HTMLInputElement>('#gtitle').value, screens: screensKey(), rows: rowsKey(), auto: archiveAuto };
         render();
         toast(store === 'github' ? 'Gespeichert ✓ – auf der Website in ca. 1–2 Minuten sichtbar.' : 'Gespeichert ✓', 4000);
       } catch (e) {
@@ -352,12 +476,12 @@ export const prerender = false;
     addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); } });
     addEventListener('beforeunload', (e) => { if (isDirty()) e.preventDefault(); });
 
-    /* ── upload ── */
-    // downscale in the browser first (EXIF-rotated), so even 20 MB camera files fit through
-    async function shrink(file: File): Promise<Blob> {
+    /* ── uploads ── */
+    // downscale in the browser first (EXIF-rotated), so even 20 MB camera files fit through Vercel's limit
+    async function shrink(file: File, max = 2400): Promise<Blob> {
       try {
         const bmp = await createImageBitmap(file);
-        const k = Math.min(1, 2400 / Math.max(bmp.width, bmp.height));
+        const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
         const c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
         c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
         return await new Promise((res) => c.toBlob((b) => res(b || file), 'image/jpeg', 0.92));
@@ -365,7 +489,8 @@ export const prerender = false;
     }
     async function upload(files: File[]) {
       const list = files.filter((f) => f.type.startsWith('image/'));
-      if (!list.length) return;
+      if (!list.length || mode === 'projects') return;
+      if (mode === 'archive' && archiveAuto) archiveAuto = false; // a new upload turns the archive into a curated list
       const c = cases.find((x) => x.id === current);
       let n = 0;
       for (const f of list) {
@@ -389,62 +514,115 @@ export const prerender = false;
       }
       toast(`${list.length} ${list.length === 1 ? 'Foto' : 'Fotos'} hinzugefügt – Alt-Text ergänzen (Bearbeiten), dann speichern.`, 4500);
     }
+    async function uploadScreens(files: File[]) {
+      const list = files.filter((f) => f.type.startsWith('image/'));
+      if (!list.length || mode !== 'case') return;
+      let n = 0;
+      for (const f of list) {
+        toast(`Screen ${++n} von ${list.length} wird vorbereitet …`, 60000);
+        try {
+          const form = new FormData();
+          form.append('file', await shrink(f, 2600), f.name.replace(/\.[^.]+$/, '') + '.jpg');
+          form.append('name', f.name); form.append('kind', 'screen'); form.append('project', current);
+          const r = await call('process', { method: 'POST', body: form });
+          newScreens.set(r.path, r.data);
+          const portrait = r.height > r.width * 1.2;
+          screens.push({ image: r.path, device: portrait ? 'poster' : 'image', caption: '', preview: `data:image/webp;base64,${r.data}` });
+          render();
+        } catch (e) {
+          if (e instanceof LoginNeeded) { $('#login').hidden = false; return; }
+          toast(`${f.name}: ${(e as Error).message}`, 5000);
+        }
+      }
+      toast(`${list.length} ${list.length === 1 ? 'Screen' : 'Screens'} hinzugefügt – Typ und Bildunterschrift prüfen, dann speichern.`, 4500);
+    }
     $<HTMLInputElement>('#file').addEventListener('change', () => { const i = $<HTMLInputElement>('#file'); if (i.files) upload([...i.files]); i.value = ''; });
+    $<HTMLInputElement>('#sfile').addEventListener('change', () => { const i = $<HTMLInputElement>('#sfile'); if (i.files) uploadScreens([...i.files]); i.value = ''; });
     let depth = 0;
     const hasFiles = (e: DragEvent) => [...(e.dataTransfer?.types || [])].includes('Files');
-    addEventListener('dragenter', (e) => { if (!hasFiles(e)) return; depth++; $('#dropinfo').textContent = $('#dzinfo').textContent; $('#dropall').classList.add('show'); });
+    addEventListener('dragenter', (e) => { if (!hasFiles(e) || mode === 'projects') return; depth++; $('#dropinfo').textContent = $('#dzinfo').textContent; $('#dropall').classList.add('show'); });
     addEventListener('dragleave', (e) => { if (!hasFiles(e)) return; if (--depth <= 0) { depth = 0; $('#dropall').classList.remove('show'); } });
     addEventListener('dragover', (e) => { if (hasFiles(e)) e.preventDefault(); });
     addEventListener('drop', (e) => { if (!hasFiles(e)) return; e.preventDefault(); depth = 0; $('#dropall').classList.remove('show'); upload([...e.dataTransfer!.files]); });
 
-    /* ── events ── */
-    function switchTo(fn: () => void) {
+    /* ── switching areas / projects ── */
+    function discardPending() { photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos.forEach((_, id) => byId.delete(id)); newPhotos = new Map(); newScreens = new Map(); photoEdits = {}; deletes = new Set(); }
+    function setMode(m: Mode, doPick = true) {
+      mode = m; document.body.dataset.mode = m;
+      document.querySelectorAll('[data-mode]').forEach((x) => { if (x.tagName === 'BUTTON') x.setAttribute('aria-pressed', String((x as HTMLElement).dataset.mode === m)); });
+      seriesFilter = 'Alle';
+      const u = new URL(location.href); u.searchParams.set('bereich', m); history.replaceState(null, '', u);
+      if (doPick) pick();
+    }
+    function guarded(fn: () => void) {
       if (isDirty() && !confirm('Ungespeicherte Änderungen verwerfen?')) return false;
-      if (isDirty()) { photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos.forEach((_, id) => byId.delete(id)); newPhotos = new Map(); photoEdits = {}; deletes = new Set(); }
+      if (isDirty()) discardPending();
       fn(); return true;
     }
+    document.querySelectorAll<HTMLButtonElement>('header [data-mode]').forEach((b) => b.addEventListener('click', () => { if (b.dataset.mode !== mode) guarded(() => setMode(b.dataset.mode as Mode)); }));
     $('#case').addEventListener('change', () => {
       const next = $<HTMLSelectElement>('#case').value;
-      if (!switchTo(() => { current = next; seriesFilter = 'Alle'; history.replaceState(null, '', `?projekt=${current}`); pick(); })) $<HTMLSelectElement>('#case').value = current;
+      if (!guarded(() => { current = next; seriesFilter = 'Alle'; const u = new URL(location.href); u.searchParams.set('projekt', current); history.replaceState(null, '', u); pick(); })) $<HTMLSelectElement>('#case').value = current;
     });
     $('#gtitle').addEventListener('input', refreshBar);
-    document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.addEventListener('click', () => {
-      if (b.dataset.mode === mode) return;
-      switchTo(() => {
-        mode = b.dataset.mode as 'case' | 'home'; document.body.classList.toggle('home', mode === 'home');
-        document.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-        seriesFilter = 'Alle'; pick();
-      });
-    }));
+    $('#takeover').addEventListener('click', () => { archiveAuto = false; render(); });
+    $('#backauto').addEventListener('click', () => { if (confirm('Wieder automatisch alle Fotos zeigen? Deine Reihenfolge wird verworfen.')) { archiveAuto = true; selection = photos.map((p) => p.id); render(); } });
     $('#q').addEventListener('input', () => { query = $<HTMLInputElement>('#q').value; render(); });
     $('#series').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { seriesFilter = b.dataset.s!; render(); } });
+
     document.querySelector('main')!.addEventListener('click', (e) => {
       const t = e.target as HTMLElement;
       const edit = t.closest<HTMLElement>('[data-edit]'); if (edit) { e.preventDefault(); openEdit(edit.dataset.edit!); return; }
       const rm = t.closest<HTMLElement>('[data-remove]'); if (rm) { toggle(rm.dataset.remove!); return; }
-      const mv = t.closest<HTMLElement>('[data-move]'); if (mv) { move(mv.dataset.id!, Number(mv.dataset.move)); return; }
-      const tg = t.closest<HTMLElement>('[data-toggle]'); if (tg) toggle(tg.dataset.toggle!);
+      const mv = t.closest<HTMLElement>('[data-move]'); if (mv) { moveIn(selection, selection.indexOf(mv.dataset.id!), Number(mv.dataset.move)); render(); return; }
+      const tg = t.closest<HTMLElement>('[data-toggle]'); if (tg) { toggle(tg.dataset.toggle!); return; }
+      const sm = t.closest<HTMLElement>('[data-smove]'); if (sm) { moveIn(screens, Number(sm.dataset.i), Number(sm.dataset.smove)); render(); return; }
+      const sr = t.closest<HTMLElement>('[data-sremove]'); if (sr) { const i = Number(sr.dataset.sremove); if (confirm('Diesen Screen aus dem Projekt entfernen?')) { screens.splice(i, 1); render(); } return; }
+      const rmv = t.closest<HTMLElement>('[data-rmove]'); if (rmv) { moveIn(rows, Number(rmv.dataset.row), Number(rmv.dataset.rmove)); renderRows(); return; }
+      const op = t.closest<HTMLElement>('[data-open]'); if (op) { guarded(() => { current = op.dataset.open!; $<HTMLSelectElement>('#case').value = current; setMode('case'); }); return; }
+      const tp = t.closest<HTMLElement>('[data-topic]');
+      if (tp) {
+        const r = rows[Number(tp.dataset.row)], topic = tp.dataset.topic!;
+        if (topic === r.discipline) { if (r.also.length) { r.discipline = r.also.shift()!; } else toast('Ein Projekt braucht mindestens ein Thema.', 2200); }
+        else if (r.also.includes(topic)) { r.also = r.also.filter((x) => x !== topic); r.also.unshift(r.discipline); r.discipline = topic; } // active → becomes main
+        else r.also.push(topic);
+        r.also = r.also.filter((x, i, a) => x !== r.discipline && a.indexOf(x) === i);
+        renderRows(); return;
+      }
+    });
+    document.querySelector('main')!.addEventListener('change', (e) => {
+      const t = e.target as HTMLElement;
+      if (t.matches('[data-sdev]')) { screens[Number((t as HTMLElement).dataset.sdev)].device = (t as HTMLSelectElement).value; refreshBar(); }
+      if (t.matches('[data-vis]')) { rows[Number((t as HTMLElement).dataset.vis)].hidden = !(t as HTMLInputElement).checked; renderRows(); }
+    });
+    document.querySelector('main')!.addEventListener('input', (e) => {
+      const t = e.target as HTMLElement;
+      if (t.matches('[data-scap]')) { screens[Number(t.dataset.scap)].caption = (t as HTMLInputElement).value; refreshBar(); }
     });
 
-    // reorder by dragging cards inside the gallery
-    let dragId: string | null = null;
-    const gal = $('#gal');
-    gal.addEventListener('dragstart', (e) => { const c = (e.target as HTMLElement).closest<HTMLElement>('.card'); if (!c) return; dragId = c.dataset.id!; c.classList.add('dragging'); e.dataTransfer!.effectAllowed = 'move'; e.dataTransfer!.setData('text/plain', dragId); });
-    gal.addEventListener('dragend', () => { dragId = null; gal.querySelectorAll('.card').forEach((c) => c.classList.remove('dragging', 'over')); });
-    gal.addEventListener('dragover', (e) => { if (!dragId) return; e.preventDefault(); const c = (e.target as HTMLElement).closest<HTMLElement>('.card'); gal.querySelectorAll('.card.over').forEach((x) => x !== c && x.classList.remove('over')); c?.classList.add('over'); });
-    gal.addEventListener('drop', (e) => {
-      if (!dragId) return; e.preventDefault(); e.stopPropagation();
-      const c = (e.target as HTMLElement).closest<HTMLElement>('.card'), from = selection.indexOf(dragId);
-      const to = c ? selection.indexOf(c.dataset.id!) : selection.length - 1;
-      if (from >= 0 && to >= 0 && from !== to) { selection.splice(to, 0, selection.splice(from, 1)[0]); render(); }
+    // drag & drop reordering: gallery cards, screen cards, project rows
+    let drag: { list: 'sel' | 'screens' | 'rows'; key: string } | null = null;
+    const listOf = (el: HTMLElement) => (el.dataset.row !== undefined && el.classList.contains('row') ? 'rows' : el.dataset.list) as 'sel' | 'screens' | 'rows';
+    const keyOf = (el: HTMLElement) => el.dataset.id ?? el.dataset.i ?? el.dataset.row ?? '';
+    const itemSel = '.card[draggable], .row[draggable]';
+    document.addEventListener('dragstart', (e) => { const el = (e.target as HTMLElement).closest<HTMLElement>(itemSel); if (!el) return; drag = { list: listOf(el), key: keyOf(el) }; el.classList.add('dragging'); e.dataTransfer!.effectAllowed = 'move'; e.dataTransfer!.setData('text/plain', drag.key); });
+    document.addEventListener('dragend', () => { drag = null; document.querySelectorAll('.dragging, .over').forEach((x) => x.classList.remove('dragging', 'over')); });
+    document.addEventListener('dragover', (e) => { if (!drag) return; const el = (e.target as HTMLElement).closest<HTMLElement>(itemSel); if (!el || listOf(el) !== drag.list) return; e.preventDefault(); document.querySelectorAll('.over').forEach((x) => x !== el && x.classList.remove('over')); el.classList.add('over'); });
+    document.addEventListener('drop', (e) => {
+      if (!drag) return; const el = (e.target as HTMLElement).closest<HTMLElement>(itemSel); if (!el || listOf(el) !== drag.list) return;
+      e.preventDefault(); e.stopPropagation();
+      if (drag.list === 'sel') { const from = selection.indexOf(drag.key), to = selection.indexOf(keyOf(el)); if (from >= 0 && to >= 0 && from !== to) { selection.splice(to, 0, selection.splice(from, 1)[0]); render(); } }
+      else if (drag.list === 'screens') { const from = Number(drag.key), to = Number(keyOf(el)); if (from !== to) { screens.splice(to, 0, screens.splice(from, 1)[0]); render(); } }
+      else { const from = Number(drag.key), to = Number(keyOf(el)); if (from !== to) { rows.splice(to, 0, rows.splice(from, 1)[0]); renderRows(); } }
     });
 
     /* ── photo details + delete ── */
     let editing = '';
     function usage(id: string) {
-      const where = cases.filter((c) => (mode === 'case' && c.id === current ? selection : c.galleryPhotos).includes(id)).map((c) => c.client);
-      const home = mode === 'home' ? selection.includes(id) : !!byId.get(id)?.featured;
-      return [...where.map((w) => `Galerie ${w}`), ...(home ? ['Startseite'] : [])];
+      const where = cases.filter((c) => (mode === 'case' && c.id === current ? selection : c.galleryPhotos).includes(id)).map((c) => `Galerie ${c.client}`);
+      if (mode === 'home' ? selection.includes(id) : byId.get(id)?.featured) where.push('Startseite');
+      if (mode === 'archive' ? !archiveAuto && selection.includes(id) : archiveList.includes(id)) where.push('Fotografie-Seite');
+      return where;
     }
     function openEdit(id: string) {
       const p = byId.get(id)!; editing = id;
@@ -453,7 +631,7 @@ export const prerender = false;
       $<HTMLTextAreaElement>('#dalt').value = p.alt || '';
       $<HTMLInputElement>('#dseries').value = p.series || '';
       $<HTMLSelectElement>('#dproject').value = p.project || '';
-      $('#dusage').textContent = `Verwendet in: ${usage(id).join(', ') || 'keiner Galerie'} · ${p.width ?? '?'} × ${p.height ?? '?'} px`;
+      $('#dusage').textContent = `Verwendet in: ${usage(id).join(', ') || 'keiner Liste'} · ${p.width ?? '?'} × ${p.height ?? '?'} px`;
       $<HTMLDialogElement>('#dlg').showModal();
     }
     $('#dlg').addEventListener('close', () => {

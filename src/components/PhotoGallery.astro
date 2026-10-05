@@ -3,7 +3,12 @@
 // dialog (arrows, swipe, Esc). New photos come from the Keystatic „Fotos“ collection.
 import { getCollection } from 'astro:content';
 
-const photos = (await getCollection('photos')).sort((a, b) => a.data.order - b.data.order).map((p) => ({ id: p.id, ...p.data }));
+import archive from '../content/site/fotografie.json';
+
+// „Fotografie-Seite" (Keystatic / gallery editor) picks and orders the archive; empty = every photo
+const library = (await getCollection('photos')).sort((a, b) => a.data.order - b.data.order).map((p) => ({ id: p.id, ...p.data }));
+const curated = ((archive.photos ?? []) as (string | null)[]).filter(Boolean) as string[];
+const photos = curated.length ? curated.map((id) => library.find((p) => p.id === id)).filter((p): p is (typeof library)[number] => !!p) : library;
 const series = [...new Set(photos.map((p) => p.series))];
 ---
 

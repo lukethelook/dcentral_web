@@ -5,7 +5,7 @@ import { hl } from '../lib/text';
 // Stats may use {projekte} / {fotos}: counted live from the collections, so the
 // numbers can never drift from what the site actually shows.
 const counts: Record<string, number> = {
-  projekte: (await getCollection('cases')).filter((c) => !c.data.previewDummy).length,
+  projekte: (await getCollection('cases')).filter((c) => !c.data.previewDummy && !c.data.hidden).length,
   fotos: (await getCollection('photos')).length,
 };
 const fill = (n: string) => n.replace(/\{(projekte|fotos)\}/g, (_, k) => String(counts[k]));

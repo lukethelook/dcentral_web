@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import w from '../content/site/work.json';
 import { hl } from '../lib/text';
 
-const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+const cases = (await getCollection('cases')).filter((c) => !c.data.hidden).sort((a, b) => a.data.order - b.data.order);
 const filters = ['Alle', 'Foto', 'Film & Aerial', 'Web', 'KI'];
 const arrow = 'M6 18 18 6M6 6h12v12';
 // Keystatic image fields may store just a filename — tolerate both forms.

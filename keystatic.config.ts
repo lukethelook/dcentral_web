@@ -20,7 +20,7 @@ export default config({
     brand: { name: 'dcentral' },
     navigation: {
       Arbeiten: ['cases'],
-      Fotografie: ['photos'],
+      Fotografie: ['photos', 'fotografie'],
       Seiteninhalte: ['hero', 'manifest', 'leistungen', 'work', 'studio', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
       Rechtliches: ['impressum', 'datenschutz'],
       'SEO & Firma': ['seo'],
@@ -86,6 +86,11 @@ export default config({
           }),
           { label: 'Galerie-Vorschau (Hover, 2 Bilder)', itemLabel: (p) => p.value?.filename ?? 'Bild' },
         ),
+        hidden: fields.checkbox({
+          label: 'Ausblenden',
+          description: 'Projekt erscheint nicht in den Listen (Startseite, Themenseiten, „Nächstes Projekt“). Die Seite selbst bleibt erreichbar.',
+          defaultValue: false,
+        }),
         previewDummy: fields.checkbox({
           label: 'Vorschau ist Dummymotiv',
           description: 'Solange aktiv, steht „Dummymotiv" auf der Vorschau. Deaktivieren, sobald echte Projektbilder drin sind.',
@@ -251,6 +256,15 @@ export default config({
       },
     }),
 
+    fotografie: singleton({
+      label: 'Fotografie-Seite (Archiv)', path: 'src/content/site/fotografie', format: { data: 'json' },
+      schema: {
+        photos: fields.array(
+          fields.relationship({ label: 'Foto', collection: 'photos' }),
+          { label: 'Fotos im Archiv (Reihenfolge)', description: 'Leer = alle Fotos der Bibliothek. Komfortabler mit Vorschaubildern: /cms/galerien → Fotografie-Seite', itemLabel: (p) => p.value ?? 'Foto wählen' },
+        ),
+      },
+    }),
     studio: singleton({
       label: 'Studio', path: 'src/content/site/studio', format: { data: 'json' },
       schema: {

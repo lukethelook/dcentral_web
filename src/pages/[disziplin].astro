@@ -28,7 +28,7 @@ const palettes = [
 ];
 const pal = palettes[index % 4];
 const cases = (await getCollection('cases'))
-  .filter((c) => !c.data.previewDummy && [c.data.discipline, ...c.data.also].includes(s.key as never))
+  .filter((c) => !c.data.previewDummy && !c.data.hidden && [c.data.discipline, ...c.data.also].includes(s.key as never))
   .sort((a, b) => a.data.order - b.data.order);
 const others = services.map((o, i) => ({ ...o, i })).filter((o) => o.i !== index);
 const isPhoto = s.key === 'Foto';

@@ -22,9 +22,12 @@ const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
 const disciplines = [d.discipline, ...d.also];
 
 // neighbouring cases for prev/next navigation + gallery index for the cover colour
-const all = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+const all = (await getCollection('cases')).filter((c) => !c.data.hidden || c.id === entry.id).sort((a, b) => a.data.order - b.data.order);
 const idx = all.findIndex((c) => c.id === entry.id);
-const next = all[(idx + 1) % all.length];
+const listed = all.filter((c) => !c.data.hidden);
+// next listed project after this one (wraps to the first); hidden projects are skipped
+const after = listed.findIndex((c) => c.id !== entry.id && (c.data.order > d.order || (c.data.order === d.order && c.id > entry.id)));
+const next = listed[after >= 0 ? after : 0] ?? all[(idx + 1) % all.length];
 
 // Real cover first; otherwise the first preview (flagged while it is a dummy); else the line cover.
 const visual = d.cover

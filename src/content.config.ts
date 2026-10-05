@@ -21,6 +21,7 @@ const cases = defineCollection({
     cover: z.string().optional(),
     previews: z.array(z.string()).default([]),
     previewDummy: z.boolean().default(true),
+    hidden: z.boolean().default(false), // true = not listed (homepage, topic pages, next project)
     // Optional case-study depth (real projects): shown on /arbeiten/[id] when present.
     also: z.array(Discipline).default([]),
     url: z.string().nullable().optional(),

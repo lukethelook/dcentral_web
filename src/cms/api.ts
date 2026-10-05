@@ -22,6 +22,9 @@ const BRANCH = process.env.CMS_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || (t
 const CASES = 'src/content/cases';
 const PHOTOS = 'src/content/photos';
 const PHOTO_IMG = 'public/images/photos';
+const ARCHIVE = 'src/content/site/fotografie.json';
+const DISCIPLINES = ['Foto', 'Film & Aerial', 'Web', 'KI'];
+const DEVICES = ['desktop', 'mobile', 'image', 'wide', 'poster'];
 
 type Json = Record<string, any>;
 type Change = { path: string; content?: Buffer | string; remove?: boolean };
@@ -39,6 +42,7 @@ const byOrder = (a: Json, b: Json) => (Number(a.order) || 0) - (Number(b.order) 
 interface Store {
   mode: 'local' | 'github';
   list(dir: string): Promise<Entry[]>;
+  read(file: string): Promise<Json | null>;
   commit(changes: Change[], message: string): Promise<void>;
 }
 
@@ -49,10 +53,14 @@ const localStore: Store = {
     const files = (await fs.readdir(abs)).filter((f) => f.endsWith('.json'));
     return Promise.all(files.map(async (f) => ({ id: f.slice(0, -5), ...JSON.parse(await fs.readFile(path.join(abs, f), 'utf8')) })));
   },
+  async read(file) {
+    try { return JSON.parse(await fs.readFile(path.join(process.cwd(), file), 'utf8')); } catch { return null; }
+  },
   async commit(changes) {
     for (const c of changes) {
       const abs = path.join(process.cwd(), c.path);
-      if (c.remove) await fs.rm(abs, { force: true }); else await fs.writeFile(abs, c.content!);
+      if (c.remove) await fs.rm(abs, { force: true });
+      else { await fs.mkdir(path.dirname(abs), { recursive: true }); await fs.writeFile(abs, c.content!); }
     }
   },
 };
@@ -80,6 +88,11 @@ function githubStore(token: string): Store {
       );
       const entries = d.repository?.object?.entries ?? [];
       return entries.filter((e: Json) => e.name.endsWith('.json') && e.object?.text).map((e: Json) => ({ id: e.name.slice(0, -5), ...JSON.parse(e.object.text) }));
+    },
+    async read(file) {
+      const d = await gql(`query($owner:String!,$name:String!,$expr:String!){repository(owner:$owner,name:$name){object(expression:$expr){... on Blob{text}}}}`, { owner, name, expr: `${BRANCH}:${file}` });
+      const text = d.repository?.object?.text;
+      return text ? JSON.parse(text) : null;
     },
     async commit(changes, message) {
       // optimistic: expectedHeadOid makes GitHub reject the commit if someone pushed in between
@@ -128,16 +141,23 @@ export const GET: APIRoute = async ({ params, request }) => {
   const store = storeFor(request);
   if (!store) return fail('login', 401);
   try {
-    const [cases, photos] = await Promise.all([store.list(CASES), store.list(PHOTOS)]);
+    const [cases, photos, archive] = await Promise.all([store.list(CASES), store.list(PHOTOS), store.read(ARCHIVE)]);
     return ok({
       mode: store.mode,
       branch: store.mode === 'github' ? BRANCH : null,
       // online, images come straight from the repo so fresh uploads show before Vercel has rebuilt
       imageBase: store.mode === 'github' ? `https://raw.githubusercontent.com/${REPO}/${BRANCH}/public` : '',
       cases: cases
-        .map((c) => ({ id: c.id, title: c.title, client: c.client, order: c.order ?? 0, galleryTitle: c.galleryTitle ?? '', galleryPhotos: (c.galleryPhotos ?? []).filter(Boolean) }))
+        .map((c) => ({
+          id: c.id, title: c.title, client: c.client, order: c.order ?? 0, year: c.year,
+          discipline: c.discipline, also: c.also ?? [], hidden: !!c.hidden,
+          thumb: c.cover || (c.previews ?? [])[0] || null,
+          galleryTitle: c.galleryTitle ?? '', galleryPhotos: (c.galleryPhotos ?? []).filter(Boolean),
+          screens: (c.screens ?? []).filter((x: Json) => x?.image),
+        }))
         .sort(byOrder),
       photos: photos.sort(byOrder),
+      archive: ((archive?.photos ?? []) as unknown[]).filter(Boolean),
     });
   } catch (e) {
     return e instanceof AuthError ? fail('login', 401) : fail(String((e as Error).message), 500);
@@ -165,6 +185,14 @@ export const POST: APIRoute = async ({ params, request, url }) => {
       let id = base, n = 2;
       while (taken.has(id)) id = `${base}-${n++}`;
       const input = Buffer.from(await file.arrayBuffer());
+      if (form.get('kind') === 'screen') {
+        // project screens (screenshots, posters …): kept larger and crisper, stored with the project
+        const caseId = safeId(form.get('project'));
+        if (!caseId) return fail('Projekt fehlt');
+        const img = await sharp(input).rotate().resize({ width: 2400, height: 2400, fit: 'inside', withoutEnlargement: true }).webp({ quality: 88 }).toBuffer({ resolveWithObject: true });
+        const name = `${base}-${Date.now().toString(36)}`;
+        return ok({ path: `/images/cases/${caseId}/screens/${name}.webp`, data: img.data.toString('base64'), width: img.info.width, height: img.info.height });
+      }
       const big = await sharp(input).rotate().resize({ width: 2200, height: 2200, fit: 'inside', withoutEnlargement: true }).sharpen({ sigma: 0.6 }).webp({ quality: 84 }).toBuffer({ resolveWithObject: true });
       const sm = await sharp(input).rotate().resize({ width: 760, height: 760, fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 }).toBuffer();
       return ok({
@@ -218,6 +246,13 @@ export const POST: APIRoute = async ({ params, request, url }) => {
       }
       const selection = ((body.photos ?? []) as unknown[]).map(safeId).filter((id): id is string => !!id && photos.has(id));
 
+      // archive list (Fotografie-Seite): drop deleted photos, or replace it entirely
+      let archive = (await store.read(ARCHIVE)) ?? { photos: [] };
+      if (deleted.length && (archive.photos ?? []).some((id: string) => deleted.includes(id))) {
+        archive = { ...archive, photos: archive.photos.filter((id: string) => !deleted.includes(id)) };
+        changes.push({ path: ARCHIVE, content: jsonText(archive) });
+      }
+
       let message = deleted.length ? `cms: ${deleted.length} Foto${deleted.length === 1 ? '' : 's'} gelöscht` : 'cms: Fotos aktualisiert';
       if (body.kind === 'gallery') {
         const caseId = safeId(body.case);
@@ -225,8 +260,36 @@ export const POST: APIRoute = async ({ params, request, url }) => {
         if (!c) return fail('Projekt nicht gefunden');
         if (typeof body.galleryTitle === 'string') c.galleryTitle = body.galleryTitle;
         c.galleryPhotos = selection;
+        // screens: new uploads (only inside this project's own folder) + the edited list
+        for (const ns of body.newScreens ?? []) {
+          const p = String(ns.path || '');
+          if (!new RegExp(`^/images/cases/${caseId}/screens/[a-z0-9-]+\\.webp$`).test(p) || typeof ns.data !== 'string') continue;
+          changes.push({ path: `public${p}`, content: Buffer.from(ns.data, 'base64') });
+        }
+        if (Array.isArray(body.screens)) {
+          c.screens = body.screens
+            .filter((x: Json) => typeof x?.image === 'string' && x.image.startsWith('/images/'))
+            .map((x: Json) => ({ image: x.image, device: DEVICES.includes(x.device) ? x.device : 'image', caption: typeof x.caption === 'string' ? x.caption : '' }));
+        }
         dirtyCases.add(caseId!);
         message = `cms: Galerie ${c.client || caseId} (${selection.length} Fotos)` + (deleted.length ? ` · ${deleted.length} gelöscht` : '');
+      } else if (body.kind === 'archive') {
+        changes.push({ path: ARCHIVE, content: jsonText({ ...archive, photos: selection }) });
+        message = selection.length ? `cms: Fotografie-Seite (${selection.length} Fotos)` : 'cms: Fotografie-Seite zeigt alle Fotos';
+      } else if (body.kind === 'projects') {
+        // order, topics and visibility of all projects
+        let n = 0;
+        for (const row of (body.projects ?? []) as Json[]) {
+          const id = safeId(row.id), c = id && cases.get(id);
+          if (!c) continue;
+          const discipline = DISCIPLINES.includes(row.discipline) ? row.discipline : c.discipline;
+          const also = ((row.also ?? []) as unknown[]).filter((x): x is string => typeof x === 'string' && DISCIPLINES.includes(x) && x !== discipline);
+          const next = { order: n++, discipline, also, hidden: !!row.hidden };
+          if (c.order !== next.order || c.discipline !== next.discipline || JSON.stringify(c.also ?? []) !== JSON.stringify(also) || !!c.hidden !== next.hidden) {
+            Object.assign(c, next); dirtyCases.add(c.id);
+          }
+        }
+        message = 'cms: Projekte – Reihenfolge & Themen';
       } else if (body.kind === 'home') {
         let rest = selection.length;
         for (const p of [...photos.values()].sort(byOrder)) {
