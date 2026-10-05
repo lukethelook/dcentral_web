@@ -20,6 +20,7 @@ export default config({
     brand: { name: 'dcentral' },
     navigation: {
       Arbeiten: ['cases'],
+      Film: ['films', 'film'],
       Fotografie: ['photos', 'fotografie'],
       Seiteninhalte: ['hero', 'manifest', 'leistungen', 'work', 'studio', 'haltung', 'accelerator', 'region', 'prozess', 'faq', 'contact'],
       Rechtliches: ['impressum', 'datenschutz'],
@@ -196,6 +197,29 @@ export default config({
       },
     }),
 
+    films: collection({
+      label: 'Filme (Startseite)',
+      slugField: 'title',
+      path: 'src/content/films/*',
+      format: { data: 'json' },
+      columns: ['client'],
+      schema: {
+        title: fields.slug({ name: { label: 'Titel' } }),
+        client: TEXT('Kunde / Projekt'),
+        category: TEXT('Art (z.B. Imagefilm, Eventfilm, Social-Reel, Aerial)'),
+        year: fields.integer({ label: 'Jahr', defaultValue: 2026 }),
+        duration: TEXT('Länge (z.B. 0:30)'),
+        loop: fields.file({ label: 'Vorschau-Loop (MP4, stumm, ca. 10 s, 1280 px breit)', directory: 'public/videos', publicPath: '/videos/' }),
+        film: fields.file({ label: 'Film mit Ton (MP4, selbst gehostet)', directory: 'public/videos', publicPath: '/videos/' }),
+        vimeo: TEXT('… oder Vimeo-ID (statt MP4)'),
+        youtube: TEXT('… oder YouTube-ID (statt MP4)'),
+        poster: fields.image({ label: 'Standbild', directory: 'public/videos', publicPath: '/videos/' }),
+        case: fields.relationship({ label: 'Projekt (optional, „Zum Projekt")', collection: 'cases' }),
+        hidden: fields.checkbox({ label: 'Ausblenden', defaultValue: false }),
+        order: fields.integer({ label: 'Reihenfolge (0 = vorne)', defaultValue: 0 }),
+      },
+    }),
+
     photos: collection({
       label: 'Fotos',
       slugField: 'alt',
@@ -332,6 +356,16 @@ export default config({
           fields.object({ no: TEXT('Nummer'), t: TEXT('Titel'), d: TEXT('Text', { multiline: true }) }),
           { label: 'Schritte', itemLabel: (p) => p.fields.t.value },
         ),
+      },
+    }),
+
+    film: singleton({
+      label: 'Film (Sektion Startseite)', path: 'src/content/site/film', format: { data: 'json' },
+      schema: {
+        railLeft: TEXT('Leiste links'),
+        railRight: TEXT('Leiste rechts'),
+        title: TEXT('Überschrift', { multiline: true, description: RICH }),
+        lead: TEXT('Einleitung', { multiline: true }),
       },
     }),
 

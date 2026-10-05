@@ -91,4 +91,24 @@ const photos = defineCollection({
   }),
 });
 
-export const collections = { cases, photos };
+// Films on the homepage (Film section): short loops + full films, newest first by order.
+const films = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/films' }),
+  schema: z.object({
+    title: z.string(),
+    client: z.string(),
+    category: z.string().nullable().optional(),
+    year: z.number().nullable().optional(),
+    duration: z.string().nullable().optional(), // e.g. "0:30"
+    loop: z.string().nullable().optional(), // muted preview loop (MP4)
+    film: z.string().nullable().optional(), // self-hosted film with sound (MP4)
+    vimeo: z.string().nullable().optional(), // … or Vimeo ID
+    youtube: z.string().nullable().optional(), // … or YouTube ID
+    poster: z.string().nullable().optional(),
+    case: z.string().nullable().optional(), // case id → „Zum Projekt"
+    hidden: z.boolean().default(false),
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { cases, photos, films };
