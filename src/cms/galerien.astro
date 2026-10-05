@@ -1,7 +1,7 @@
 ---
-// Gallery editor (/cms/galerien). Visual, drag & drop editing of project galleries
-// and the homepage photo module. Local: writes files; online: commits via GitHub
-// with the Keystatic login (see src/cms/api.ts). Same JSON as Keystatic.
+// Gallery editor (/cms/galerien). Project galleries and the homepage photo module,
+// visual and drag & drop. Local: writes files; online: commits via GitHub with the
+// Keystatic login (see src/cms/api.ts). Same JSON as Keystatic.
 import '../styles/fonts.css';
 export const prerender = false;
 ---
@@ -15,144 +15,170 @@ export const prerender = false;
   <title>Galerien · dcentral CMS</title>
   <!-- global: most of the UI is rendered from JS and would miss Astro's scoped styles -->
   <style is:global>
-    :root { --paper:#f3f4ec; --ink:#153e35; --muted:#52685c; --line:#cbd4c6; --soft:#e8ece0; --lime:#d4ff3f; --forest:#102f28; }
+    :root { --paper:#f3f4ec; --ink:#153e35; --muted:#52685c; --line:#cbd4c6; --soft:#e8ece0; --lime:#d4ff3f; --forest:#102f28; --red:#a3352a; --ease:cubic-bezier(.23,1,.32,1); }
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 14px/1.45 Manrope, system-ui, sans-serif; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.5 Manrope, system-ui, sans-serif; padding-bottom: 96px; }
     button, input, select, textarea { font: inherit; color: inherit; }
-    header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; padding: 14px 24px; background: var(--forest); color: var(--paper); }
-    header .brand { font-weight: 800; font-size: 20px; letter-spacing: -.05em; }
-    header .brand span { color: var(--lime); }
-    header nav { display: flex; gap: 4px; }
-    header nav button { background: none; border: 1px solid transparent; color: inherit; padding: 7px 14px; border-radius: 99px; cursor: pointer; }
-    header nav button[aria-pressed=true] { border-color: var(--lime); color: var(--lime); }
-    header .spacer { flex: 1; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+
+    header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 18px; padding: 12px 28px; background: var(--forest); color: var(--paper); }
+    .brand { font-weight: 800; font-size: 20px; letter-spacing: -.05em; white-space: nowrap; }
+    .brand span { color: var(--lime); }
+    .tabs { display: flex; gap: 4px; }
+    .tabs button { background: none; border: 1px solid transparent; color: inherit; padding: 7px 15px; border-radius: 99px; }
+    .tabs button[aria-pressed=true] { border-color: var(--lime); color: var(--lime); }
+    header .grow { flex: 1; }
     header a { color: rgba(243,244,236,.7); font-size: 13px; }
-    .status { font-size: 13px; color: rgba(243,244,236,.75); min-width: 120px; text-align: right; }
-    .save { background: var(--lime); color: var(--forest); border: 0; font-weight: 700; padding: 9px 18px; border-radius: 99px; cursor: pointer; }
-    .save:disabled { opacity: .35; cursor: default; }
-    main { display: grid; grid-template-columns: minmax(340px, 34%) 1fr; min-height: calc(100vh - 60px); }
-    aside { border-right: 1px solid var(--line); padding: 22px 22px 60px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow: auto; }
-    .lib { padding: 22px 24px 60px; }
-    label.f { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-    select, input[type=text], input[type=search], textarea { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
-    textarea { min-height: 70px; resize: vertical; }
-    .row { margin-bottom: 16px; }
-    .hint { color: var(--muted); font-size: 12.5px; margin: 6px 0 0; }
-    h2 { font-size: 15px; font-weight: 700; margin: 22px 0 10px; display: flex; justify-content: space-between; align-items: baseline; }
-    h2 small { font-weight: 400; color: var(--muted); }
-    .sel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; min-height: 120px; padding: 8px; border: 1px dashed var(--line); border-radius: 10px; background: var(--soft); }
-    .sel:empty::before { content: 'Noch leer – rechts Fotos anklicken oder Bilder hierher ziehen.'; grid-column: 1/-1; align-self: center; text-align: center; color: var(--muted); padding: 30px 10px; }
-    .chip { position: relative; aspect-ratio: 4/3; border-radius: 7px; overflow: hidden; background: #ccd3c4; cursor: grab; outline: 2px solid transparent; transition: transform 160ms cubic-bezier(.23,1,.32,1), outline-color 160ms ease; }
-    .chip img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
-    .chip .no { position: absolute; left: 6px; top: 6px; background: var(--lime); color: var(--forest); font-weight: 800; font-size: 11px; padding: 1px 6px; border-radius: 99px; }
-    .chip .x { position: absolute; right: 5px; top: 5px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: rgba(16,47,40,.82); color: #fff; cursor: pointer; line-height: 1; }
-    .chip.dragging { opacity: .35; }
-    .chip.over { outline-color: var(--lime); transform: scale(.96); }
-    .tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
-    .tools input[type=search] { max-width: 280px; }
-    .pills { display: flex; gap: 6px; flex-wrap: wrap; }
-    .pills button { border: 1px solid var(--line); background: none; padding: 6px 12px; border-radius: 99px; cursor: pointer; font-size: 13px; }
+    .badge-mode { font-size: 12px; padding: 4px 10px; border-radius: 99px; background: rgba(212,255,63,.12); color: var(--lime); white-space: nowrap; }
+
+    main { max-width: 1400px; margin: 0 auto; padding: 28px 28px 40px; }
+    section + section { margin-top: 48px; }
+    .head { display: flex; flex-wrap: wrap; align-items: end; gap: 16px 24px; margin-bottom: 14px; }
+    h1 { font-size: 30px; font-weight: 600; letter-spacing: -.04em; margin: 0; line-height: 1.1; }
+    h2 { font-size: 22px; font-weight: 600; letter-spacing: -.03em; margin: 0; }
+    .field { display: grid; gap: 5px; }
+    .field label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    select, input[type=text], input[type=search], textarea { padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+    #case { min-width: 320px; font-weight: 600; }
+    #gtitle { min-width: 300px; }
+    textarea { min-height: 80px; resize: vertical; width: 100%; }
+    .hint { color: var(--muted); font-size: 13.5px; margin: 0 0 16px; }
+
+    /* gallery: the photos of this project, in order */
+    .gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; padding: 16px; background: var(--soft); border-radius: 14px; min-height: 180px; }
+    .gal-empty { grid-column: 1/-1; align-self: center; text-align: center; color: var(--muted); padding: 40px 10px; }
+    .card { position: relative; background: #fff; border-radius: 11px; overflow: hidden; box-shadow: 0 1px 0 rgba(16,47,40,.08); transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), opacity 180ms ease; }
+    .card .img { position: relative; aspect-ratio: 4/3; background: #ccd3c4; }
+    .gal .card .img { cursor: grab; }
+    .card .img img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .card .no { position: absolute; left: 9px; top: 9px; background: var(--lime); color: var(--forest); font-weight: 800; font-size: 13px; min-width: 26px; text-align: center; padding: 2px 8px; border-radius: 99px; }
+    .card .grip { position: absolute; right: 9px; top: 9px; background: rgba(16,47,40,.7); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 99px; }
+    .card .meta { padding: 9px 11px 11px; }
+    .card .title { font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card .sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card .actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .btn { border: 1px solid var(--line); background: #fff; padding: 5px 11px; border-radius: 99px; font-size: 12.5px; }
+    .btn:hover:not(:disabled) { border-color: var(--ink); }
+    .btn:disabled { opacity: .35; cursor: default; }
+    .btn.danger { color: var(--red); }
+    .btn.danger:hover { border-color: var(--red); background: #fbeeec; }
+    .btn.icon { padding: 5px 10px; }
+    .card.dragging { opacity: .35; }
+    .card.over { box-shadow: 0 0 0 3px var(--lime); transform: scale(.97); }
+    .card.hidden-home { opacity: .5; }
+    .card .flag { position: absolute; left: 9px; bottom: 9px; background: rgba(16,47,40,.82); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
+    .warn { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #e59a2f; margin-left: 6px; vertical-align: middle; }
+
+    /* add photos */
+    .dropzone { display: grid; place-items: center; text-align: center; border: 2px dashed var(--ink); border-radius: 14px; padding: 26px; margin-bottom: 22px; background: #fff; cursor: pointer; transition: background 160ms ease, border-color 160ms ease; }
+    .dropzone:hover { background: #f6ffd6; border-color: var(--forest); }
+    .dropzone strong { font-size: 17px; }
+    .dropzone span { color: var(--muted); font-size: 13.5px; }
+    .tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+    .tools input[type=search] { width: 260px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pills button { border: 1px solid var(--line); background: none; padding: 6px 12px; border-radius: 99px; font-size: 13px; }
     .pills button[aria-pressed=true] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-    .ph { position: relative; border-radius: 9px; overflow: hidden; background: #ccd3c4; cursor: pointer; aspect-ratio: 4/3; outline: 3px solid transparent; outline-offset: -3px; }
-    .ph img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms cubic-bezier(.23,1,.32,1); }
-    @media (hover: hover) and (pointer: fine) { .ph:hover img { transform: scale(1.04); } }
-    .ph.on { outline-color: var(--lime); }
-    .ph .badge { position: absolute; left: 8px; top: 8px; background: var(--lime); color: var(--forest); font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 99px; }
-    .ph .cap { position: absolute; inset: auto 0 0 0; padding: 22px 9px 7px; background: linear-gradient(transparent, rgba(16,47,40,.85)); color: #fff; font-size: 12px; line-height: 1.3; }
-    .ph .cap b { display: block; font-weight: 600; }
-    .ph .cap span { opacity: .75; }
-    .ph .edit { position: absolute; right: 7px; top: 7px; border: 0; border-radius: 99px; padding: 3px 9px; font-size: 11.5px; background: rgba(243,244,236,.92); color: var(--forest); cursor: pointer; opacity: 0; transition: opacity 160ms ease; }
-    .ph:hover .edit, .ph:focus-within .edit { opacity: 1; }
-    .ph .warn { position: absolute; right: 7px; bottom: 7px; width: 9px; height: 9px; border-radius: 50%; background: #f4b04a; box-shadow: 0 0 0 2px rgba(16,47,40,.6); }
-    .drop { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; background: rgba(16,47,40,.86); color: var(--paper); font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
-    .drop.show { display: grid; }
-    .drop small { display: block; font-size: 14px; font-weight: 400; opacity: .7; margin-top: 8px; text-align: center; }
-    .upload label { border: 1px dashed var(--ink); padding: 8px 14px; border-radius: 99px; cursor: pointer; font-size: 13px; }
-    .upload input { display: none; }
-    dialog { border: 0; border-radius: 14px; padding: 0; width: min(720px, 94vw); box-shadow: 0 30px 80px rgba(16,47,40,.35); }
+    .lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+    .lib .card .img { cursor: pointer; }
+    .add { width: 100%; border: 0; padding: 8px; font-weight: 700; font-size: 13px; background: var(--forest); color: var(--lime); }
+    .add.on { background: var(--lime); color: var(--forest); }
+    .lib .card.on { box-shadow: 0 0 0 3px var(--lime); }
+
+    /* save bar */
+    .savebar { position: fixed; left: 50%; bottom: 18px; z-index: 30; display: flex; align-items: center; gap: 14px; padding: 10px 12px 10px 20px; border-radius: 99px; background: var(--forest); color: var(--paper); box-shadow: 0 16px 40px rgba(16,47,40,.35); transform: translate(-50%, 160%); transition: transform 260ms var(--ease); max-width: calc(100vw - 32px); }
+    .savebar.show { transform: translate(-50%, 0); }
+    .savebar .what { font-size: 14px; }
+    .savebar button { border: 0; border-radius: 99px; padding: 9px 18px; font-weight: 700; }
+    .savebar .discard { background: none; color: rgba(243,244,236,.75); font-weight: 500; }
+    .savebar .save { background: var(--lime); color: var(--forest); }
+    .savebar .save:disabled { opacity: .5; }
+
+    dialog { border: 0; border-radius: 16px; padding: 0; width: min(760px, 94vw); box-shadow: 0 30px 80px rgba(16,47,40,.35); }
     dialog::backdrop { background: rgba(16,47,40,.55); }
     .dlg { display: grid; grid-template-columns: 1fr 1fr; }
-    .dlg img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 320px; }
-    .dlg form { padding: 22px; }
-    .dlg .btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
-    .ghost { background: none; border: 1px solid var(--line); padding: 8px 14px; border-radius: 99px; cursor: pointer; }
-    .toast { position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--forest); color: var(--paper); padding: 10px 18px; border-radius: 99px; font-size: 13px; transition: transform 220ms cubic-bezier(.23,1,.32,1), opacity 220ms ease; z-index: 50; }
+    .dlg img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 340px; }
+    .dlg form { padding: 22px; display: grid; gap: 14px; }
+    .dlg .row-btns { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+    .dlg .row-btns .grow { flex: 1; }
+    .dlg .ok { border: 0; background: var(--lime); color: var(--forest); font-weight: 700; padding: 9px 18px; border-radius: 99px; }
+    .dlg .usage { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+    .toast { position: fixed; top: 70px; left: 50%; transform: translate(-50%, -10px); opacity: 0; background: var(--forest); color: var(--paper); padding: 10px 18px; border-radius: 99px; font-size: 13.5px; transition: transform 220ms var(--ease), opacity 220ms ease; z-index: 50; pointer-events: none; }
     .toast.show { transform: translate(-50%, 0); opacity: 1; }
-    .ph .new { position: absolute; left: 8px; bottom: 34px; background: var(--forest); color: var(--lime); font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
-    .hint.mode { margin: -4px 0 10px; color: var(--ink); }
+    .drop-all { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; background: rgba(16,47,40,.86); color: var(--paper); font-size: 24px; font-weight: 600; text-align: center; }
+    .drop-all.show { display: grid; }
+    .drop-all small { display: block; font-size: 14px; font-weight: 400; opacity: .75; margin-top: 8px; }
     .login { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: var(--forest); color: var(--paper); text-align: center; padding: 24px; }
-    .login[hidden] { display: none; }
-    .login .brand { font-weight: 800; font-size: 22px; letter-spacing: -.05em; margin: 0 0 18px; }
-    .login .brand span { color: var(--lime); }
-    .login h1 { font-weight: 600; font-size: clamp(30px, 4vw, 44px); letter-spacing: -.04em; margin: 0 0 10px; }
+    .login h1 { font-size: clamp(30px, 4vw, 44px); margin: 14px 0 10px; }
     .login p { max-width: 46ch; margin: 0 auto 22px; color: rgba(243,244,236,.75); }
-    .login a.save { display: inline-block; text-decoration: none; }
-    .login .hint { margin-top: 16px; color: rgba(243,244,236,.55); }
-    .home-only, body.home .case-only { display: none; }
-    body.home .home-only { display: block; }
-    @media (prefers-reduced-motion: reduce) { .chip, .ph img, .toast { transition: none; } }
+    .login a { display: inline-block; background: var(--lime); color: var(--forest); font-weight: 700; padding: 11px 20px; border-radius: 99px; text-decoration: none; }
+    .home-only { display: none; }
+    body.home .home-only { display: revert; }
+    body.home .case-only { display: none; }
+    @media (prefers-reduced-motion: reduce) { .card, .savebar, .toast { transition: none; } }
   </style>
 </head>
 <body>
   <header>
     <div class="brand">dcentral<span>.</span> Galerien</div>
-    <nav>
+    <nav class="tabs" aria-label="Bereich">
       <button type="button" data-mode="case" aria-pressed="true">Projekt-Galerien</button>
       <button type="button" data-mode="home" aria-pressed="false">Startseite</button>
     </nav>
-    <div class="spacer"></div>
-    <a href="/keystatic" target="_blank" rel="noopener">Keystatic öffnen</a>
-    <span class="status" id="status"></span>
-    <button class="save" id="save" type="button" disabled>Speichern <kbd style="opacity:.6">⌘S</kbd></button>
+    <div class="grow"></div>
+    <span class="badge-mode" id="modebadge"></span>
+    <a href="/keystatic" target="_blank" rel="noopener">Keystatic</a>
   </header>
 
   <main>
-    <aside>
-      <div class="case-only">
-        <div class="row">
-          <label class="f" for="case">Projekt</label>
-          <select id="case"></select>
-        </div>
-        <div class="row">
-          <label class="f" for="gtitle">Überschrift der Galerie</label>
-          <input id="gtitle" type="text" placeholder="z. B. Aus der Fotoserie" />
-        </div>
-        <h2>Galerie <small id="count"></small></h2>
+    <!-- 1 · the gallery itself -->
+    <section aria-labelledby="g-h">
+      <div class="head case-only">
+        <div class="field"><label for="case">Projekt</label><select id="case"></select></div>
+        <div class="field"><label for="gtitle">Überschrift über der Galerie</label><input id="gtitle" type="text" placeholder="z. B. Aus der Bildwelt" /></div>
       </div>
-      <div class="home-only">
-        <h2>„Bilder, die bleiben.“ <small id="hcount"></small></h2>
-        <p class="hint" style="margin-top:-4px">Die Startseite zeigt bis zu 7 Fotos in dieser Reihenfolge.</p>
+      <div class="head">
+        <h1 id="g-h"><span class="case-only">Galerie</span><span class="home-only">Startseite · „Bilder, die bleiben.“</span> <small id="count" style="font-size:16px;color:var(--muted);font-weight:500"></small></h1>
       </div>
-      <div class="sel" id="sel"></div>
-      <p class="hint">Ziehen zum Sortieren · Klick öffnet die Details · × entfernt aus der Auswahl (das Foto bleibt in der Bibliothek).</p>
-    </aside>
+      <p class="hint case-only">So erscheinen die Fotos auf der Projektseite. Reihenfolge per Ziehen oder mit ‹ › ändern. <b>Entfernen</b> nimmt ein Foto nur aus dieser Galerie – es bleibt in der Bibliothek.</p>
+      <p class="hint home-only">Die Startseite zeigt die ersten 7 Fotos in dieser Reihenfolge. Reihenfolge per Ziehen oder mit ‹ › ändern.</p>
+      <div class="gal" id="gal"></div>
+    </section>
 
-    <section class="lib">
-      <div class="tools">
-        <input id="q" type="search" placeholder="Fotos suchen …" />
-        <div class="pills" id="series"></div>
-        <div style="flex:1"></div>
-        <div class="upload">
-          <label for="file">+ Bilder hochladen</label>
-          <input id="file" type="file" accept="image/*" multiple />
+    <!-- 2 · add photos -->
+    <section aria-labelledby="a-h">
+      <div class="head"><h2 id="a-h">Fotos hinzufügen</h2></div>
+      <label class="dropzone" for="file">
+        <div>
+          <strong>Neue Fotos hochladen</strong><br />
+          <span id="dzinfo">Hierher ziehen oder klicken</span>
         </div>
+      </label>
+      <input id="file" type="file" accept="image/*" multiple hidden />
+      <div class="tools">
+        <input id="q" type="search" placeholder="Bibliothek durchsuchen …" />
+        <div class="pills" id="series"></div>
       </div>
-      <p class="hint mode" id="modeinfo"></p>
-      <p class="hint" style="margin:-4px 0 14px">Klick auf ein Foto = zur Auswahl hinzufügen / entfernen. Bilder einfach ins Fenster ziehen, um sie hochzuladen. <span style="color:#b97a12">●</span> = Alt-Text fehlt.</p>
-      <div class="grid" id="grid"></div>
+      <div class="lib" id="lib"></div>
     </section>
   </main>
 
-  <div class="drop" id="drop"><div>Loslassen zum Hochladen<small id="dropinfo"></small></div></div>
+  <div class="savebar" id="savebar" role="region" aria-label="Speichern">
+    <span class="what" id="what"></span>
+    <button type="button" class="discard" id="discard">Verwerfen</button>
+    <button type="button" class="save" id="save">Speichern</button>
+  </div>
   <div class="toast" id="toast" role="status"></div>
+  <div class="drop-all" id="dropall"><div>Loslassen zum Hochladen<small id="dropinfo"></small></div></div>
   <div class="login" id="login" hidden>
     <div>
-      <p class="brand">dcentral<span>.</span> Galerien</p>
+      <div class="brand">dcentral<span>.</span> Galerien</div>
       <h1>Bitte zuerst anmelden.</h1>
       <p>Der Galerie-Editor nutzt deine Keystatic-Anmeldung über GitHub. Nur wer im Repository schreiben darf, kann speichern.</p>
-      <a class="save" href="/keystatic">In Keystatic mit GitHub anmelden</a>
-      <p class="hint">Danach diese Seite neu laden.</p>
+      <a href="/keystatic">In Keystatic mit GitHub anmelden</a>
+      <p style="margin-top:16px;font-size:13px">Danach diese Seite neu laden.</p>
     </div>
   </div>
 
@@ -160,12 +186,17 @@ export const prerender = false;
     <div class="dlg">
       <img id="dimg" alt="" />
       <form method="dialog">
-        <div class="row"><label class="f" for="dtitle">Titel</label><input id="dtitle" type="text" /></div>
-        <div class="row"><label class="f" for="dalt">Bildbeschreibung (Alt-Text)</label><textarea id="dalt"></textarea></div>
-        <div class="row"><label class="f" for="dseries">Serie</label><input id="dseries" type="text" list="serieslist" /><datalist id="serieslist"></datalist></div>
-        <div class="row"><label class="f" for="dproject">Gehört zu Projekt</label><select id="dproject"></select></div>
-        <p class="hint" id="dmeta"></p>
-        <div class="btns"><button class="ghost" value="cancel">Abbrechen</button><button class="save" value="save">Übernehmen</button></div>
+        <div class="field"><label for="dtitle">Titel</label><input id="dtitle" type="text" /></div>
+        <div class="field"><label for="dalt">Bildbeschreibung (Alt-Text)</label><textarea id="dalt" placeholder="Was ist zu sehen? Wichtig für Barrierefreiheit und Google."></textarea></div>
+        <div class="field"><label for="dseries">Serie (Filter auf der Fotografie-Seite)</label><input id="dseries" type="text" list="serieslist" /><datalist id="serieslist"></datalist></div>
+        <div class="field"><label for="dproject">Gehört zu Projekt</label><select id="dproject"></select></div>
+        <p class="usage" id="dusage"></p>
+        <div class="row-btns">
+          <button type="button" class="btn danger" id="ddelete">Foto löschen …</button>
+          <span class="grow"></span>
+          <button class="btn" value="cancel">Abbrechen</button>
+          <button class="ok" value="save">Übernehmen</button>
+        </div>
       </form>
     </div>
   </dialog>
@@ -175,14 +206,17 @@ export const prerender = false;
     type Case = { id: string; title: string; client: string; galleryTitle: string; galleryPhotos: string[] };
     type NewPhoto = { id: string; json: Photo; big: string; sm: string };
     const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector(s) as T;
+    const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
     let cases: Case[] = [], photos: Photo[] = [], byId = new Map<string, Photo>();
-    let mode: 'case' | 'home' = 'case', current = '', selection: string[] = [], dirty = false, seriesFilter = 'Alle', query = '';
+    let mode: 'case' | 'home' = 'case', current = '', selection: string[] = [], seriesFilter = 'Alle', query = '';
     let store: 'local' | 'github' = 'local', branch = '', imageBase = '';
     // everything waits here until "Speichern" (online that is one commit)
-    let newPhotos = new Map<string, NewPhoto>(), photoEdits: Record<string, Partial<Photo>> = {};
-    const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+    let newPhotos = new Map<string, NewPhoto>(), photoEdits: Record<string, Partial<Photo>> = {}, deletes = new Set<string>();
+    let baseline = '', titleBase = '';
     const src = (p: Photo) => p.preview || imageBase + (p.thumb || p.image);
 
+    /* ── server ── */
     class LoginNeeded extends Error {}
     async function call(action: string, init?: RequestInit, retry = true): Promise<any> {
       const r = await fetch(`/api/cms/${action}`, init);
@@ -191,31 +225,41 @@ export const prerender = false;
         if (retry && (await fetch('/api/keystatic/github/refresh-token', { method: 'POST' })).ok) return call(action, init, false);
         throw new LoginNeeded();
       }
-      const d = await r.json();
+      const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || r.statusText);
       return d;
     }
     const postJson = (action: string, body: unknown) => call(action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
 
     let toastTimer = 0;
-    function toast(msg: string, ms = 2600) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = window.setTimeout(() => t.classList.remove('show'), ms); }
-    function setDirty(v: boolean) {
-      dirty = v; $<HTMLButtonElement>('#save').disabled = !v;
-      $('#status').textContent = v ? 'Nicht gespeichert' : store === 'github' ? `Online · ${branch}` : 'Lokal';
+    function toast(msg: string, ms = 2800) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = window.setTimeout(() => t.classList.remove('show'), ms); }
+
+    /* ── state ── */
+    function changes() {
+      const out: string[] = [];
+      if (selection.join(',') !== baseline) out.push(mode === 'case' ? 'Galerie geändert' : 'Startseite geändert');
+      if (mode === 'case' && $<HTMLInputElement>('#gtitle').value !== titleBase) out.push('Überschrift');
+      if (newPhotos.size) out.push(`${newPhotos.size} neue${newPhotos.size === 1 ? 's Foto' : ' Fotos'}`);
+      const e = Object.keys(photoEdits).length; if (e) out.push(`${e} Foto-Info${e === 1 ? '' : 's'}`);
+      if (deletes.size) out.push(`${deletes.size} gelöscht`);
+      return out;
     }
-    function showLogin() { $('#login').hidden = false; }
+    const isDirty = () => changes().length > 0;
+    function refreshBar() {
+      const c = changes();
+      $('#what').textContent = c.length ? `Nicht gespeichert: ${c.join(' · ')}` : '';
+      $('#savebar').classList.toggle('show', c.length > 0);
+    }
 
     async function load() {
       let s;
-      try { s = await call('state'); } catch (e) { if (e instanceof LoginNeeded) return showLogin(); throw e; }
+      try { s = await call('state'); } catch (e) { if (e instanceof LoginNeeded) { $('#login').hidden = false; return; } toast(String((e as Error).message), 6000); return; }
       store = s.mode; branch = s.branch || ''; imageBase = s.imageBase || '';
-      $('#modeinfo').textContent = store === 'github'
-        ? `Online-Modus: Speichern erzeugt einen Commit auf „${branch}“. Die Website zeigt es nach dem nächsten Vercel-Build (ca. 1–2 Minuten).`
-        : 'Lokaler Modus: Speichern schreibt direkt in die Projektdateien.';
+      $('#modebadge').textContent = store === 'github' ? `Online · speichert auf ${branch}` : 'Lokal';
       cases = s.cases; photos = s.photos; byId = new Map(photos.map((p: Photo) => [p.id, p]));
-      newPhotos = new Map(); photoEdits = {};
+      newPhotos = new Map(); photoEdits = {}; deletes = new Set();
       $('#case').innerHTML = cases.map((c) => `<option value="${c.id}">${esc(c.client)} — ${esc(c.title)}</option>`).join('');
-      $('#dproject').innerHTML = '<option value="">– keinem –</option>' + cases.map((c) => `<option value="${c.id}">${esc(c.client)}</option>`).join('');
+      $('#dproject').innerHTML = '<option value="">– keinem Projekt –</option>' + cases.map((c) => `<option value="${c.id}">${esc(c.client)}</option>`).join('');
       const wanted = new URLSearchParams(location.search).get('projekt');
       current = cases.some((c) => c.id === wanted) ? wanted! : cases.some((c) => c.id === current) ? current : cases[0]?.id || '';
       $<HTMLSelectElement>('#case').value = current;
@@ -226,63 +270,89 @@ export const prerender = false;
       if (mode === 'case') {
         const c = cases.find((x) => x.id === current)!;
         selection = c.galleryPhotos.filter((id) => byId.has(id));
-        $<HTMLInputElement>('#gtitle').value = c.galleryTitle || '';
+        $<HTMLInputElement>('#gtitle').value = titleBase = c.galleryTitle || '';
       } else selection = photos.filter((p) => p.featured).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((p) => p.id);
-      setDirty(newPhotos.size > 0 || Object.keys(photoEdits).length > 0); render();
+      baseline = selection.join(',');
+      const c = cases.find((x) => x.id === current);
+      $('#dzinfo').textContent = mode === 'case' && c ? `Hierher ziehen oder klicken – landen direkt in der Galerie von ${c.client}` : 'Hierher ziehen oder klicken – landen in der Bibliothek und auf der Startseite';
+      render();
     }
 
-    function renderSeries() {
+    /* ── render ── */
+    function render() {
+      $('#count').textContent = `${selection.length} ${selection.length === 1 ? 'Foto' : 'Fotos'}`;
+      $('#gal').innerHTML = selection.length ? selection.map((id, i) => {
+        const p = byId.get(id)!, hidden = mode === 'home' && i >= 7;
+        return `<article class="card${hidden ? ' hidden-home' : ''}" draggable="true" data-id="${id}">
+          <div class="img"><img src="${src(p)}" alt="" loading="lazy"><span class="no">${i + 1}</span><span class="grip" aria-hidden="true">⋮⋮ ziehen</span>${hidden ? '<span class="flag">nicht sichtbar (nur 7)</span>' : ''}</div>
+          <div class="meta"><div class="title">${esc(p.title || id)}${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}</div><div class="sub">${esc(p.series)}</div>
+            <div class="actions">
+              <button type="button" class="btn icon" data-move="-1" data-id="${id}" aria-label="Nach vorne"${i === 0 ? ' disabled' : ''}>‹</button>
+              <button type="button" class="btn icon" data-move="1" data-id="${id}" aria-label="Nach hinten"${i === selection.length - 1 ? ' disabled' : ''}>›</button>
+              <button type="button" class="btn" data-edit="${id}">Bearbeiten</button>
+              <button type="button" class="btn danger" data-remove="${id}">Entfernen</button>
+            </div></div></article>`;
+      }).join('') : `<div class="gal-empty">${mode === 'case' ? 'Diese Galerie ist noch leer.<br>Unten Fotos hinzufügen oder neue hochladen.' : 'Noch keine Fotos für die Startseite gewählt.'}</div>`;
+
       const all = ['Alle', ...(mode === 'case' ? ['Dieses Projekt'] : []), ...new Set(photos.map((p) => p.series || 'Fotografie'))];
       $('#series').innerHTML = all.map((x) => `<button type="button" aria-pressed="${x === seriesFilter}" data-s="${esc(x)}">${esc(x)}</button>`).join('');
-    }
-    function visible() {
       const q = query.toLowerCase();
-      return photos.filter((p) => {
+      const list = photos.filter((p) => {
         if (seriesFilter === 'Dieses Projekt' ? p.project !== current : seriesFilter !== 'Alle' && (p.series || 'Fotografie') !== seriesFilter) return false;
         return !q || [p.id, p.title, p.alt, p.series].join(' ').toLowerCase().includes(q);
       });
+      $('#lib').innerHTML = list.map((p) => {
+        const at = selection.indexOf(p.id);
+        return `<article class="card${at >= 0 ? ' on' : ''}">
+          <div class="img" data-toggle="${p.id}"><img src="${src(p)}" alt="" loading="lazy">${newPhotos.has(p.id) ? '<span class="no">neu</span>' : ''}</div>
+          <div class="meta"><div class="title">${esc(p.title || p.id)}${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}</div><div class="sub">${esc(p.series)} · <a href="#" data-edit="${p.id}" style="color:inherit">Bearbeiten</a></div></div>
+          <button type="button" class="add${at >= 0 ? ' on' : ''}" data-toggle="${p.id}">${at >= 0 ? `✓ In der ${mode === 'case' ? 'Galerie' : 'Auswahl'} (Nr. ${at + 1})` : '+ Hinzufügen'}</button>
+        </article>`;
+      }).join('') || '<p class="hint">Keine Fotos gefunden.</p>';
+      refreshBar();
     }
-    function render() {
-      renderSeries();
-      $('#sel').innerHTML = selection.map((id, i) => {
-        const p = byId.get(id)!;
-        return `<div class="chip" draggable="true" data-id="${id}" title="${esc(p.title || id)}"><img src="${src(p)}" alt="" loading="lazy"><span class="no">${i + 1}</span><button class="x" type="button" data-x="${id}" aria-label="Aus der Auswahl entfernen">×</button></div>`;
-      }).join('');
-      $('#count').textContent = `${selection.length} ${selection.length === 1 ? 'Foto' : 'Fotos'}`;
-      $('#hcount').textContent = `${selection.length} gewählt${selection.length > 7 ? ' · nur 7 sichtbar' : ''}`;
-      $('#grid').innerHTML = visible().map((p) => {
-        const at = selection.indexOf(p.id), fresh = newPhotos.has(p.id);
-        return `<div class="ph${at >= 0 ? ' on' : ''}" data-id="${p.id}" tabindex="0" role="button" aria-pressed="${at >= 0}" aria-label="${esc(p.title || p.id)}">${at >= 0 ? `<span class="badge">${at + 1}</span>` : ''}${fresh ? '<span class="new">neu</span>' : ''}<img src="${src(p)}" alt="" loading="lazy"><button class="edit" type="button" data-edit="${p.id}">Bearbeiten</button>${p.alt ? '' : '<span class="warn" title="Alt-Text fehlt"></span>'}<div class="cap"><b>${esc(p.title || p.id)}</b><span>${esc(p.series)}</span></div></div>`;
-      }).join('');
+    function toggle(id: string) {
+      const i = selection.indexOf(id);
+      if (i >= 0) selection.splice(i, 1); else { selection.push(id); toast(`Hinzugefügt als Nr. ${selection.length}`, 1400); }
+      render();
     }
-    function toggle(id: string) { const i = selection.indexOf(id); if (i >= 0) selection.splice(i, 1); else selection.push(id); setDirty(true); render(); }
+    function move(id: string, d: number) {
+      const i = selection.indexOf(id), j = i + d;
+      if (i < 0 || j < 0 || j >= selection.length) return;
+      selection.splice(j, 0, selection.splice(i, 1)[0]); render();
+    }
 
+    /* ── save / discard ── */
     async function save() {
-      if (!dirty) return;
-      $('#status').textContent = store === 'github' ? 'Speichert auf GitHub …' : 'Speichert …';
-      $<HTMLButtonElement>('#save').disabled = true;
+      if (!isDirty()) return;
+      const btn = $<HTMLButtonElement>('#save'); btn.disabled = true; btn.textContent = 'Speichert …';
       try {
         // keep each request under Vercel's 4.5 MB body limit: big uploads go first in their own commits
-        const pending = [...newPhotos.values()];
-        const size = (n: NewPhoto) => n.big.length + n.sm.length;
+        const pending = [...newPhotos.values()], size = (n: NewPhoto) => n.big.length + n.sm.length;
         const chunks: NewPhoto[][] = [[]]; let used = 0;
         for (const n of pending) { if (used + size(n) > 3_200_000 && chunks.at(-1)!.length) { chunks.push([]); used = 0; } chunks.at(-1)!.push(n); used += size(n); }
         for (const chunk of chunks.slice(0, -1)) await postJson('save', { kind: 'files', newPhotos: chunk });
-        const base = { photoEdits, newPhotos: chunks.at(-1), photos: selection };
+        const base = { photoEdits, newPhotos: chunks.at(-1), deletePhotos: [...deletes], photos: selection };
         if (mode === 'case') await postJson('save', { ...base, kind: 'gallery', case: current, galleryTitle: $<HTMLInputElement>('#gtitle').value });
         else await postJson('save', { ...base, kind: 'home' });
-        if (mode === 'case') { const c = cases.find((x) => x.id === current)!; c.galleryPhotos = [...selection]; c.galleryTitle = $<HTMLInputElement>('#gtitle').value; }
+        if (mode === 'case') { const c = cases.find((x) => x.id === current)!; c.galleryPhotos = [...selection]; c.galleryTitle = titleBase = $<HTMLInputElement>('#gtitle').value; }
         else photos.forEach((p) => { const at = selection.indexOf(p.id); p.featured = at >= 0; if (at >= 0) p.order = at; });
-        newPhotos = new Map(); photoEdits = {};
-        setDirty(false);
-        toast(store === 'github' ? 'Gespeichert – auf der Website in ca. 1–2 Minuten sichtbar.' : 'Gespeichert.', 3600);
+        for (const id of deletes) cases.forEach((c) => { c.galleryPhotos = c.galleryPhotos.filter((x) => x !== id); });
+        newPhotos.forEach((n) => { const p = byId.get(n.id); if (p) delete p.preview; });
+        baseline = selection.join(','); newPhotos = new Map(); photoEdits = {}; deletes = new Set();
+        render();
+        toast(store === 'github' ? 'Gespeichert ✓ – auf der Website in ca. 1–2 Minuten sichtbar.' : 'Gespeichert ✓', 4000);
       } catch (e) {
-        setDirty(true);
-        if (e instanceof LoginNeeded) { showLogin(); return; }
-        $('#status').textContent = 'Fehler beim Speichern'; toast(String((e as Error).message), 6000);
-      }
+        if (e instanceof LoginNeeded) { $('#login').hidden = false; return; }
+        toast(String((e as Error).message), 6000);
+      } finally { btn.disabled = false; btn.textContent = 'Speichern'; }
     }
+    $('#save').addEventListener('click', save);
+    $('#discard').addEventListener('click', () => { if (confirm('Alle ungespeicherten Änderungen verwerfen?')) load(); });
+    addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); } });
+    addEventListener('beforeunload', (e) => { if (isDirty()) e.preventDefault(); });
 
+    /* ── upload ── */
     // downscale in the browser first (EXIF-rotated), so even 20 MB camera files fit through
     async function shrink(file: File): Promise<Blob> {
       try {
@@ -293,13 +363,13 @@ export const prerender = false;
         return await new Promise((res) => c.toBlob((b) => res(b || file), 'image/jpeg', 0.92));
       } catch { return file; }
     }
-    async function upload(files: FileList | File[]) {
-      const list = [...files].filter((f) => f.type.startsWith('image/'));
+    async function upload(files: File[]) {
+      const list = files.filter((f) => f.type.startsWith('image/'));
       if (!list.length) return;
       const c = cases.find((x) => x.id === current);
-      let done = 0;
+      let n = 0;
       for (const f of list) {
-        $('#status').textContent = `Bereitet Bild ${++done} von ${list.length} vor …`;
+        toast(`Bild ${++n} von ${list.length} wird vorbereitet …`, 60000);
         try {
           const form = new FormData();
           form.append('file', await shrink(f), f.name.replace(/\.[^.]+$/, '') + '.jpg');
@@ -313,76 +383,69 @@ export const prerender = false;
           photos.push(p); byId.set(p.id, p); selection.push(p.id);
           render();
         } catch (e) {
-          if (e instanceof LoginNeeded) { showLogin(); return; }
+          if (e instanceof LoginNeeded) { $('#login').hidden = false; return; }
           toast(`${f.name}: ${(e as Error).message}`, 5000);
         }
       }
-      setDirty(true);
-      toast(`${list.length} ${list.length === 1 ? 'Bild' : 'Bilder'} bereit – Alt-Texte ergänzen, dann speichern.`, 4000);
+      toast(`${list.length} ${list.length === 1 ? 'Foto' : 'Fotos'} hinzugefügt – Alt-Text ergänzen (Bearbeiten), dann speichern.`, 4500);
     }
+    $<HTMLInputElement>('#file').addEventListener('change', () => { const i = $<HTMLInputElement>('#file'); if (i.files) upload([...i.files]); i.value = ''; });
+    let depth = 0;
+    const hasFiles = (e: DragEvent) => [...(e.dataTransfer?.types || [])].includes('Files');
+    addEventListener('dragenter', (e) => { if (!hasFiles(e)) return; depth++; $('#dropinfo').textContent = $('#dzinfo').textContent; $('#dropall').classList.add('show'); });
+    addEventListener('dragleave', (e) => { if (!hasFiles(e)) return; if (--depth <= 0) { depth = 0; $('#dropall').classList.remove('show'); } });
+    addEventListener('dragover', (e) => { if (hasFiles(e)) e.preventDefault(); });
+    addEventListener('drop', (e) => { if (!hasFiles(e)) return; e.preventDefault(); depth = 0; $('#dropall').classList.remove('show'); upload([...e.dataTransfer!.files]); });
 
-    // ── events ──
+    /* ── events ── */
+    function switchTo(fn: () => void) {
+      if (isDirty() && !confirm('Ungespeicherte Änderungen verwerfen?')) return false;
+      if (isDirty()) { photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos.forEach((_, id) => byId.delete(id)); newPhotos = new Map(); photoEdits = {}; deletes = new Set(); }
+      fn(); return true;
+    }
     $('#case').addEventListener('change', () => {
       const next = $<HTMLSelectElement>('#case').value;
-      if (dirty && !confirm('Ungespeicherte Änderungen verwerfen?')) { $<HTMLSelectElement>('#case').value = current; return; }
-      if (dirty) { newPhotos.forEach((_, id) => { byId.delete(id); }); photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos = new Map(); photoEdits = {}; }
-      current = next; seriesFilter = 'Alle'; history.replaceState(null, '', `?projekt=${current}`); pick();
+      if (!switchTo(() => { current = next; seriesFilter = 'Alle'; history.replaceState(null, '', `?projekt=${current}`); pick(); })) $<HTMLSelectElement>('#case').value = current;
     });
-    $('#gtitle').addEventListener('input', () => setDirty(true));
+    $('#gtitle').addEventListener('input', refreshBar);
     document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.addEventListener('click', () => {
       if (b.dataset.mode === mode) return;
-      if (dirty && !confirm('Ungespeicherte Änderungen verwerfen?')) return;
-      if (dirty) { photos = photos.filter((p) => !newPhotos.has(p.id)); newPhotos.forEach((_, id) => byId.delete(id)); newPhotos = new Map(); photoEdits = {}; }
-      mode = b.dataset.mode as 'case' | 'home'; document.body.classList.toggle('home', mode === 'home');
-      document.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      seriesFilter = 'Alle'; pick();
+      switchTo(() => {
+        mode = b.dataset.mode as 'case' | 'home'; document.body.classList.toggle('home', mode === 'home');
+        document.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        seriesFilter = 'Alle'; pick();
+      });
     }));
     $('#q').addEventListener('input', () => { query = $<HTMLInputElement>('#q').value; render(); });
     $('#series').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { seriesFilter = b.dataset.s!; render(); } });
-    $('#grid').addEventListener('click', (e) => {
-      const t = e.target as HTMLElement, edit = t.closest<HTMLElement>('[data-edit]');
-      if (edit) { openEdit(edit.dataset.edit!); return; }
-      const ph = t.closest<HTMLElement>('.ph'); if (ph) toggle(ph.dataset.id!);
+    document.querySelector('main')!.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const edit = t.closest<HTMLElement>('[data-edit]'); if (edit) { e.preventDefault(); openEdit(edit.dataset.edit!); return; }
+      const rm = t.closest<HTMLElement>('[data-remove]'); if (rm) { toggle(rm.dataset.remove!); return; }
+      const mv = t.closest<HTMLElement>('[data-move]'); if (mv) { move(mv.dataset.id!, Number(mv.dataset.move)); return; }
+      const tg = t.closest<HTMLElement>('[data-toggle]'); if (tg) toggle(tg.dataset.toggle!);
     });
-    $('#grid').addEventListener('keydown', (e) => { const ph = (e.target as HTMLElement).closest<HTMLElement>('.ph'); if (ph && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggle(ph.dataset.id!); } });
-    $('#sel').addEventListener('click', (e) => {
-      const x = (e.target as HTMLElement).closest<HTMLElement>('[data-x]');
-      if (x) { toggle(x.dataset.x!); return; }
-      const c = (e.target as HTMLElement).closest<HTMLElement>('.chip'); if (c) openEdit(c.dataset.id!);
-    });
-    $('#save').addEventListener('click', save);
-    addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); } });
-    addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
-    $<HTMLInputElement>('#file').addEventListener('change', () => { const input = $<HTMLInputElement>('#file'); if (input.files) upload([...input.files]); input.value = ''; });
 
-    // reorder inside the selection (HTML5 drag & drop)
+    // reorder by dragging cards inside the gallery
     let dragId: string | null = null;
-    const sel = $('#sel');
-    sel.addEventListener('dragstart', (e) => { const c = (e.target as HTMLElement).closest<HTMLElement>('.chip'); if (!c) return; dragId = c.dataset.id!; c.classList.add('dragging'); e.dataTransfer!.effectAllowed = 'move'; e.dataTransfer!.setData('text/plain', dragId); });
-    sel.addEventListener('dragend', () => { dragId = null; document.querySelectorAll('.chip').forEach((c) => c.classList.remove('dragging', 'over')); });
-    sel.addEventListener('dragover', (e) => { if (!dragId) return; e.preventDefault(); const c = (e.target as HTMLElement).closest<HTMLElement>('.chip'); document.querySelectorAll('.chip.over').forEach((x) => x !== c && x.classList.remove('over')); c?.classList.add('over'); });
-    sel.addEventListener('drop', (e) => {
+    const gal = $('#gal');
+    gal.addEventListener('dragstart', (e) => { const c = (e.target as HTMLElement).closest<HTMLElement>('.card'); if (!c) return; dragId = c.dataset.id!; c.classList.add('dragging'); e.dataTransfer!.effectAllowed = 'move'; e.dataTransfer!.setData('text/plain', dragId); });
+    gal.addEventListener('dragend', () => { dragId = null; gal.querySelectorAll('.card').forEach((c) => c.classList.remove('dragging', 'over')); });
+    gal.addEventListener('dragover', (e) => { if (!dragId) return; e.preventDefault(); const c = (e.target as HTMLElement).closest<HTMLElement>('.card'); gal.querySelectorAll('.card.over').forEach((x) => x !== c && x.classList.remove('over')); c?.classList.add('over'); });
+    gal.addEventListener('drop', (e) => {
       if (!dragId) return; e.preventDefault(); e.stopPropagation();
-      const c = (e.target as HTMLElement).closest<HTMLElement>('.chip'), from = selection.indexOf(dragId);
+      const c = (e.target as HTMLElement).closest<HTMLElement>('.card'), from = selection.indexOf(dragId);
       const to = c ? selection.indexOf(c.dataset.id!) : selection.length - 1;
-      if (from >= 0 && to >= 0 && from !== to) { selection.splice(to, 0, selection.splice(from, 1)[0]); setDirty(true); render(); }
+      if (from >= 0 && to >= 0 && from !== to) { selection.splice(to, 0, selection.splice(from, 1)[0]); render(); }
     });
 
-    // files dragged in from Finder → upload
-    let depth = 0; const drop = $('#drop');
-    const hasFiles = (e: DragEvent) => [...(e.dataTransfer?.types || [])].includes('Files');
-    addEventListener('dragenter', (e) => {
-      if (!hasFiles(e)) return; depth++;
-      const c = cases.find((x) => x.id === current);
-      $('#dropinfo').textContent = mode === 'case' && c ? `Neue Fotos für ${c.client} (Serie „${c.client}“)` : 'Neue Fotos für die Bibliothek';
-      drop.classList.add('show');
-    });
-    addEventListener('dragleave', (e) => { if (!hasFiles(e)) return; if (--depth <= 0) { depth = 0; drop.classList.remove('show'); } });
-    addEventListener('dragover', (e) => { if (hasFiles(e)) e.preventDefault(); });
-    addEventListener('drop', (e) => { if (!hasFiles(e)) return; e.preventDefault(); depth = 0; drop.classList.remove('show'); upload([...e.dataTransfer!.files]); });
-
-    // photo details: collected and saved together with the gallery
+    /* ── photo details + delete ── */
     let editing = '';
+    function usage(id: string) {
+      const where = cases.filter((c) => (mode === 'case' && c.id === current ? selection : c.galleryPhotos).includes(id)).map((c) => c.client);
+      const home = mode === 'home' ? selection.includes(id) : !!byId.get(id)?.featured;
+      return [...where.map((w) => `Galerie ${w}`), ...(home ? ['Startseite'] : [])];
+    }
     function openEdit(id: string) {
       const p = byId.get(id)!; editing = id;
       $<HTMLImageElement>('#dimg').src = src(p);
@@ -390,16 +453,27 @@ export const prerender = false;
       $<HTMLTextAreaElement>('#dalt').value = p.alt || '';
       $<HTMLInputElement>('#dseries').value = p.series || '';
       $<HTMLSelectElement>('#dproject').value = p.project || '';
-      $('#dmeta').textContent = `${id} · ${p.width ?? '?'} × ${p.height ?? '?'} px`;
+      $('#dusage').textContent = `Verwendet in: ${usage(id).join(', ') || 'keiner Galerie'} · ${p.width ?? '?'} × ${p.height ?? '?'} px`;
       $<HTMLDialogElement>('#dlg').showModal();
     }
     $('#dlg').addEventListener('close', () => {
       if ($<HTMLDialogElement>('#dlg').returnValue !== 'save' || !editing) return;
       const edit = { title: $<HTMLInputElement>('#dtitle').value, alt: $<HTMLTextAreaElement>('#dalt').value, series: $<HTMLInputElement>('#dseries').value, project: $<HTMLSelectElement>('#dproject').value || null };
-      const p = byId.get(editing)!; Object.assign(p, edit);
+      Object.assign(byId.get(editing)!, edit);
       const fresh = newPhotos.get(editing);
       if (fresh) Object.assign(fresh.json, edit); else photoEdits[editing] = { ...(photoEdits[editing] || {}), ...edit };
-      setDirty(true); render();
+      render();
+    });
+    $('#ddelete').addEventListener('click', () => {
+      const p = byId.get(editing); if (!p) return;
+      const also = usage(editing);
+      if (!confirm(`„${p.title || p.id}“ endgültig löschen?${also.length ? `\n\nEs wird auch entfernt aus: ${also.join(', ')}.` : ''}\n\nWirksam nach „Speichern“.`)) return;
+      if (newPhotos.has(editing)) newPhotos.delete(editing); else deletes.add(editing);
+      delete photoEdits[editing];
+      selection = selection.filter((x) => x !== editing);
+      photos = photos.filter((x) => x.id !== editing); byId.delete(editing);
+      $<HTMLDialogElement>('#dlg').close('deleted');
+      render();
     });
 
     load();

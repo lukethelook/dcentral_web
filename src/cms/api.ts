@@ -24,7 +24,7 @@ const PHOTOS = 'src/content/photos';
 const PHOTO_IMG = 'public/images/photos';
 
 type Json = Record<string, any>;
-type Change = { path: string; content: Buffer | string };
+type Change = { path: string; content?: Buffer | string; remove?: boolean };
 type Entry = Json & { id: string };
 
 const ok = (data: unknown) => new Response(JSON.stringify(data), { headers: { 'content-type': 'application/json' } });
@@ -50,7 +50,10 @@ const localStore: Store = {
     return Promise.all(files.map(async (f) => ({ id: f.slice(0, -5), ...JSON.parse(await fs.readFile(path.join(abs, f), 'utf8')) })));
   },
   async commit(changes) {
-    for (const c of changes) await fs.writeFile(path.join(process.cwd(), c.path), c.content);
+    for (const c of changes) {
+      const abs = path.join(process.cwd(), c.path);
+      if (c.remove) await fs.rm(abs, { force: true }); else await fs.writeFile(abs, c.content!);
+    }
   },
 };
 
@@ -90,7 +93,10 @@ function githubStore(token: string): Store {
             branch: { repositoryNameWithOwner: REPO, branchName: BRANCH },
             message: { headline: message },
             expectedHeadOid: oid,
-            fileChanges: { additions: changes.map((c) => ({ path: c.path, contents: Buffer.from(c.content).toString('base64') })) },
+            fileChanges: {
+              additions: changes.filter((c) => !c.remove).map((c) => ({ path: c.path, contents: Buffer.from(c.content!).toString('base64') })),
+              deletions: changes.filter((c) => c.remove).map((c) => ({ path: c.path })),
+            },
           },
         },
       );
@@ -197,18 +203,28 @@ export const POST: APIRoute = async ({ params, request, url }) => {
         if ('project' in edit) p.project = safeId(edit.project);
         touched.add(id!);
       }
+      // photos deleted from the library: entry + both image files, and every reference to them
+      const deleted = ((body.deletePhotos ?? []) as unknown[]).map(safeId).filter((id): id is string => !!id && photos.has(id));
+      const cases = new Map((await store.list(CASES)).map((c) => [c.id, c]));
+      const dirtyCases = new Set<string>();
+      for (const id of deleted) {
+        const p = photos.get(id)!;
+        changes.push({ path: `${PHOTOS}/${id}.json`, remove: true });
+        for (const img of new Set([p.image, p.thumb])) if (typeof img === 'string' && img.startsWith('/images/photos/')) changes.push({ path: `public${img}`, remove: true });
+        photos.delete(id); touched.delete(id);
+        for (const c of cases.values()) if ((c.galleryPhotos ?? []).includes(id)) { c.galleryPhotos = c.galleryPhotos.filter((x: string) => x !== id); dirtyCases.add(c.id); }
+      }
       const selection = ((body.photos ?? []) as unknown[]).map(safeId).filter((id): id is string => !!id && photos.has(id));
 
-      let message = 'cms: Fotos aktualisiert';
+      let message = deleted.length ? `cms: ${deleted.length} Foto${deleted.length === 1 ? '' : 's'} gelöscht` : 'cms: Fotos aktualisiert';
       if (body.kind === 'gallery') {
         const caseId = safeId(body.case);
-        const c = caseId && (await store.list(CASES)).find((x) => x.id === caseId);
+        const c = caseId && cases.get(caseId);
         if (!c) return fail('Projekt nicht gefunden');
-        const { id: _id, ...data } = c;
-        if (typeof body.galleryTitle === 'string') data.galleryTitle = body.galleryTitle;
-        data.galleryPhotos = selection;
-        changes.push({ path: `${CASES}/${caseId}.json`, content: jsonText(data) });
-        message = `cms: Galerie ${data.client || caseId} (${selection.length} Fotos)`;
+        if (typeof body.galleryTitle === 'string') c.galleryTitle = body.galleryTitle;
+        c.galleryPhotos = selection;
+        dirtyCases.add(caseId!);
+        message = `cms: Galerie ${c.client || caseId} (${selection.length} Fotos)` + (deleted.length ? ` · ${deleted.length} gelöscht` : '');
       } else if (body.kind === 'home') {
         let rest = selection.length;
         for (const p of [...photos.values()].sort(byOrder)) {
@@ -217,7 +233,8 @@ export const POST: APIRoute = async ({ params, request, url }) => {
         }
         message = `cms: Startseiten-Fotos (${selection.length})`;
       }
-      for (const id of touched) { const { id: _id, ...data } = photos.get(id)!; changes.push({ path: `${PHOTOS}/${id}.json`, content: jsonText(data) }); }
+      for (const id of touched) { if (!photos.has(id)) continue; const { id: _id, ...data } = photos.get(id)!; changes.push({ path: `${PHOTOS}/${id}.json`, content: jsonText(data) }); }
+      for (const id of dirtyCases) { const { id: _id, ...data } = cases.get(id)!; changes.push({ path: `${CASES}/${id}.json`, content: jsonText(data) }); }
       const added = (body.newPhotos ?? []).length;
       if (added) message += ` · ${added} neue${added === 1 ? 's Foto' : ' Fotos'}`;
       if (!changes.length) return ok({ saved: 0 });
