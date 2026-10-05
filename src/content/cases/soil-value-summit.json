@@ -71,6 +71,20 @@
     "Gimbal",
     "Lightroom Classic"
   ],
+  "credits": [
+    {
+      "name": "TSHN",
+      "role": "Auftraggeber"
+    },
+    {
+      "name": "Theresa Breiteneder",
+      "role": "Moderation"
+    },
+    {
+      "name": "Michael Kneidinger",
+      "role": "Digital Results"
+    }
+  ],
   "showcase": {
     "loop": "/images/cases/soil-value/loop.mp4",
     "film": "/images/cases/soil-value/film.mp4",

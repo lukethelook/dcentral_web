@@ -127,6 +127,10 @@ export default config({
           fields.object({ place: TEXT('Ort / Anlass'), year: TEXT('Jahr') }),
           { label: 'Ausgestellt / Stationen', itemLabel: (p) => `${p.fields.place.value} ${p.fields.year.value}` },
         ),
+        credits: fields.array(
+          fields.object({ name: TEXT('Name'), role: TEXT('Rolle / Firma (z.B. Moderation, Auftraggeber)') }),
+          { label: 'Credits (Auftraggeber, Mitwirkende)', itemLabel: (p) => `${p.fields.name.value} · ${p.fields.role.value}` },
+        ),
         panoramaTitle: TEXT('360°-Rundgang: Überschrift'),
         panoramas: fields.array(
           fields.object({

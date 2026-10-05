@@ -58,6 +58,7 @@ const cases = defineCollection({
     clientLabel: z.string().nullable().optional(), // e.g. „Auftrag: Quantiflux" on the case page
     scope: z.array(z.string()).default([]), // full scope, shown as „Umfang"
     shown: z.array(z.object({ place: z.string(), year: z.string() })).default([]), // exhibitions
+    credits: z.array(z.object({ name: z.string(), role: z.string().nullable().optional() })).default([]), // client, collaborators
     stackTitle: z.string().nullable().optional(),
     panoramaTitle: z.string().nullable().optional(),
     panoramas: z.array(z.object({ image: z.string().nullable(), title: z.string() })).default([]),
