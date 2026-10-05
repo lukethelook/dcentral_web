@@ -56,36 +56,36 @@
   "panoramaTitle": "Das Werk von oben – in 360°",
   "panoramas": [
     {
-      "image": "/images/cases/grafinger/pano-werk.webp",
+      "image": "/images/cases/grafinger/panoramas/0/image.webp",
       "title": "Sägewerk Grafinger"
     },
     {
-      "image": "/images/cases/grafinger/pano-wasserkraft.webp",
+      "image": "/images/cases/grafinger/panoramas/1/image.webp",
       "title": "Wasserkraftwerk"
     },
     {
-      "image": "/images/cases/grafinger/pano-almtal.webp",
+      "image": "/images/cases/grafinger/panoramas/2/image.webp",
       "title": "Herrliches Almtal"
     }
   ],
   "screens": [
     {
-      "image": "/images/cases/grafinger/aerial-yard.webp",
+      "image": "/images/cases/grafinger/screens/0/image.webp",
       "device": "wide",
       "caption": "Aus der Luft: Holzlager, Werk und Straße in einem Bild."
     },
     {
-      "image": "/images/cases/grafinger/still-forest.webp",
+      "image": "/images/cases/grafinger/screens/1/image.webp",
       "device": "image",
       "caption": "Aus dem Imagefilm: der Wald als Anfang …"
     },
     {
-      "image": "/images/cases/grafinger/still-felling.webp",
+      "image": "/images/cases/grafinger/screens/2/image.webp",
       "device": "image",
       "caption": "… das Fällen …"
     },
     {
-      "image": "/images/cases/grafinger/still-water.webp",
+      "image": "/images/cases/grafinger/screens/3/image.webp",
       "device": "image",
       "caption": "… und die Wasserkraft am Werk."
     }
@@ -137,18 +137,19 @@
     "SEO"
   ],
   "showcase": {
+    "phones": [],
     "youtube": "0UP930i5lvg",
+    "loop": "/images/cases/grafinger/showcase/loop.mp4",
     "vimeoLabel": "Imagefilm ansehen",
-    "loop": "/images/cases/grafinger/film-loop.mp4",
-    "poster": "/images/cases/grafinger/film-poster.webp"
+    "slides": [],
+    "poster": "/images/cases/grafinger/showcase/poster.webp"
   },
   "hue": 30,
   "format": "landscape",
   "cover": "/images/cases/grafinger/cover.webp",
   "coverTone": "dark",
   "previews": [
-    "/images/cases/grafinger/hover-aerial.webp",
-    "/images/cases/grafinger/hover-building.webp"
+    "/images/cases/grafinger/previews/0.webp"
   ],
   "previewDummy": false,
   "featured": true,
@@ -166,5 +167,9 @@
     "wasserkraft-kanal",
     "grafinger-gegenlicht"
   ],
-  "galleryTitle": "Aus der Fotoserie – Werk & Produkte"
+  "galleryTitle": "Aus der Fotoserie – Werk & Produkte",
+  "shown": [],
+  "demo": "",
+  "gallery": [],
+  "status": ""
 }
