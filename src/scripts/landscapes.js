@@ -137,7 +137,8 @@ c=mix(c,national,clamp(vFlag,0.,.6));c=mix(c,uAccent,tip*.24);gl_FragColor=vec4(
  }
  const hover={x:0,z:0,tx:0,tz:0,a:0,target:0};const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
  function positionCamera(){const mobile=innerWidth<760;
-  if(hero){const dist=mobile?12.8:10,center=mobile?.45:-.8;camera.position.set(center+Math.sin(angle)*dist,mobile?4.8:4.1,Math.cos(angle)*dist);camera.lookAt(center,mobile?1.55:1.15,0);}
+  // Desktop rests slightly turned (approved framing: lower left flank, room under the CTA); drag stays relative to it.
+  if(hero){const dist=mobile?12.8:10,center=mobile?.45:-.8,a=angle+(mobile?0:-.25);camera.position.set(center+Math.sin(a)*dist,mobile?4.8:4.1,Math.cos(a)*dist);camera.lookAt(center,mobile?1.55:1.15,0);}
   else {const presets=[[.8,3.0,3.2,.5,1.65,-.3],[-.4,3.6,4.0,.5,1.4,-.3],[1.0,6.5,3.6,.4,1.25,-.2],[1.7,3.0,3.6,.55,1.65,-.6]],p=presets[variant-1];const drift=0;camera.position.set(p[0]+drift,p[1],p[2]);camera.lookAt(p[3],p[4],p[5]);}
   camera.updateMatrixWorld();
  }
