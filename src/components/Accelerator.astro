@@ -10,7 +10,7 @@ import { hl } from '../lib/text';
         <h2 set:html={hl(a.title)} />
         <p class="impact-lead">{a.lead}</p>
         <ul class="tags causes">{a.causes.map((c) => <li>{c}</li>)}</ul>
-        <a class="action magnetic" href={a.ctaHref}>
+        <a class="action magnetic" href={a.ctaHref} data-contact="purpose">
           {a.ctaLabel}
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
         </a>

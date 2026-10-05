@@ -1,0 +1,86 @@
+/* ── „Brief an Lukas": contact sheet (ContactSheet.astro, brief.js) ──────────
+   Slides up over the page in forest green; the visitor completes a letter whose
+   blanks are inline inputs and chips. */
+html.brief-open { overflow: hidden; }
+.brief { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: #f1f2e8; overflow: hidden; }
+.brief::backdrop { background: rgba(8, 24, 20, .55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.brief-panel { position: absolute; left: 0; right: 0; bottom: 0; max-height: calc(100dvh - 24px); overflow: auto; overscroll-behavior: contain; background: var(--forest, #102f28); border-radius: 28px 28px 0 0; padding: clamp(22px, 3vw, 40px) clamp(20px, 5vw, 72px) clamp(24px, 3vw, 44px); box-shadow: 0 -30px 80px rgba(0, 0, 0, .35); }
+.brief[open] .brief-panel { animation: brief-in 640ms var(--ease) both; }
+.brief[open]::backdrop { animation: brief-fade 400ms ease both; }
+.brief.is-closing .brief-panel { animation: brief-out 300ms cubic-bezier(.5, 0, .75, 0) both; }
+.brief.is-closing::backdrop { animation: brief-fade 300ms ease reverse both; }
+@keyframes brief-in { from { transform: translateY(100%); } }
+@keyframes brief-out { to { transform: translateY(100%); } }
+@keyframes brief-fade { from { opacity: 0; } }
+
+.brief-head { display: flex; align-items: center; gap: 24px; margin-bottom: clamp(24px, 4vw, 48px); }
+.brief-eyebrow { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: rgba(241, 242, 232, .7); }
+.brief-eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+.brief-tabs { display: flex; gap: 6px; margin-left: auto; }
+.brief-tabs button { border: 1px solid rgba(241, 242, 232, .22); background: none; color: inherit; border-radius: 99px; padding: 9px 16px; font: 500 13px/1 'DM Sans', sans-serif; white-space: nowrap; cursor: pointer; transition: background 180ms ease, color 180ms ease, border-color 180ms ease; }
+.brief-tabs button[aria-pressed='true'] { background: var(--lime); color: var(--forest, #102f28); border-color: var(--lime); }
+.brief-close { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(241, 242, 232, .22); border-radius: 50%; background: none; color: inherit; cursor: pointer; }
+.brief-close svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+@media (hover: hover) and (pointer: fine) {
+  .brief-tabs button:hover, .brief-close:hover { border-color: var(--lime); }
+}
+
+.brief-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 290px); gap: 0 clamp(28px, 5vw, 80px); align-items: start; }
+.brief-title { margin: 0 0 clamp(18px, 2.6vw, 32px); font-size: clamp(34px, 4vw, 60px); color: #f1f2e8; }
+.brief-letter { font: 500 clamp(21px, 2.3vw, 33px)/1.6 Manrope, sans-serif; letter-spacing: -.02em; color: rgba(241, 242, 232, .92); }
+.brief-letter p { margin: 0 0 .45em; color: inherit; font-size: inherit; line-height: inherit; }
+.brief-letter.is-active > * { animation: brief-line 560ms var(--ease) both; animation-delay: calc(var(--i, 0) * 70ms + 140ms); }
+@keyframes brief-line { from { opacity: 0; transform: translateY(14px); } }
+.brief-letter input, .brief-letter textarea { margin: 0 .08em; padding: 0 2px 1px; max-width: 100%; border: 0; border-bottom: 2px solid rgba(212, 255, 63, .45); border-radius: 0; background: transparent; color: var(--lime); font: italic 400 1.1em/1.2 'Instrument Serif', Georgia, serif; letter-spacing: 0; outline: none; transition: border-color 180ms ease; }
+.brief-letter input::placeholder, .brief-letter textarea::placeholder { color: rgba(212, 255, 63, .45); }
+.brief-letter input:focus, .brief-letter textarea:focus { border-bottom-color: var(--lime); }
+.brief-letter textarea { display: block; width: 100%; min-height: 3.4em; margin: .1em 0 .5em; resize: vertical; }
+.brief-chip { display: inline-flex; align-items: center; margin: 0 .1em .25em; padding: .42em .9em; vertical-align: .18em; border: 1.5px solid rgba(212, 255, 63, .5); border-radius: 99px; background: none; color: var(--lime); font: 500 max(13px, .48em)/1 'DM Sans', sans-serif; cursor: pointer; transition: background 160ms ease, color 160ms ease, transform 160ms var(--ease); }
+.brief-chip[aria-pressed='true'] { background: var(--lime); color: var(--forest, #102f28); }
+.brief-chip:active { transform: scale(.95); }
+.brief-letter .is-missing { border-bottom-color: #ffb199; animation: brief-nudge 420ms var(--ease); }
+@keyframes brief-nudge { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+
+.brief-direct { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: .9em; }
+.brief-direct a { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; border: 1px solid rgba(241, 242, 232, .14); border-radius: 16px; background: rgba(241, 242, 232, .06); color: #f1f2e8; font: 600 clamp(18px, 1.7vw, 23px)/1.2 Manrope, sans-serif; text-decoration: none; transition: background 180ms ease, border-color 180ms ease; }
+.brief-direct a span { font: 500 11px/1 'DM Sans', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); }
+@media (hover: hover) and (pointer: fine) { .brief-direct a:hover { background: rgba(212, 255, 63, .1); border-color: rgba(212, 255, 63, .5); } }
+
+.brief-side { display: flex; flex-direction: column; gap: 30px; padding-top: clamp(4px, 5.4vw, 88px); font-size: 14px; color: rgba(241, 242, 232, .75); }
+.brief-side-label { margin: 0 0 14px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgba(241, 242, 232, .55); }
+.brief-team { display: none; }
+.brief-form[data-intent='start'] .brief-team, .brief-form[data-intent='team'] .brief-team, .brief-form[data-intent='purpose'] .brief-team { display: block; }
+.brief-crew { position: relative; display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.brief-crew::before { content: ''; position: absolute; left: 19px; top: 20px; bottom: 20px; width: 1px; background: rgba(241, 242, 232, .18); }
+.brief-crew li { position: relative; display: flex; align-items: center; gap: 14px; opacity: .34; transition: opacity 260ms ease; }
+.brief-crew b { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border: 1.5px dashed rgba(241, 242, 232, .45); border-radius: 50%; background: var(--forest, #102f28); color: #f1f2e8; font: 700 14px/1 Manrope, sans-serif; transition: background 260ms ease, color 260ms ease, border-color 260ms ease; }
+.brief-crew span { display: flex; flex-direction: column; color: #f1f2e8; font: 600 15px/1.25 Manrope, sans-serif; }
+.brief-crew small { color: rgba(241, 242, 232, .6); font: 400 12px/1.3 'DM Sans', sans-serif; }
+.brief-crew li.is-lead, .brief-crew li.is-in { opacity: 1; }
+.brief-crew li.is-lead b { border: 0; background: var(--lime); color: var(--forest, #102f28); }
+.brief-crew li.is-in b { border: 1.5px solid var(--lime); background: rgba(212, 255, 63, .16); color: var(--lime); animation: brief-pop 420ms var(--ease); }
+@keyframes brief-pop { 0% { transform: scale(.6); } 60% { transform: scale(1.12); } }
+.brief-count { margin: 14px 0 0; font-size: 13px; color: rgba(241, 242, 232, .72); }
+.brief-contact a { display: block; color: #f1f2e8; font: 600 16px/1.7 Manrope, sans-serif; text-decoration: none; }
+.brief-contact p { margin: 8px 0 0; font-size: 13px; color: rgba(241, 242, 232, .62); }
+
+.brief-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 14px; padding-top: 24px; border-top: 1px solid rgba(241, 242, 232, .14); }
+.brief-send { color: var(--forest, #102f28); font-weight: 600; cursor: pointer; }
+.brief-copy { padding: 0 0 2px; border: 0; border-bottom: 1px solid rgba(241, 242, 232, .4); background: none; color: #f1f2e8; font: 500 13px/1.4 'DM Sans', sans-serif; cursor: pointer; }
+.brief-note { max-width: 48ch; margin: 0 0 0 auto; font-size: 12px; color: rgba(241, 242, 232, .62); text-align: right; }
+
+@media (max-width: 860px) {
+  .brief-panel { max-height: 100dvh; border-radius: 22px 22px 0 0; }
+  .brief-head { flex-wrap: wrap; gap: 14px; }
+  .brief-tabs { order: 3; width: 100%; margin-left: 0; overflow-x: auto; scrollbar-width: none; }
+  .brief-close { margin-left: auto; }
+  .brief-form { grid-template-columns: 1fr; }
+  .brief-side { padding-top: 18px; }
+  .brief-direct { grid-template-columns: 1fr; }
+  .brief-note { margin-left: 0; text-align: left; }
+  .brief-actions { position: sticky; bottom: calc(-1 * clamp(24px, 3vw, 44px)); z-index: 2; margin-inline: calc(-1 * clamp(20px, 5vw, 72px)); padding: 16px clamp(20px, 5vw, 72px) calc(16px + env(safe-area-inset-bottom)); background: var(--forest, #102f28); }
+  .brief-actions .brief-note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brief[open] .brief-panel, .brief.is-closing .brief-panel, .brief-letter.is-active > *, .brief-crew li.is-in b { animation: none; }
+}

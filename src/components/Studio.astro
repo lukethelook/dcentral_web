@@ -21,7 +21,7 @@ const img = /^(https?:|\/)/.test(s.image) ? s.image : `/images/studio/${s.image}
       {s.subtitle && <h3>{s.subtitle}</h3>}
       <p>{s.lead}</p>
       <ol class="studio-points">{s.points.map((p) => <li>{p}</li>)}</ol>
-      <a class="text-link" href="#kontakt">
+      <a class="text-link" href="#kontakt" data-contact="team">
         {s.cta}
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
       </a>

@@ -17,7 +17,7 @@ const links = [
   <nav aria-label="Hauptnavigation" id="navigation">
     {links.map((l) => <a href={l.href}>{l.label}</a>)}
   </nav>
-  <a class="header-contact" href={`${base}#kontakt`}>
+  <a class="header-contact" href={`${base}#kontakt`} data-contact="talk">
     Reden wir
     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
   </a>

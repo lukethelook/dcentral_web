@@ -232,7 +232,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
         <h2 id="case-cta">Du hast etwas Ähnliches <em>vor?</em></h2>
         <p>Vom Auftritt bis zur KI, die ihn weiterentwickelt: Ich baue Systeme, die für dich arbeiten – ein Ansprechpartner, ein Netzwerk dahinter.</p>
       </div>
-      <a class="action magnetic" href="/#kontakt">
+      <a class="action magnetic" href="/#kontakt" data-contact="start" data-discipline={d.discipline} data-ref={d.client}>
         Projekt starten
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
       </a>
