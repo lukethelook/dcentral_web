@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import keystatic from '@keystatic/astro';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import node from '@astrojs/node';
 
 // Visual gallery editor (/cms/galerien): drag & drop galleries, uploads, homepage
 // photo order. Locally it writes the files; online it commits through GitHub with
@@ -13,7 +14,7 @@ const galleryEditor = {
   hooks: {
     'astro:config:setup': ({ injectRoute, updateConfig }) => {
       // the branch this deployment was built from = the branch the editor commits to
-      updateConfig({ vite: { define: { __CMS_BRANCH__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_REF || '') } } });
+      updateConfig({ vite: { define: { __CMS_BRANCH__: JSON.stringify(process.env.CMS_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || '') } } });
       injectRoute({ pattern: '/cms/galerien', entrypoint: './src/cms/galerien.astro', prerender: false });
       injectRoute({ pattern: '/api/cms/[action]', entrypoint: './src/cms/api.ts', prerender: false });
     },
@@ -21,13 +22,15 @@ const galleryEditor = {
 };
 
 // Public pages stay static/prerendered (fast, JS-light). Keystatic's admin UI
-// (/keystatic) + its API route run on-demand via the Vercel adapter, so content
-// can be edited from anywhere in the browser. Edits commit to GitHub → Vercel
-// rebuilds automatically.
+// (/keystatic), the gallery editor and their API routes run on-demand, so content
+// can be edited from anywhere in the browser. Edits commit to GitHub → the host
+// rebuilds automatically. Hosting: Hostinger Node.js app (standalone server,
+// `npm start`); on Vercel (preview deployments) the Vercel adapter is used.
 export default defineConfig({
   site: 'https://www.dcentral.at',
   output: 'static',
-  adapter: vercel(),
+  adapter: process.env.VERCEL ? vercel() : node({ mode: 'standalone' }),
+  server: { host: true },
   integrations: [
     react(),
     keystatic(),

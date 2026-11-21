@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.5",
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^8.2.11",
@@ -19,5 +21,8 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "three": "^0.183.2"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
