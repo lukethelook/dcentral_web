@@ -227,3 +227,11 @@
   .haltung-stage { padding: 0 0 0 44px; }
   .haltung-link { top: 4px; }
 }
+
+/* Leistungsseiten: Suchbegriff als Teil der H1, Region- und FAQ-Block */
+.disc-hero h1 .disc-h1-kw { display: block; margin-bottom: 18px; font-size: clamp(14px, 1.15vw, 16px); font-weight: 500; line-height: 1.4; letter-spacing: .01em; color: var(--disc-soft); }
+.disc-region { margin-top: clamp(80px, 10vw, 140px); }
+.disc-region > * { max-width: 980px; }
+.disc-region-text { margin-top: 24px; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.65; max-width: 62ch; color: var(--muted); }
+.disc-region .text-link { margin-top: 28px; display: inline-flex; }
+.disc-faq { margin-top: clamp(80px, 10vw, 140px); }

@@ -290,6 +290,17 @@ export default config({
               }),
               { label: 'Leistungsumfang (Unterseite, Block „Was dazugehört“)', itemLabel: (p) => p.fields.group.value },
             ),
+            keyword: TEXT('Suchbegriff-Zeile über dem Titel (Unterseite, Teil der H1)', { description: 'z.B. „Webdesign im Salzkammergut“ – so, wie Leute bei Google suchen' }),
+            seoTitle: TEXT('SEO-Titel (Browser-Tab & Google)', { description: 'max. ca. 60 Zeichen, „· dcentral“ wird automatisch angehängt' }),
+            seoDescription: TEXT('SEO-Beschreibung (Google-Snippet)', { multiline: true, description: 'ca. 140–155 Zeichen' }),
+            region: fields.object({
+              title: TEXT('Überschrift', { description: RICH }),
+              text: TEXT('Text', { multiline: true }),
+            }, { label: 'Region / Für wen (Unterseite)' }),
+            faq: fields.array(
+              fields.object({ q: TEXT('Frage'), a: TEXT('Antwort', { multiline: true }) }),
+              { label: 'Häufige Fragen (Unterseite, erscheint auch bei Google)', itemLabel: (p) => p.fields.q.value },
+            ),
           }),
           { label: 'Disziplinen', itemLabel: (p) => p.fields.title.value },
         ),

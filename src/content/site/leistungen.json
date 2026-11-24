@@ -63,7 +63,10 @@
             }
           ]
         }
-      ]
+      ],
+      "keyword": "Fotograf im Salzkammergut",
+      "seoTitle": "Fotograf im Salzkammergut – Business, Produkt & Landschaft",
+      "seoDescription": "Business-, Produkt- und Landschaftsfotografie aus Grünau im Almtal. Echte Bilder für Website, Social Media und Druck – für Betriebe im Salzkammergut."
     },
     {
       "no": "02",
@@ -122,6 +125,35 @@
             }
           ]
         }
+      ],
+      "keyword": "Imagefilm & Drohnenaufnahmen im Salzkammergut",
+      "seoTitle": "Imagefilm & Drohnenaufnahmen im Salzkammergut",
+      "seoDescription": "Imagefilm, Social-Reels, Eventdoku und Luftaufnahmen mit zertifizierter Drohne – für Betriebe im Salzkammergut und in Oberösterreich. Echt gedreht.",
+      "region": {
+        "title": "Gedreht, wo *dein Betrieb ist.*",
+        "text": "Mein Ausgangspunkt ist Grünau im Almtal. Von hier aus drehe ich im ganzen Salzkammergut – am Almsee und Traunsee, in Gmunden, Bad Ischl, am Attersee und rund um den Dachstein – und für Projekte in Linz, Wels, Salzburg oder Wien kommt das Team mit. Kurze Wege heißen: flexible Drehtage, wenn Licht und Wetter passen, statt starrer Termine."
+      },
+      "faq": [
+        {
+          "q": "Was kostet ein Imagefilm?",
+          "a": "Das hängt von Drehtagen, Länge und Team ab. Nach einem kostenlosen Erstgespräch bekommst du ein Angebot mit Fixpreis – inklusive der Schnittfassungen, die du wirklich brauchst, vom Langfilm bis zum Reel."
+        },
+        {
+          "q": "Darf überall mit der Drohne geflogen werden?",
+          "a": "Nicht überall – und das ist gut so. Geflogen wird mit zertifizierter Drohne, und vor jedem Dreh kläre ich, was am Ort erlaubt ist und ob Genehmigungen nötig sind, etwa in der Nähe von Flugplätzen, in Schutzgebieten oder über Menschenmengen. Das gehört zur Planung, nicht zu deinen Sorgen."
+        },
+        {
+          "q": "Bekomme ich auch Material für Social Media?",
+          "a": "Ja. Aus einem Drehtag entstehen mehrere Fassungen: der Film selbst, Reels und Stories im Hochformat und kurze Loops für die Website. So arbeitet ein Dreh monatelang für dich."
+        },
+        {
+          "q": "Wie läuft ein Dreh ab?",
+          "a": "Erst ein Gespräch, dann ein Konzept mit Ablauf und Drehplan. Am Drehtag bin ich mit dem passenden Team vor Ort, danach folgen Schnitt, eine Feedbackrunde und die Übergabe in allen vereinbarten Formaten."
+        },
+        {
+          "q": "Ist das KI-generiert?",
+          "a": "Nein. Was du siehst, ist echt gedreht – Menschen, Orte und Produkte vor der Kamera. KI hilft höchstens im Hintergrund, etwa bei Untertiteln und Transkripten."
+        }
       ]
     },
     {
@@ -140,7 +172,82 @@
       ],
       "short": "Web",
       "key": "Web",
-      "slug": "web"
+      "slug": "web",
+      "keyword": "Webdesign im Salzkammergut",
+      "seoTitle": "Webdesign im Salzkammergut – Website erstellen lassen",
+      "seoDescription": "Websites und Landingpages aus Grünau im Almtal: schnell, bei Google auffindbar und selbst pflegbar. Für Betriebe im Salzkammergut und in Oberösterreich.",
+      "scope": [
+        {
+          "group": "Website",
+          "lead": "Gebaut statt zusammengeklickt.",
+          "modules": [
+            {
+              "t": "Markenwebsite",
+              "d": "Ein mehrseitiger Auftritt mit eigener Gestaltung – abgestimmt auf deine Marke und deine Bildwelt."
+            },
+            {
+              "t": "Landingpage & Onepager",
+              "d": "Eine Seite, ein Ziel: Anfrage, Buchung oder Kampagne."
+            },
+            {
+              "t": "Selbst pflegbar",
+              "d": "Texte, Bilder und Projekte änderst du selbst im Browser – ohne Agentur-Ticket für jede Kleinigkeit."
+            },
+            {
+              "t": "Mehrsprachig",
+              "d": "Für Gäste und Kund:innen über die Grenze hinaus – sauber strukturiert, damit jede Sprache gefunden wird."
+            }
+          ]
+        },
+        {
+          "group": "Technik & Sichtbarkeit",
+          "lead": "Schnell, gefunden, sicher.",
+          "modules": [
+            {
+              "t": "Ladezeit",
+              "d": "Optimierte Bilder und schlanker Code – damit die Seite auch am Handy mit schwachem Netz sofort da ist."
+            },
+            {
+              "t": "SEO-Basis & lokale Suche",
+              "d": "Saubere Struktur, Metadaten und strukturierte Daten, damit Google versteht, wer du bist und wo du arbeitest."
+            },
+            {
+              "t": "GEO – sichtbar in KI-Suchen",
+              "d": "Inhalte so aufbereitet, dass ChatGPT, Perplexity und Googles KI-Antworten dein Angebot richtig wiedergeben."
+            },
+            {
+              "t": "Pflege & Hosting",
+              "d": "Updates und Sicherheit laufen auch nach dem Launch weiter – du hast einen Ansprechpartner, wenn etwas zu tun ist."
+            }
+          ]
+        }
+      ],
+      "region": {
+        "title": "Websites für Betriebe *aus der Region.*",
+        "text": "Vom Sägewerk im Almtal über die Fischzucht bis zum Physio-Netzwerk: Ich baue Websites für Betriebe im Salzkammergut und in ganz Oberösterreich – von Grünau aus, mit Terminen vor Ort in Gmunden, Vöcklabruck, Wels oder Linz, wenn es um Inhalte und Bilder geht, und remote, wenn es schneller ist."
+      },
+      "faq": [
+        {
+          "q": "Was kostet eine Website?",
+          "a": "Das hängt vom Umfang ab – von der Onepage bis zur mehrsprachigen Markenwelt. Nach einem kostenlosen Erstgespräch bekommst du ein Angebot mit Fixpreis, ohne Stundenraten-Risiko."
+        },
+        {
+          "q": "Kann ich die Website selbst bearbeiten?",
+          "a": "Ja. Texte, Bilder und neue Projekte pflegst du in einer einfachen Oberfläche im Browser. Wenn du lieber nichts selbst machen willst, übernehme ich die Pflege."
+        },
+        {
+          "q": "Baust du mit WordPress?",
+          "a": "Neue Websites baue ich mit modernen Frameworks statt mit Baukasten-Themes: weniger Plugins, weniger Angriffsfläche, schnellere Ladezeiten. Bestehende WordPress-Seiten betreue ich trotzdem weiter."
+        },
+        {
+          "q": "Wird meine Website bei Google gefunden?",
+          "a": "Die technische SEO-Basis ist immer dabei: Struktur, Metadaten, Ladezeit und strukturierte Daten. Ein Ranking kann niemand seriös versprechen – aber eine Seite, die Google und KI-Suchen gut verstehen, ist die Voraussetzung dafür."
+        },
+        {
+          "q": "Kümmerst du dich um Hosting und Updates?",
+          "a": "Ja, auf Wunsch übernehme ich Hosting, Updates und Sicherheit. Du hast einen Ansprechpartner statt drei Dienstleistern."
+        }
+      ]
     },
     {
       "no": "04",
@@ -202,6 +309,35 @@
               "d": "Ideen sichtbar machen und Richtung finden, bevor gedreht oder fotografiert wird."
             }
           ]
+        }
+      ],
+      "keyword": "KI-Lösungen für Betriebe in Oberösterreich",
+      "seoTitle": "KI-Lösungen & Automatisierung für Betriebe in Oberösterreich",
+      "seoDescription": "Automatisierung, KI-Sichtbarkeit (GEO) und hybride Bildwelten – maßgeschneidert für kleine und mittlere Betriebe im Salzkammergut und in Oberösterreich.",
+      "region": {
+        "title": "KI mit *Hausverstand.*",
+        "text": "Ich entwickle KI-Lösungen für kleine und mittlere Betriebe im Salzkammergut und in Oberösterreich – vom Handwerksbetrieb bis zur Industrie. Am Anfang steht kein Tool, sondern dein Ablauf: Wo geht im Alltag Zeit verloren, wo bleiben Anfragen liegen, wo fehlen Inhalte? Erst dann wird gebaut – klein anfangen, wirken lassen, ausbauen."
+      },
+      "faq": [
+        {
+          "q": "Was kann KI konkret für meinen Betrieb tun?",
+          "a": "Typische Einstiege: Anfragen vorsortieren und beantworten, Angebote und Texte vorbereiten, Inhalte für Website und Social Media planen oder Daten aus verschiedenen Quellen zusammenführen. Welche davon sich bei dir lohnt, klären wir im Erstgespräch."
+        },
+        {
+          "q": "Brauche ich dafür eigene IT oder teure Software?",
+          "a": "Meist nicht. Viele Lösungen docken an Werkzeuge an, die du schon nutzt – E-Mail, Kalender, Website, Tabellen. Wo eine eigene Anwendung sinnvoll ist, wird sie für deinen Ablauf gebaut statt von der Stange gekauft."
+        },
+        {
+          "q": "Was ist GEO?",
+          "a": "Generative Engine Optimization: Inhalte und Daten so aufbereiten, dass KI-Suchen wie ChatGPT, Perplexity oder Googles KI-Antworten dein Angebot finden und richtig wiedergeben. Es ergänzt klassische Suchmaschinenoptimierung, ersetzt sie aber nicht."
+        },
+        {
+          "q": "Was passiert mit meinen Daten?",
+          "a": "Vor dem Start klären wir, welche Daten verarbeitet werden und wo. Wo es nötig ist, setzen wir auf Dienste mit Servern in der EU oder auf selbst betriebene Lösungen."
+        },
+        {
+          "q": "Ersetzt KI eure Fotos und Filme?",
+          "a": "Nein. Echte Aufnahmen bleiben das Fundament. KI erweitert sie – um Formate, Hintergründe oder Varianten –, Produkt und Menschen bleiben echt."
         }
       ]
     }
