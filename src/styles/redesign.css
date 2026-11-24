@@ -63,7 +63,7 @@ h1{font-size:clamp(64px,6.7vw,108px);line-height:.98;font-weight:600}
 .service-1 .art-label,.service-3 .art-label{color:#eaf1e3}
 .art-corners{position:absolute;inset:22px;border:1px solid #8d9e8e60;pointer-events:none;clip-path:polygon(0 0,24px 0,24px 1px,1px 1px,1px 24px,0 24px,0 0,100% 0,100% 24px,calc(100% - 1px) 24px,calc(100% - 1px) 1px,calc(100% - 24px) 1px,calc(100% - 24px) 0,100% 0,100% 100%,calc(100% - 24px) 100%,calc(100% - 24px) calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) calc(100% - 24px),100% calc(100% - 24px),100% 100%,0 100%,0 calc(100% - 24px),1px calc(100% - 24px),1px calc(100% - 1px),24px calc(100% - 1px),24px 100%,0 100%)}
 .service-copy{padding-top:28px}
-.service-copy h4{font-size:23px;margin-bottom:13px}
+.service-copy h3{font-size:23px;margin-bottom:13px}
 .service-copy p{font-size:15px;max-width:57ch}
 .tags{display:flex;flex-wrap:wrap;gap:8px 17px;list-style:none;padding:0;margin:23px 0}
 .tags li{font-size:11px;padding-bottom:5px;border-bottom:1px solid var(--line)}
@@ -229,7 +229,7 @@ h1{font-size:64px}
 .section-title{margin-bottom:35px}
 .service-art{height:330px}
 .service-copy p{font-size:14px}
-.service-copy h4{font-size:22px}
+.service-copy h3{font-size:22px}
 .work-heading h2{font-size:66px}
 .gallery-controls button{width:40px;height:40px}
 .filters{gap:0;margin-bottom:28px;flex-wrap:nowrap}

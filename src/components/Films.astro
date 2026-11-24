@@ -1,4 +1,5 @@
 ---
+import { responsive } from '../lib/img';
 // Film section (homepage): client films as expanding panels. Hovering a panel opens
 // it and plays its muted loop; a click opens the player, which grows out of the panel.
 // Phones get a swipeable row. Content: Keystatic „Film" (films collection + film singleton).
@@ -49,7 +50,7 @@ const play = 'M7 4.5v15l13-7.5-13-7.5Z';
               >
                 {f.loop
                   ? <video class="film-media" data-loop={src(f.loop)} poster={f.poster ? src(f.poster) : undefined} muted loop playsinline preload="none" aria-hidden="true"></video>
-                  : f.poster && <img class="film-media" src={src(f.poster)} alt="" loading="lazy" decoding="async" />}
+                  : f.poster && <img class="film-media" {...responsive(src(f.poster), '(max-width: 760px) 100vw, 50vw')} alt="" loading="lazy" decoding="async" />}
                 <span class="film-shade" aria-hidden="true"></span>
                 <span class="film-rail" aria-hidden="true"><b>{pad(i + 1)}</b>{f.client}</span>
                 <span class="film-meta">
@@ -62,7 +63,7 @@ const play = 'M7 4.5v15l13-7.5-13-7.5Z';
               </button>
               {f.case && (
                 <a class="film-case" href={`/arbeiten/${f.case}`}>
-                  Zum Projekt <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+                  Zum Projekt<span class="sr-only"> {f.client}</span> <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
                 </a>
               )}
             </article>
@@ -94,7 +95,7 @@ const play = 'M7 4.5v15l13-7.5-13-7.5Z';
       <div class="fm-caption">
         <span class="fm-title"></span>
         <span class="fm-client"></span>
-        <a class="fm-case" href="#">Zum Projekt <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a>
+        <a class="fm-case" hidden>Zum Projekt <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg></a>
       </div>
       <button type="button" class="fm-close" aria-label="Film schließen">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg>

@@ -7,3 +7,7 @@ dist/
 .env
 .env.*
 .claude/
+
+# erzeugt von scripts/responsive-images.mjs
+public/_r/
+src/generated/
