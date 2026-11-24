@@ -31,6 +31,16 @@ export default defineConfig({
   output: 'static',
   adapter: process.env.VERCEL ? vercel() : node({ mode: 'standalone' }),
   server: { host: true },
+  // Hinter dem Hostinger-Proxy läuft Node intern auf einem eigenen Port. Ohne diese
+  // Liste vertraut Astro (ab v7) den X-Forwarded-*-Headern nicht und baut URLs wie
+  // https://www.dcentral.at:4321 – das bricht u. a. den Keystatic-GitHub-Login
+  // (redirect_uri). Nur diese Domains dürfen Host/Proto/Port der Request-URL setzen.
+  security: {
+    allowedDomains: [
+      { hostname: 'www.dcentral.at', protocol: 'https' },
+      { hostname: 'dcentral.at', protocol: 'https' },
+    ],
+  },
   integrations: [
     react(),
     keystatic(),
