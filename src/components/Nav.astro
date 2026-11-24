@@ -1,27 +1,75 @@
 ---
 // Home uses in-page anchors; subpages link back to the homepage sections.
+// „Leistungen“ is a disclosure menu: the four discipline pages come from the
+// „Leistungen“ singleton (Keystatic), so new or renamed disciplines appear here too.
+import leistungen from '../content/site/leistungen.json';
+
 interface Props { home?: boolean }
 const { home = false } = Astro.props;
 const base = home ? '' : '/';
+const path = Astro.url.pathname.replace(/\/$/, '');
+const services = (leistungen.services as { no: string; title: string; tag: string; slug: string; short?: string }[]).filter((s) => s.slug);
 const links = [
-  { href: `${base}#leistungen`, label: 'Leistungen' },
   { href: `${base}#arbeiten`, label: 'Arbeiten' },
-  { href: '/fotografie', label: 'Fotografie' },
   { href: `${base}#studio`, label: 'Studio' },
   { href: `${base}#impact`, label: 'Impact' },
 ];
+const inServices = services.some((s) => path === `/${s.slug}`);
+const arrow = 'M6 18 18 6M6 6h12v12';
 ---
 
 <header class="site-header">
   <a aria-label="dcentral – Startseite" class="brand" href={home ? '#top' : '/'}>dcentral<span>.</span></a>
   <nav aria-label="Hauptnavigation" id="navigation">
+    <div class="nav-group" data-nav-group>
+      <button class:list={['nav-trigger', { 'is-current': inServices }]} type="button" aria-expanded="false" aria-controls="nav-leistungen">
+        Leistungen
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <div class="nav-sub" id="nav-leistungen">
+        <ul>
+          {services.map((s) => (
+            <li>
+              <a href={`/${s.slug}`} aria-current={path === `/${s.slug}` ? 'page' : undefined}>
+                <span class="nav-sub-no">{s.no}</span>
+                <span class="nav-sub-copy"><strong>{s.title}</strong><span>{s.tag}</span></span>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="nav-sub-all" href={`${base}#leistungen`}>Alle Leistungen im Überblick</a>
+      </div>
+    </div>
     {links.map((l) => <a href={l.href}>{l.label}</a>)}
   </nav>
   <a class="header-contact" href={`${base}#kontakt`} data-contact="talk">
     Reden wir
-    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>
+    <svg aria-hidden="true" viewBox="0 0 24 24"><path d={arrow}></path></svg>
   </a>
   <button aria-controls="navigation" aria-expanded="false" aria-label="Menü öffnen" class="menu-toggle" type="button">
     <span></span><span></span>
   </button>
 </header>
+
+<script>
+  // Disclosure pattern: click/Enter toggles, hover opens on fine pointers (desktop),
+  // Escape / outside click / focus leaving the group closes. On mobile it is an accordion
+  // inside the burger menu (same markup, CSS decides the presentation).
+  const group = document.querySelector<HTMLElement>('[data-nav-group]');
+  const trigger = group?.querySelector<HTMLButtonElement>('.nav-trigger');
+  if (group && trigger) {
+    const desktop = matchMedia('(min-width: 761px) and (hover: hover) and (pointer: fine)');
+    let closeTimer = 0;
+    const set = (open: boolean) => { trigger.setAttribute('aria-expanded', String(open)); group.classList.toggle('is-open', open); };
+    const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+    trigger.addEventListener('click', () => set(!isOpen()));
+    group.addEventListener('pointerenter', () => { if (!desktop.matches) return; clearTimeout(closeTimer); set(true); });
+    group.addEventListener('pointerleave', () => { if (!desktop.matches) return; closeTimer = window.setTimeout(() => set(false), 180); });
+    group.addEventListener('focusout', (e) => { if (desktop.matches && !group.contains(e.relatedTarget as Node | null)) set(false); });
+    document.addEventListener('click', (e) => { if (isOpen() && !group.contains(e.target as Node)) set(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) { set(false); trigger.focus(); } });
+    group.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) set(false); });
+    desktop.addEventListener('change', () => set(false));
+  }
+</script>
