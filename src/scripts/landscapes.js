@@ -5,7 +5,6 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(h
 const instances=[];
 let introSpeed=1;
 const INTRO_SESSION_KEY='dcentral:hero-entry:v1';
-function hasSeenIntro(){try{return sessionStorage.getItem(INTRO_SESSION_KEY)==='seen';}catch{return false;}}
 function rememberIntro(){try{sessionStorage.setItem(INTRO_SESSION_KEY,'seen');}catch{/* Storage restrictions must never block the scene. */}}
 let globalPaused=reduced.matches;
 // Digitised WSW skyline from C.Stadler/Bwag, CC BY-SA 4.0. Extruded depth is illustrative.
@@ -21,7 +20,9 @@ function height(x,z){const along=profile(Math.max(-5,x));const mass=Math.exp(-Ma
 function buildLandscape(host){
  const hero=host.dataset.landscape==='hero',variant=hero?0:Number(host.dataset.landscape)+1;
  const demo=host.hasAttribute('data-intro-demo');
- const entryPending=hero&&!globalPaused&&(demo||!hasSeenIntro());
+ // Kein Linien-Intro mehr beim Laden: die Silhouette steht sofort. Nur die Demo-Seite
+ // (data-intro-demo) kann das Intro noch abspielen.
+ const entryPending=hero&&!globalPaused&&demo;
  const canvas=host.querySelector('canvas'),dark=hero?document.documentElement.dataset.heroTheme!=='light':variant===2||variant===4;
  const bg=new THREE.Color(dark?'#102f28':hero?'#f3f4ec':'#e6ebdf'),ink=new THREE.Color(dark?'#b9d0bf':'#236b5e'),accent=new THREE.Color(dark?'#d4ff3f':'#789f16');
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(hero?37:33,1,.1,100);
@@ -113,7 +114,7 @@ c=mix(c,national,clamp(vFlag,0.,.6));c=mix(c,uAccent,tip*.24);gl_FragColor=vec4(
   }
   threadTexture.needsUpdate=true;
  }
- let time=hero?0:variant*1.7,last=0,raf=0,visible=false,nextPulse=hero?3:2,pulseIndex=0,lastFlag=-60,mountainNext=true,previous=null,drag=null,angle=0,targetAngle=0;
+ let time=hero?0:variant*1.7,last=0,raf=0,visible=false,nextPulse=hero?(demo?3:Infinity):2,pulseIndex=0,lastFlag=-60,mountainNext=true,previous=null,drag=null,angle=0,targetAngle=0;
  let introStartedAt=null;
  let introElapsed=entryPending?0:INTRO_SECONDS;
  let introFinished=!entryPending;
@@ -134,6 +135,11 @@ c=mix(c,national,clamp(vFlag,0.,.6));c=mix(c,uAccent,tip*.24);gl_FragColor=vec4(
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&!introFinished)finishIntro();});
   document.addEventListener('motion-state',e=>{if(e.detail.paused&&!introFinished)finishIntro();});
   notifyIntro();
+  // Schockwelle von der Bergspitze, sobald die Seite fertig geladen ist.
+  // Gipfel = höchster Punkt des Ridge-Profils (x) auf der Massenachse des Bergs (z = -.85).
+  const summit=ridge.reduce((a,b)=>b[1]>a[1]?b:a);
+  const summitWave=()=>{if(globalPaused||demo){nextPulse=time+3;return;}pulse(summit[0],-.85,.8,0,false);previous={x:summit[0],z:-.85};mountainNext=false;nextPulse=time+9+Math.random()*4;wake();};
+  if(document.readyState==='complete')requestAnimationFrame(summitWave);else addEventListener('load',summitWave,{once:true});
  }
  const hover={x:0,z:0,tx:0,tz:0,a:0,target:0};const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
  function positionCamera(){const mobile=innerWidth<760;
