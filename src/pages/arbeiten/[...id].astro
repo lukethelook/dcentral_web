@@ -1,4 +1,5 @@
 ---
+import { responsive } from '../../lib/img';
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
@@ -89,7 +90,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
       <div class={`case-visual case-showcase case-showcase--phones cover-${idx % 4}`} aria-label={`Mockup: ${d.client} auf dem Smartphone`} role="img">
         {phones.map((p, i) => (
           <div class={`sc-phone sc-float sc-float--${i}`} aria-hidden="true">
-            <div class="sc-screen"><img src={src(p)} alt="" decoding="async" /></div>
+            <div class="sc-screen"><img {...responsive(src(p), '300px')} alt="" decoding="async" /></div>
           </div>
         ))}
       </div>
@@ -100,18 +101,18 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
           <div class="sc-screen">
             {showcase.video
               ? <video class="sc-video" src={src(showcase.video)} poster={showcase.poster ? src(showcase.poster) : undefined} autoplay muted loop playsinline preload="metadata" data-motion-video></video>
-              : <img class="sc-scroll" src={src(showcase.desktop!)} alt="" decoding="async" />}
+              : <img class="sc-scroll" {...responsive(src(showcase.desktop!), '(max-width: 760px) 90vw, 60vw')} alt="" decoding="async" />}
           </div>
         </div>
         {showcase.mobile && (
           <div class="sc-phone" aria-hidden="true">
-            <div class="sc-screen"><img class="sc-scroll sc-scroll--phone" src={src(showcase.mobile)} alt="" decoding="async" /></div>
+            <div class="sc-screen"><img class="sc-scroll sc-scroll--phone" {...responsive(src(showcase.mobile), '300px')} alt="" decoding="async" /></div>
           </div>
         )}
       </div>
     ) : (
       <div class={`case-visual cover-${idx % 4}`}>
-        <img src={visual.src} alt={visual.dummy ? '' : d.title} />
+        <img {...responsive(visual.src, '100vw')} alt={visual.dummy ? '' : d.title} fetchpriority="high" />
         {visual.dummy && <span class="case-flag">Dummymotiv · Originale folgen</span>}
       </div>
     )}
@@ -170,14 +171,14 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
             {s.device === 'desktop' ? (
               <div class="sc-browser sc-browser--static">
                 <div class="sc-bar" aria-hidden="true"><i></i><i></i><i></i><span>{liveHost || d.client}</span></div>
-                <img src={src(s.image!)} alt={s.caption || `${d.client} – Desktop`} loading="lazy" decoding="async" />
+                <img {...responsive(src(s.image!), '(max-width: 760px) 90vw, 60vw')} alt={s.caption || `${d.client} – Desktop`} loading="lazy" decoding="async" />
               </div>
             ) : s.device === 'mobile' ? (
               <div class="sc-phone sc-phone--static">
-                <div class="sc-screen"><img src={src(s.image!)} alt={s.caption || `${d.client} – Smartphone`} loading="lazy" decoding="async" /></div>
+                <div class="sc-screen"><img {...responsive(src(s.image!), '300px')} alt={s.caption || `${d.client} – Smartphone`} loading="lazy" decoding="async" /></div>
               </div>
             ) : (
-              <img class="case-image" src={src(s.image!)} alt={s.caption || d.client} loading="lazy" decoding="async" />
+              <img class="case-image" {...responsive(src(s.image!), '(max-width: 760px) 100vw, 80vw')} alt={s.caption || d.client} loading="lazy" decoding="async" />
             )}
             {s.caption && <figcaption>{s.caption}</figcaption>}
           </figure>

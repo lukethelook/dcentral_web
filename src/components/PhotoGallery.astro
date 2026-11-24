@@ -1,4 +1,5 @@
 ---
+import { responsive } from '../lib/img';
 // Photography page gallery: series filter, masonry columns, and a lightbox
 // dialog (arrows, swipe, Esc). New photos come from the Keystatic „Fotos“ collection.
 import { getCollection } from 'astro:content';
@@ -24,7 +25,7 @@ const series = [...new Set(photos.map((p) => p.series))];
     {photos.map((p, i) => (
       <figure class="pg-item" data-series={p.series} style={p.width && p.height ? `aspect-ratio:${p.width}/${p.height}` : undefined}>
         <button type="button" data-index={i} aria-label={`Foto vergrößern: ${p.alt}`}>
-          <img src={p.thumb || p.image} alt={p.alt} loading="lazy" decoding="async" width={p.width ?? undefined} height={p.height ?? undefined} />
+          <img {...(p.thumb ? { src: p.thumb } : responsive(p.image, '(max-width: 760px) 50vw, 33vw'))} alt={p.alt} loading="lazy" decoding="async" width={p.width ?? undefined} height={p.height ?? undefined} />
         </button>
       </figure>
     ))}
@@ -35,7 +36,7 @@ const series = [...new Set(photos.map((p) => p.series))];
     <div class="pg-lb-bar">
       <p class="pg-lb-caption"></p>
       <span class="pg-lb-count"></span>
-      <a class="pg-lb-project" href="#" hidden>Zum Projekt</a>
+      <a class="pg-lb-project" hidden>Zum Projekt</a>
     </div>
     <button type="button" class="pg-lb-btn pg-lb-prev" aria-label="Vorheriges Foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
     <button type="button" class="pg-lb-btn pg-lb-next" aria-label="Nächstes Foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>

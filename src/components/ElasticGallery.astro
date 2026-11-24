@@ -1,4 +1,5 @@
 ---
+import { responsive } from '../lib/img';
 // Elastic Gallery — after the 21st.dev component (accordion of images: the
 // active panel takes flex 4, the others flex 1, easing cubic-bezier(.25,1,.5,1)).
 // Rebuilt for Astro without React/Tailwind and styled for dcentral.
@@ -33,7 +34,7 @@ const arrow = 'M6 18 18 6M6 6h12v12';
           aria-label={`${it.title}${it.category ? ` – ${it.category}` : ''}`}
           {...(it.href ? { href: it.href } : { type: 'button' })}
         >
-          <img src={it.src} alt={it.alt} loading="lazy" decoding="async" />
+          <img {...responsive(it.src, '(max-width: 760px) 100vw, 60vw')} alt={it.alt} loading="lazy" decoding="async" />
           <span class="eg-shade" aria-hidden="true"></span>
           <span class="eg-content">
             {it.category && <span class="eg-cat">{it.category}</span>}

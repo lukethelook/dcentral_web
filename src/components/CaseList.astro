@@ -1,4 +1,5 @@
 ---
+import { responsive } from '../lib/img';
 // Editorial project list for the discipline pages: big rows, and on desktop a
 // preview image that follows the pointer with a spring (hover reveal).
 import type { CollectionEntry } from 'astro:content';
@@ -14,7 +15,7 @@ const src = (p: string) => (/^(https?:|\/)/.test(p) ? p : `/images/cases/${p}`);
       <li>
         <a class="cl-row" href={`/arbeiten/${id}`} data-preview={d.previews[0] ? src(d.previews[0]) : ''}>
           <span class="cl-no">{String(i + 1).padStart(2, '0')}</span>
-          <span class="cl-thumb" aria-hidden="true">{d.previews[0] && <img src={src(d.previews[0])} alt="" loading="lazy" decoding="async" />}</span>
+          <span class="cl-thumb" aria-hidden="true">{d.previews[0] && <img {...responsive(src(d.previews[0]), '160px')} alt="" loading="lazy" decoding="async" />}</span>
           <span class="cl-client">{d.client}</span>
           <span class="cl-title">{d.title}</span>
           <span class="cl-meta">{[d.discipline, ...d.also].join(' · ')} · {d.year}</span>

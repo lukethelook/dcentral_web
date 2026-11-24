@@ -1,4 +1,5 @@
 ---
+import { responsive } from '../lib/img';
 // Cinema stage: a muted background loop (or cross-fading stills) with a play button.
 // The film itself loads only on click — Vimeo/YouTube as an iframe (privacy), a
 // self-hosted MP4 (showcase.film) as a video with sound and controls (motion-system.js).
@@ -19,7 +20,7 @@ const host = provider === 'youtube' ? 'YouTube' : 'Vimeo';
   {c.loop
     ? <video class="cinema-loop" src={src(c.loop)} poster={c.poster ? src(c.poster) : undefined} autoplay muted loop playsinline preload="metadata" aria-hidden="true" data-motion-video></video>
     : <div class="cinema-slides" aria-hidden="true">
-        {slides.map((s, i) => <img src={src(s)} alt="" decoding="async" style={`--i:${i}`} loading={i ? 'lazy' : 'eager'} />)}
+        {slides.map((s, i) => <img {...responsive(src(s), '100vw')} alt="" decoding="async" style={`--i:${i}`} loading={i ? 'lazy' : 'eager'} />)}
       </div>}
   <button type="button" class="cinema-play" aria-label={provider === 'file' ? `Film abspielen: ${client}` : `Film abspielen: ${client} (lädt ${host})`}>
     <span class="cinema-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5-13-7.5Z"></path></svg></span>
