@@ -17,6 +17,9 @@ if(x>end[0]){const d=x-end[0],slope=(end[1]-before[1])/(end[0]-before[0]);return
 for(let i=1;i<ridge.length;i++){if(x<=ridge[i][0]){const a=ridge[i-1],b=ridge[i],t=(x-a[0])/(b[0]-a[0]);return a[1]+(b[1]-a[1])*t;}}return .02}
 function height(x,z){const along=profile(Math.max(-5,x));const mass=Math.exp(-Math.pow((z+.85)/1.05,2));const folds=(Math.sin(x*13+z*5)+.5*Math.sin(x*23-z*9))*.033*mass*(1-Math.exp(-Math.pow((z+.85)/.16,2)));const foothills=.19*(Math.sin(x*2+z*1.2)+1)*Math.exp(-Math.pow((z-.35)/.7,2));const lake=.025*Math.sin(x*2+z*4);return Math.max(.008,along*mass+folds+foothills+lake)}
 
+// Gipfel = höchster Punkt des Ridge-Profils (x); Massenachse des Bergs liegt bei z = -.85.
+const summitRidge=ridge.reduce((a,b)=>b[1]>a[1]?b:a);
+
 function buildLandscape(host){
  const hero=host.dataset.landscape==='hero',variant=hero?0:Number(host.dataset.landscape)+1;
  const demo=host.hasAttribute('data-intro-demo');
@@ -137,18 +140,33 @@ c=mix(c,national,clamp(vFlag,0.,.6));c=mix(c,uAccent,tip*.24);gl_FragColor=vec4(
   notifyIntro();
   // Schockwelle von der Bergspitze, sobald die Seite fertig geladen ist.
   // Gipfel = höchster Punkt des Ridge-Profils (x) auf der Massenachse des Bergs (z = -.85).
-  const summit=ridge.reduce((a,b)=>b[1]>a[1]?b:a);
-  const summitWave=()=>{if(globalPaused||demo){nextPulse=time+3;return;}pulse(summit[0],-.85,.8,0,false);previous={x:summit[0],z:-.85};mountainNext=false;nextPulse=time+9+Math.random()*4;wake();};
+  const summitWave=()=>{if(globalPaused||demo){nextPulse=time+3;return;}pulse(summitRidge[0],-.85,.8,0,false);previous={x:summitRidge[0],z:-.85};mountainNext=false;nextPulse=time+9+Math.random()*4;wake();};
   if(document.readyState==='complete')requestAnimationFrame(summitWave);else addEventListener('load',summitWave,{once:true});
  }
  const hover={x:0,z:0,tx:0,tz:0,a:0,target:0};const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
+ // Mobile: the summit is pinned to the right of the CTA ("Projekt starten"), so no line runs behind
+ // the copy above it. Target is a fraction of the canvas, measured from the DOM on resize.
+ const summitPoint=hero?new THREE.Vector3(summitRidge[0],height(summitRidge[0],-.85),-.85):null,summitScreen=new THREE.Vector3();
+ let summitTarget=null;
+ function measureSummitTarget(){
+  if(!hero||innerWidth>=760){summitTarget=null;return;}
+  const cta=host.closest('.hero')?.querySelector('.hero-copy .action');const box=host.getBoundingClientRect();
+  if(!cta||!box.height){summitTarget=null;return;}
+  const r=cta.getBoundingClientRect();
+  summitTarget={x:.8,y:THREE.MathUtils.clamp((r.top+r.height*.5-box.top)/box.height,.25,.8)};
+ }
  function positionCamera(){const mobile=innerWidth<760;
   // Desktop rests slightly turned (approved framing: lower left flank, room under the CTA); drag stays relative to it.
-  if(hero){const dist=mobile?12.8:10,center=mobile?.45:-.8,a=angle+(mobile?0:-.25);camera.position.set(center+Math.sin(a)*dist,mobile?4.8:4.1,Math.cos(a)*dist);camera.lookAt(center,mobile?1.55:1.15,0);}
+  if(hero){const dist=mobile?12.2:10,center=mobile?summitRidge[0]:-.8,a=angle+(mobile?.18:-.25);camera.position.set(center+Math.sin(a)*dist,mobile?6.6:4.1,Math.cos(a)*dist);camera.lookAt(center,mobile?.75:1.15,0);
+   camera.updateMatrixWorld();
+   if(mobile&&summitTarget){const w=host.clientWidth,h=host.clientHeight;camera.clearViewOffset();camera.updateProjectionMatrix();summitScreen.copy(summitPoint).project(camera);
+    camera.setViewOffset(w,h,(summitScreen.x*.5+.5-summitTarget.x)*w,(.5-summitScreen.y*.5-summitTarget.y)*h,w,h);}
+   else if(camera.view)camera.clearViewOffset();
+   camera.updateProjectionMatrix();}
   else {const presets=[[.8,3.0,3.2,.5,1.65,-.3],[-.4,3.6,4.0,.5,1.4,-.3],[1.0,6.5,3.6,.4,1.25,-.2],[1.7,3.0,3.6,.55,1.65,-.6]],p=presets[variant-1];const drift=0;camera.position.set(p[0]+drift,p[1],p[2]);camera.lookAt(p[3],p[4],p[5]);}
   camera.updateMatrixWorld();
  }
- function resize(){const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);uniforms.uViewport.value.set(w,h);uniforms.uRowStep.value=innerWidth<760?2:1;camera.aspect=w/h;positionCamera();camera.updateProjectionMatrix();measureThreadBounds();wake();}
+ function resize(){const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);uniforms.uViewport.value.set(w,h);uniforms.uRowStep.value=innerWidth<760?2:1;camera.aspect=w/h;measureSummitTarget();positionCamera();camera.updateProjectionMatrix();measureThreadBounds();wake();}
  function pulse(x,z,strength=.65,shape=0,flag=false){const i=pulseIndex++%4;uniforms.uPulses.value[i].set(x,z,time,strength);uniforms.uShapes.value[i].set(shape,flag?1:0,Math.random()*Math.PI,0);}
  function autoPulse(){let x,z;do{x=mountainNext?-.9+Math.random()*2.6:-3+Math.random()*6;z=mountainNext?-1.35+Math.random():.5+Math.random()*1.9;}while(previous&&Math.hypot(x-previous.x,z-previous.z)<1.1);previous={x,z};mountainNext=!mountainNext;
  const flag=hero&&time-lastFlag>45&&Math.random()<.14;if(flag)lastFlag=time;
@@ -168,6 +186,7 @@ c=mix(c,national,clamp(vFlag,0.,.6));c=mix(c,uAccent,tip*.24);gl_FragColor=vec4(
  }
  function wake(){if(!raf&&visible&&!document.hidden)raf=requestAnimationFrame(draw);}
  const ro=new ResizeObserver(resize);ro.observe(host);
+ if(hero)document.fonts?.ready.then(resize);
  const observer=new IntersectionObserver(([e])=>{visible=e.isIntersecting;last=0;if(visible)wake();else{cancelAnimationFrame(raf);raf=0;}},{rootMargin:'70px'});observer.observe(host);
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();visible=false;cancelAnimationFrame(raf);});
  const api={wake,reset(){last=0;if(globalPaused){hover.a=hover.target=0;uniforms.uHover.value.z=0;}wake();},dispose(){cancelAnimationFrame(raf);ro.disconnect();observer.disconnect();scene.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});threadTexture.dispose();renderer.dispose();}};

@@ -6,6 +6,14 @@ const motion=()=>!paused&&!reduced.matches;
 const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('#navigation');
 function closeMenu(){menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Menü öffnen');nav.classList.remove('open');}
 menu.onclick=()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Menü schließen':'Menü öffnen');nav.classList.toggle('open',open);};
+// Phones: the header travels with the page — tucks away while reading downwards, returns on the first upward swipe.
+{const header=document.querySelector('.site-header'),phone=matchMedia('(max-width:760px)');let lastY=scrollY,ticking=false;
+ const sync=()=>{ticking=false;const y=Math.max(0,scrollY),open=menu.getAttribute('aria-expanded')==='true';
+  if(!phone.matches){header.classList.remove('is-floating','is-tucked');lastY=y;return;}
+  header.classList.toggle('is-floating',y>8);
+  if(open||y<120)header.classList.remove('is-tucked');else if(y>lastY+6)header.classList.add('is-tucked');else if(y<lastY-6)header.classList.remove('is-tucked');
+  if(Math.abs(y-lastY)>6||y<120)lastY=y;};
+ if(header){addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(sync);}},{passive:true});phone.addEventListener('change',sync);sync();}}
 nav.addEventListener('click',e=>{if(e.target.closest('a'))closeMenu();});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.getAttribute('aria-expanded')==='true'){closeMenu();menu.focus();}});matchMedia('(min-width:761px)').addEventListener('change',closeMenu);
 // Native spring integrator for the source components' spring motion values.
 const effects=[];

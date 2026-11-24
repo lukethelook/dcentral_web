@@ -1,8 +1,8 @@
 {
   "siteName": "dcentral",
-  "defaultTitle": "dcentral — Fotografie, Film, Webdesign & KI im Salzkammergut",
+  "defaultTitle": "dcentral · Fotografie, Film, Webdesign & KI im Salzkammergut",
   "titleTemplate": "%s · dcentral",
-  "defaultDescription": "Fotografie, Film & Aerial, Webdesign und KI-gestützte Kreativkonzepte aus dem Salzkammergut. Ein Ansprechpartner, ein Netzwerk aus Spezialist:innen — für Hotellerie, Tourismus, Manufakturen und Marken.",
+  "defaultDescription": "Fotografie, Film & Aerial, Webdesign und KI-gestützte Kreativkonzepte aus dem Salzkammergut. Ein Ansprechpartner, ein Netzwerk aus Spezialist:innen für Hotellerie, Tourismus, Manufakturen und Marken.",
   "keywords": [
     "Fotograf Salzkammergut",
     "Filmproduktion Salzkammergut",
@@ -14,7 +14,7 @@
     "Markenauftritt"
   ],
   "business": {
-    "name": "dcentral — Lukas Kirschbichler",
+    "name": "dcentral · Lukas Kirschbichler",
     "legalName": "Mag. Lukas Kirschbichler",
     "street": "Am Weiher 4",
     "postalCode": "4645",

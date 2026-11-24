@@ -69,6 +69,10 @@ if (dialog) {
     if (opts.ref && !message.value.trim()) message.value = `Ähnlich wie das Projekt für ${opts.ref}: `;
     document.documentElement.classList.add('brief-open');
     dialog.showModal();
+    // Safari focuses the first control while the sheet is still below the screen (slide-in) and scrolls the
+    // dialog to it — the sheet then lands shifted up. Keep the dialog itself focused and its scroll at 0.
+    if (!finePointer.matches) dialog.focus({ preventScroll: true });
+    dialog.scrollTop = 0;
     // keyboard users start typing right away; on touch the keyboard would cover the sheet
     if (finePointer.matches) (val('name') ? required() : form.elements.name).focus({ preventScroll: true });
   };

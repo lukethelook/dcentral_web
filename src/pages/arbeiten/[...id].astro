@@ -67,7 +67,7 @@ const signalAt = d.signal ? d.title.indexOf(d.signal) : -1;
 const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(signalAt + d.signal!.length)] : null;
 ---
 
-<Layout title={`${d.title} — ${disciplines.join(' & ')} für ${d.client} · dcentral`} description={d.summary} heroTheme="light">
+<Layout title={`${d.title}: ${disciplines.join(' & ')} für ${d.client} · dcentral`} description={d.summary} heroTheme="light">
   <Nav />
   <main class="page shell" id="main">
     <a href="/#arbeiten" class="page-back">
@@ -241,7 +241,7 @@ const signalParts = signalAt >= 0 ? [d.title.slice(0, signalAt), d.title.slice(s
 
     <a href={`/arbeiten/${next.id}`} class="case-next">
       <span>Nächstes Projekt</span>
-      <strong>{next.data.client} — {next.data.title}</strong>
+      <strong>{next.data.client}: {next.data.title}</strong>
     </a>
   </main>
   <Footer />

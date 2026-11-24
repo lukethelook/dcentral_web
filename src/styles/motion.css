@@ -29,7 +29,9 @@ details[data-state=closing] summary svg { transform: none; }
 .line-inner { display: inline-block; }
 
 /* Discipline tabs: one travelling indicator replaces the per-tab underline. */
+/* Sticky only beside the panels (desktop); on phones the tabs sit above the panel and scroll away. */
 .discipline-tabs { position: sticky; }
+@media (max-width: 760px) { .discipline-tabs { position: relative; top: auto; } }
 .discipline-tabs.has-indicator button:before { display: none; }
 .tab-indicator { position: absolute; left: 0; top: 0; width: 1px; height: 2px; background: var(--ink); transform-origin: 0 0; pointer-events: none; }
 

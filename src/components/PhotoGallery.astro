@@ -30,6 +30,7 @@ const series = [...new Set(photos.map((p) => p.series))];
       </figure>
     ))}
   </div>
+  <button type="button" class="pg-more" hidden>Alle <span data-more-count>{photos.length}</span> Fotos zeigen</button>
 
   <dialog class="pg-lightbox" aria-label="Foto-Ansicht">
     <img class="pg-lb-img" alt="" />
@@ -61,11 +62,31 @@ const series = [...new Set(photos.map((p) => p.series))];
     const ease = [0.23, 1, 0.32, 1];
     let visible = data.map((_, i) => i), at = 0;
 
+    // Phones: the first photos of the current series, the rest on request (CSS hides .pg-over ≤760px only).
+    const LIMIT = 16;
+    const more = root.querySelector('.pg-more');
+    const moreCount = more.querySelector('[data-more-count]');
+    let expanded = false;
+    function applyLimit() {
+      let n = 0;
+      items.forEach((it) => { if (it.hidden) { it.classList.remove('pg-over'); return; } n += 1; it.classList.toggle('pg-over', !expanded && n > LIMIT); });
+      moreCount.textContent = String(n);
+      more.hidden = expanded || n <= LIMIT;
+    }
+    more.addEventListener('click', () => {
+      expanded = true;
+      const shown = items.filter((it) => it.classList.contains('pg-over'));
+      applyLimit();
+      if (!reduced.matches) animate(shown.slice(0, 12), { opacity: [0, 1], transform: ['translateY(14px)', 'translateY(0px)'] }, { duration: 0.5, delay: (i) => i * 0.03, ease });
+    });
+    applyLimit();
+
     filters.forEach((b) => b.addEventListener('click', () => {
       filters.forEach((f) => f.setAttribute('aria-pressed', String(f === b)));
       const s = b.dataset.series;
       visible = [];
       items.forEach((it, i) => { const on = !s || it.dataset.series === s; it.hidden = !on; if (on) visible.push(i); });
+      expanded = false; applyLimit();
       if (!reduced.matches) animate(items.filter((it) => !it.hidden), { opacity: [0, 1], transform: ['translateY(14px)', 'translateY(0px)'] }, { duration: 0.5, delay: (i) => Math.min(i, 12) * 0.03, ease });
     }));
 

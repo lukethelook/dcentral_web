@@ -1,11 +1,11 @@
 {
   "eyebrow": "So läuft's",
-  "title": "Vom Gespräch zum Projekt —\n*vier Schritte.*",
+  "title": "Vom Gespräch zum Projekt\n*in vier Schritten.*",
   "steps": [
     {
       "no": "01",
       "t": "Gespräch",
-      "d": "Ein lockeres Erstgespräch — vor Ort, per Call oder beim Kaffee. Unverbindlich und kostenlos."
+      "d": "Ein lockeres Erstgespräch: vor Ort, per Call oder beim Kaffee. Unverbindlich und kostenlos."
     },
     {
       "no": "02",
@@ -15,7 +15,7 @@
     {
       "no": "03",
       "t": "Umsetzung",
-      "d": "Wir produzieren — Foto, Film, Web oder KI. Du hast einen Ansprechpartner und Zwischenstände."
+      "d": "Wir produzieren Foto, Film, Web oder KI. Du hast einen Ansprechpartner und Zwischenstände."
     },
     {
       "no": "04",

@@ -2,10 +2,13 @@
 import h from '../content/site/hero.json';
 import { hl } from '../lib/text';
 
-// First line plain, *accent* line in Instrument Serif — as in the concept.
+// First line plain, *accent* line set heavy in the same family (Manrope).
 const [first, ...rest] = h.headline.split('\n');
 const second = rest.join(' ');
 const plain = (s: string) => s.replace(/\*/g, '');
+// Network copy: first line is the promise, the rest (disciplines) doubles as a kicker above the headline on phones.
+const [networkLead, ...networkRest] = h.network.split('\n');
+const networkTail = networkRest.join(' ');
 ---
 
 <section aria-label={plain(h.headline.replace(/\n/g, ' '))} class="hero" id="top">
@@ -15,10 +18,11 @@ const plain = (s: string) => s.replace(/\*/g, '');
   <div class="hero-copy">
     <p class="location">{h.location}</p>
     <p class="hero-intro">{h.intro}</p>
+    {networkTail && <p class="hero-kicker" set:html={hl(networkTail)} />}
     <h1>
       <span set:html={hl(first)} />{second && <><br /><em>{plain(second)}</em></>}
     </h1>
-    <p class="hero-network" set:html={hl(h.network)} />
+    <p class="hero-network" set:html={hl(networkLead) + (networkTail ? `<span class="hero-network-tail"><br />${hl(networkTail)}</span>` : '')} />
     <a class="action magnetic" href="#kontakt" data-contact="start">
       {h.ctaPrimary}
       <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"></path></svg>

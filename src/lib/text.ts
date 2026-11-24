@@ -1,5 +1,5 @@
 /* Tiny rich-text helper for CMS-editable copy.
-   Converts `*betont*` → <em> (Instrument Serif accent) and newlines → <br>.
+   Converts `*betont*` → <em> (heavy Manrope accent) and newlines → <br>.
    Used with set:html on owned content (no untrusted input). */
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

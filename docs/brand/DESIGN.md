@@ -4,7 +4,7 @@ Die vollständige Markenbegründung und Brand Voice stehen in BRAND-CONCEPT.md, 
 
 ## Palette und Satz
 
-Tannengrün #102f28, Papier #f1f2e8, dunkle Schrift #153e35, Chartreuse #d4ff3f. Manrope für klare Headlines, Instrument Serif für ausgewählte richtungsgebende Worte, DM Sans für längere Texte. Keine wechselnden Headlinefarben. Hero „Von hier. Für Weiter.“ bleibt ruhig zweizeilig.
+Tannengrün #102f28, Papier #f1f2e8, dunkle Schrift #153e35, Chartreuse #d4ff3f. Manrope für alle Headlines, DM Sans für längere Texte. Keine zweite Display-Schrift und keine kursiven Serifen-Akzente (wirkt generisch/KI-typisch): Betonte Worte (*…* im CMS) werden in derselben Schrift fett gesetzt, der Rest der Headline leicht (400 gegen 800). Keine wechselnden Headlinefarben. Hero „Von hier. Für Weiter.“ bleibt ruhig zweizeilig.
 
 Große offene Flächen, asymmetrische Disziplin-Bühne, galerieartige horizontale Projektstrecke. Inhalt ist sichtbar, auch wenn Animationen ausfallen. Mobile Disziplinwahl zeigt alle vier Optionen in zwei Reihen.
 

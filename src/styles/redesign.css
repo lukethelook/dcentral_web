@@ -11,7 +11,7 @@ button:active,.action:active{transform:scale(.97)}
 h1,h2,h3,h4,p,figure{margin:0}
 h1,h2,h3,h4{font-family:Manrope,sans-serif;font-weight:600;letter-spacing:-.04em;line-height:1.1}
 h2{font-size:clamp(40px,4.8vw,76px);text-wrap:balance}
-em{font-family:'Instrument Serif',Georgia,serif;font-weight:400;letter-spacing:-.03em}
+em{font-family:inherit;font-style:normal;font-weight:700}
 p{color:var(--muted)}
 svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .shell{width:min(1500px,calc(100% - 112px));margin-inline:auto}
@@ -47,7 +47,7 @@ h1{font-size:clamp(64px,6.7vw,108px);line-height:.98;font-weight:600}
 .hero-bottom button svg{width:13px;height:13px}
 .manifest h2{max-width:1100px;font-size:clamp(42px,5.4vw,82px);line-height:1.15}
 .manifest h2>em{font-family:Manrope,sans-serif;font-style:normal}
-.manifest h2>em em{font-family:'Instrument Serif',serif}
+.manifest h2>em em{font-weight:800}
 .manifest-bottom{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:55px;align-items:start}
 .manifest-bottom p{max-width:620px;font-size:18px}
 .editorial-mark{font:400 105px/1 'Manrope';color:#779345}
@@ -59,7 +59,7 @@ h1{font-size:clamp(64px,6.7vw,108px);line-height:.98;font-weight:600}
 .service-title>span{font-size:11px;opacity:.65}
 .service-art{height:410px;position:relative;overflow:hidden;background:#e6ebdf}
 .service-1 .service-art,.service-3 .service-art{background:#173c33}
-.art-label{position:absolute;left:24px;bottom:22px;font-family:'Instrument Serif',serif;font-style:italic;font-size:30px;pointer-events:none}
+.art-label{position:absolute;left:24px;bottom:22px;font:600 28px/1.1 Manrope,sans-serif;letter-spacing:-.035em;pointer-events:none}
 .service-1 .art-label,.service-3 .art-label{color:#eaf1e3}
 .art-corners{position:absolute;inset:22px;border:1px solid #8d9e8e60;pointer-events:none;clip-path:polygon(0 0,24px 0,24px 1px,1px 1px,1px 24px,0 24px,0 0,100% 0,100% 24px,calc(100% - 1px) 24px,calc(100% - 1px) 1px,calc(100% - 24px) 1px,calc(100% - 24px) 0,100% 0,100% 100%,calc(100% - 24px) 100%,calc(100% - 24px) calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) calc(100% - 24px),100% calc(100% - 24px),100% 100%,0 100%,0 calc(100% - 24px),1px calc(100% - 24px),1px calc(100% - 1px),24px calc(100% - 1px),24px 100%,0 100%)}
 .service-copy{padding-top:28px}
@@ -126,7 +126,7 @@ h1{font-size:clamp(64px,6.7vw,108px);line-height:.98;font-weight:600}
 .client-list span{font:600 16px Manrope,sans-serif;color:#52685c}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line);padding:40px 0;gap:30px}
 .stats>div{display:flex;flex-direction:column;gap:17px}
-.stats strong{font:400 65px/1 'Instrument Serif',serif}
+.stats strong{font:400 65px/1 Manrope,sans-serif;letter-spacing:-.05em}
 .stats span{font-size:12px}
 .process{padding-top:30px}
 .steps{list-style:none;padding:0;margin:60px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:38px}
@@ -284,7 +284,7 @@ h1{font-size:64px}
 
 
 .manifest h2{hyphens:auto;overflow-wrap:break-word}
-.manifest h2>em{font-family:"Instrument Serif",Georgia,serif;font-style:italic}
+.manifest h2>em{font-family:Manrope,sans-serif;font-style:normal}
 .service-art{background-size:cover}
 @media(max-width:760px){.manifest h2{font-size:35px}
 }
@@ -342,13 +342,13 @@ html[data-hero-theme=dark] .hero a:focus-visible,html[data-hero-theme=dark] .sit
 @media(prefers-reduced-motion:reduce){
 }
 
-.hero-copy h1 em{font-size:1.04em}
+.hero-copy h1 em{font-size:1em}
 .hero-network{width:fit-content;padding:5px 8px 5px 0;background:var(--paper)}
 html[data-hero-theme=dark] .hero-network{background:#102f28}
 /* Quiet editorial hero. No network badge or cycling headline effects. */
 .hero-network,html[data-hero-theme=dark] .hero-network{display:block;background:none;padding:0;width:auto;margin-top:24px;font-size:17px}
 .hero-copy h1{font-size:clamp(64px,6.7vw,108px);line-height:1.03;font-weight:500;letter-spacing:-.04em}
-.hero-copy h1 em{font-size:1.07em}
+.hero-copy h1 em{font-size:1em}
 .hero-copy{top:18%}
 html[data-hero-theme=dark] .hero-bottom button{background:#16372f;border-color:#547266}
 @media(max-width:760px){.hero-copy{top:125px}.hero-copy h1{font-size:clamp(54px,16vw,72px)}.hero-network{font-size:14px}}
