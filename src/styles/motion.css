@@ -33,7 +33,7 @@ details[data-state=closing] summary svg { transform: none; }
 .discipline-tabs { position: sticky; }
 @media (max-width: 760px) { .discipline-tabs { position: relative; top: auto; } }
 .discipline-tabs.has-indicator button:before { display: none; }
-.tab-indicator { position: absolute; left: 0; top: 0; width: 1px; height: 2px; background: var(--ink); transform-origin: 0 0; pointer-events: none; }
+.tab-indicator { position: absolute; left: 0; top: 0; width: 0; height: 2px; background: var(--ink); pointer-events: none; }
 
 /* Studio image frame for the parallax drift. */
 .studio-frame { overflow: hidden; }

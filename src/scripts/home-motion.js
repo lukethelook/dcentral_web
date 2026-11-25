@@ -45,8 +45,12 @@ if (tabs) {
   const place = (glide) => {
     const sel = tabs.querySelector('[aria-selected="true"]');
     if (!sel) return;
+    // Real width (no 1px bar stretched by scaleX: some browsers and screenshot tools mis-render
+    // that and draw the line into the panel). Only the vertical position animates.
     const t = tabs.getBoundingClientRect(), b = sel.getBoundingClientRect();
-    const target = `translate(${(b.left - t.left).toFixed(1)}px, ${(b.bottom - t.top - 1).toFixed(1)}px) scaleX(${b.width.toFixed(1)})`;
+    bar.style.left = `${(b.left - t.left).toFixed(1)}px`;
+    bar.style.width = `${b.width.toFixed(1)}px`;
+    const target = `translateY(${(b.bottom - t.top - 1).toFixed(1)}px)`;
     current?.stop();
     if (glide && canMove()) current = animate(bar, { transform: target }, { type: 'spring', duration: 0.5, bounce: 0.12 });
     else bar.style.transform = target;

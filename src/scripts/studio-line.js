@@ -2,7 +2,6 @@
    Data: public/data/studio-line.bin (scripts/build-oneline.mjs).
    · scroll draws the line in one stroke (one-way, never undraws)
    · once drawn, a lime signal runs through the whole thread
-   · pointer pulls the thread like a rubber band (fine pointers only)
    · click / button: the thread unravels and writes Foto → Film → Web → KI, then
      knots itself back into the face; plays once by itself after the first draw
    Pauses off-screen; reduced motion / „Bewegung pausieren": finished line, no motion. */
@@ -13,7 +12,7 @@ function init(frame) {
   const canvas = frame.querySelector('canvas'), ctx = canvas.getContext('2d');
   const btn = frame.querySelector('.sl-words'), countEl = frame.querySelector('.sl-count');
   const root = document.documentElement;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)'), fine = matchMedia('(hover: hover) and (pointer: fine)');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   let paused = reduce.matches || root.classList.contains('motion-paused');
   const WORDS = ['Foto', 'Film', 'Web', 'KI'];
   const STAGES = [{ at: 0, s: 'tangle' }, { at: 0.9, s: 0 }, { at: 3.0, s: 1 }, { at: 5.1, s: 2 }, { at: 7.2, s: 3 }, { at: 9.5, s: 'tangle' }, { at: 10.3, s: 'face' }];
@@ -21,7 +20,6 @@ function init(frame) {
 
   let n = 0, aspect = 1, U, V, X, Y, cum, ox, oy, vx, vy, tx, ty, wordOff = [];
   let w = 0, h = 0, visible = false, raf = 0, drawn = 0, drawnTarget = 0, seqAt = -1e9, autoDone = false, settled = true, last = 0, sig = 0;
-  const mouse = { x: -1e4, y: -1e4, in: false };
 
   async function load() {
     const buf = await (await fetch('/data/studio-line.bin')).arrayBuffer();
@@ -100,8 +98,8 @@ function init(frame) {
 
     // springs: tangle / words / rubber band
     const ua = (now - seqAt) / 1000, seq = ua < SEQ_END && !paused;
-    const pull = mouse.in && fine.matches && !paused && !seq;
-    if (seq || pull || !settled) {
+    // No pointer reaction (removed: it felt intrusive). The line reacts to scroll and click only.
+    if (seq || !settled) {
       let motion = 0;
       for (let i = 0; i < n; i++) {
         let gx = 0, gy = 0;
@@ -110,12 +108,11 @@ function init(frame) {
           for (const S of STAGES) if (S.at <= ta) st = S.s;
           if (st === 'tangle') { gx = tx[i] * w; gy = ty[i] * w; } else if (typeof st === 'number' && wordOff[st]) { gx = wordOff[st][i * 2]; gy = wordOff[st][i * 2 + 1]; }
         }
-        if (pull) { const dx = X[i] + ox[i] - mouse.x, dy = Y[i] + oy[i] - mouse.y, d2 = dx * dx + dy * dy; if (d2 < 8100) { const d = Math.sqrt(d2) || 1, f = (1 - d / 90) * 30; gx += dx / d * f; gy += dy / d * f; } }
         vx[i] = (vx[i] + (gx - ox[i]) * 0.07) * 0.82; vy[i] = (vy[i] + (gy - oy[i]) * 0.07) * 0.82;
         ox[i] += vx[i]; oy[i] += vy[i];
         motion += Math.abs(vx[i]) + Math.abs(vy[i]) + Math.abs(ox[i]) * 0.02;
       }
-      settled = !seq && !pull && motion / n < 0.002;
+      settled = !seq && motion / n < 0.002;
       if (settled) { ox.fill(0); oy.fill(0); vx.fill(0); vy.fill(0); }
     }
     btn.disabled = seq || paused;
@@ -139,14 +136,14 @@ function init(frame) {
       if (b > a) {
         ctx.beginPath(); ctx.moveTo(X[a] + ox[a], Y[a] + oy[a]);
         for (let i = a + 1; i <= b; i++) ctx.lineTo(X[i] + ox[i], Y[i] + oy[i]);
-        ctx.strokeStyle = 'rgba(212,255,63,.95)'; ctx.lineWidth = 1.05; ctx.shadowColor = 'rgba(212,255,63,.7)'; ctx.shadowBlur = 7; ctx.stroke(); ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(212,255,63,.95)'; ctx.lineWidth = 1.05; ctx.stroke();
       }
     }
     // the pen tip while drawing
     if (count > 0 && count < n) {
       const i = count - 1;
       ctx.beginPath(); ctx.arc(X[i] + ox[i], Y[i] + oy[i], 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#d4ff3f'; ctx.shadowColor = 'rgba(212,255,63,.9)'; ctx.shadowBlur = 16; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.fillStyle = '#d4ff3f'; ctx.fill();
     }
     countEl.textContent = `1 Linie · ${(cum[Math.max(0, count - 1)] / 96 * 0.0254).toFixed(1).replace('.', ',')} m`;
 
@@ -165,8 +162,6 @@ function init(frame) {
   addEventListener('scroll', wake, { passive: true });
   new ResizeObserver(() => { if (!n) return; layout(); buildWords(); wake(); }).observe(frame);
   document.addEventListener('motion-state', (e) => { paused = e.detail.paused || reduce.matches; wake(); });
-  frame.addEventListener('pointermove', (e) => { const r = frame.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.in = true; settled = false; wake(); });
-  frame.addEventListener('pointerleave', () => { mouse.in = false; wake(); });
   frame.addEventListener('click', play);
   btn.addEventListener('click', (e) => { e.stopPropagation(); play(); });
 }
