@@ -70,6 +70,11 @@ const play = 'M7 4.5v15l13-7.5-13-7.5Z';
           );
         })}
       </div>
+      {films.some(({ data: f }) => !f.film) && (
+        <p class="films-privacy">
+          Filme von YouTube und Vimeo werden erst beim Abspielen geladen. Dabei werden Daten an den jeweiligen Anbieter übertragen. <a href="/datenschutz">Mehr dazu</a>
+        </p>
+      )}
     </div>
 
     <dialog class="film-modal" aria-label="Film">

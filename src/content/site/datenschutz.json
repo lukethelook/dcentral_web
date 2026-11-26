@@ -1,11 +1,58 @@
 {
   "title": "Datenschutz",
-  "note": "Platzhalter — vor dem Livegang von einer fachkundigen Stelle prüfen lassen. Diese Seite kommt bewusst ohne Tracking, Cookies und externe Schriften aus (Fonts selbst gehostet).",
+  "note": "",
   "blocks": [
-    { "heading": "Verantwortlicher", "body": "Lukas Kirschbichler · [Adresse] · hallo@dcentral.at" },
-    { "heading": "Grundsatz der Datensparsamkeit", "body": "Diese Website ist statisch ausgeliefert und setzt keine Cookies, kein Analytics und keine externen Schriftarten ein. Beim bloßen Besuch werden keine personenbezogenen Daten in einer Datenbank gespeichert." },
-    { "heading": "Server-Logs", "body": "Der Hosting-Anbieter verarbeitet zur Auslieferung technisch notwendige Server-Logfiles (IP-Adresse, Zeitpunkt, abgerufene Ressource). Rechtsgrundlage: berechtigtes Interesse, Art. 6 Abs. 1 lit. f DSGVO." },
-    { "heading": "Kontaktaufnahme", "body": "Wenn du uns per E-Mail kontaktierst, verarbeiten wir deine Angaben zur Bearbeitung der Anfrage. Die Daten werden gelöscht, sobald sie nicht mehr erforderlich sind." },
-    { "heading": "Deine Rechte", "body": "Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch. Beschwerdestelle: Österreichische Datenschutzbehörde (dsb.gv.at)." }
+    {
+      "heading": "Verantwortlicher",
+      "body": "Mag. Lukas Kirschbichler (dcentral)\nAm Weiher 4, 4645 Grünau im Almtal, Österreich\nE-Mail: hallo@dcentral.at · Tel.: +43 660 40 22 786\n\nEin Datenschutzbeauftragter ist nicht bestellt, da dafür keine gesetzliche Pflicht besteht. Für alle Fragen zum Datenschutz erreichst du uns direkt unter den oben genannten Kontaktdaten."
+    },
+    {
+      "heading": "Das Wichtigste in Kürze",
+      "body": "Diese Website setzt keine Cookies, kein Analytics, kein Tracking und keine Werbung ein. Schriften, Skripte, Bilder und Grafiken werden ausschließlich von unserem eigenen Server geladen. Verbindungen zu Dritten entstehen nur, wenn du selbst einen Film von YouTube oder Vimeo startest oder einem Link auf eine andere Website folgst."
+    },
+    {
+      "heading": "Hosting und Server-Logfiles",
+      "body": "Die Website und unsere E-Mail-Postfächer werden bei Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaka, Zypern, betrieben. Hostinger verarbeitet die Daten in unserem Auftrag auf Grundlage eines Auftragsverarbeitungsvertrags (Art. 28 DSGVO).\n\nBei jedem Aufruf werden technisch notwendige Daten in Server-Logfiles verarbeitet: IP-Adresse, Datum und Uhrzeit, aufgerufene Seite oder Datei, Referrer-URL, Browser und Betriebssystem, HTTP-Statuscode und übertragene Datenmenge. Zweck ist die Auslieferung der Website sowie die Sicherheit und Stabilität des Betriebs (etwa die Abwehr von Angriffen). Rechtsgrundlage ist unser berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO. Die Logfiles werden nicht mit anderen Daten zusammengeführt, nicht zur Profilbildung genutzt und gelöscht, sobald sie für diese Zwecke nicht mehr erforderlich sind."
+    },
+    {
+      "heading": "Verschlüsselung",
+      "body": "Die Verbindung zu dieser Website ist per TLS (HTTPS) verschlüsselt. Du erkennst das am Schloss-Symbol und an „https://“ in der Adresszeile deines Browsers."
+    },
+    {
+      "heading": "Speicherung im Browser",
+      "body": "Damit die Einstiegsanimation auf der Startseite nicht bei jedem Seitenwechsel neu startet, legt die Website im Sitzungsspeicher deines Browsers (sessionStorage) einen einzigen Vermerk ab („seen“). Er enthält keine personenbezogenen Daten, wird nicht an uns oder Dritte übertragen und beim Schließen des Tabs automatisch gelöscht. Diese Speicherung ist für den von dir aufgerufenen Dienst technisch erforderlich und daher nach § 165 Abs. 3 TKG 2021 ohne Einwilligung zulässig. Die Schalter für helle Ansicht und Bewegung werden nicht gespeichert."
+    },
+    {
+      "heading": "Kontaktaufnahme per E-Mail, Telefon und Anfrageformular",
+      "body": "Wenn du uns per E-Mail oder telefonisch kontaktierst, verarbeiten wir deine Angaben (z. B. Name, E-Mail-Adresse, Telefonnummer, Inhalt der Anfrage) zur Bearbeitung deines Anliegens.\n\nDas Anfrageformular auf dieser Website speichert und versendet selbst keine Daten. Es stellt aus deinen Eingaben lediglich einen E-Mail-Entwurf zusammen und öffnet ihn in deinem eigenen E-Mail-Programm. Übermittelt wird erst, wenn du die E-Mail dort selbst absendest.\n\nRechtsgrundlage ist die Durchführung vorvertraglicher Maßnahmen bzw. die Erfüllung eines Vertrags (Art. 6 Abs. 1 lit. b DSGVO), bei allgemeinen Anfragen unser berechtigtes Interesse, Anfragen zu beantworten (Art. 6 Abs. 1 lit. f DSGVO). Wir löschen die Daten, sobald sie nicht mehr erforderlich sind. Kommt ein Auftrag zustande, bewahren wir geschäftsrelevante Korrespondenz für die Dauer der gesetzlichen Aufbewahrungspflichten auf (in der Regel sieben Jahre, § 132 BAO)."
+    },
+    {
+      "heading": "Filme von YouTube",
+      "body": "Einzelne Filme sind über YouTube eingebunden, Anbieter ist Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Wir nutzen den erweiterten Datenschutzmodus (youtube-nocookie.com). Solange du einen Film nicht startest, wird keine Verbindung zu YouTube aufgebaut.\n\nErst mit dem Klick auf „Abspielen“ lädt dein Browser den Player von YouTube. Dabei werden insbesondere deine IP-Adresse, Geräte- und Browserdaten sowie die aufgerufene Seite an Google übermittelt. YouTube kann ab diesem Zeitpunkt Cookies oder ähnliche Technologien auf deinem Gerät speichern. Eine Übermittlung an Google LLC in den USA ist möglich. Google LLC ist nach dem EU-US Data Privacy Framework zertifiziert, für das ein Angemessenheitsbeschluss der EU-Kommission besteht (Art. 45 DSGVO).\n\nRechtsgrundlage ist deine Einwilligung, die du durch den Klick auf „Abspielen“ erteilst (Art. 6 Abs. 1 lit. a DSGVO, § 165 Abs. 3 TKG 2021). Du kannst sie jederzeit für die Zukunft widerrufen, indem du keine weiteren Filme startest und die von YouTube gesetzten Cookies in deinem Browser löschst. Mehr dazu: policies.google.com/privacy"
+    },
+    {
+      "heading": "Filme von Vimeo",
+      "body": "Einzelne Filme sind über Vimeo eingebunden, Anbieter ist Vimeo.com, Inc., New York, USA. Solange du einen Film nicht startest, wird keine Verbindung zu Vimeo aufgebaut. Wir binden den Player mit dem Parameter „Do Not Track“ ein, damit Vimeo keine Nutzungsdaten zu Analysezwecken erhebt.\n\nErst mit dem Klick auf „Abspielen“ lädt dein Browser den Player von Vimeo. Dabei werden insbesondere deine IP-Adresse, Geräte- und Browserdaten sowie die aufgerufene Seite an Vimeo in die USA übermittelt. Vimeo nimmt nach eigenen Angaben am EU-US Data Privacy Framework teil (Art. 45 DSGVO).\n\nRechtsgrundlage ist deine Einwilligung, die du durch den Klick auf „Abspielen“ erteilst (Art. 6 Abs. 1 lit. a DSGVO, § 165 Abs. 3 TKG 2021). Du kannst sie jederzeit für die Zukunft widerrufen, indem du keine weiteren Filme startest. Mehr dazu: vimeo.com/privacy"
+    },
+    {
+      "heading": "Links auf andere Websites",
+      "body": "Diese Website enthält Links auf Websites anderer Anbieter (z. B. von Kundinnen und Kunden oder Lizenzgebern). Beim bloßen Aufruf unserer Seiten werden dabei keine Daten übertragen. Erst wenn du einem Link folgst, gilt die Datenschutzerklärung des jeweiligen Anbieters."
+    },
+    {
+      "heading": "Redaktionszugang",
+      "body": "Der Bereich zur Pflege der Inhalte (/keystatic) ist ausschließlich für berechtigte Personen gedacht. Die Anmeldung dort erfolgt über GitHub (GitHub, Inc., San Francisco, USA), dabei werden für angemeldete Personen technisch notwendige Cookies gesetzt. Für Besucherinnen und Besucher der Website hat das keine Auswirkungen."
+    },
+    {
+      "heading": "Keine automatisierte Entscheidung",
+      "body": "Wir treffen keine ausschließlich automatisierten Entscheidungen und betreiben kein Profiling (Art. 22 DSGVO). Die Bereitstellung deiner Daten ist weder gesetzlich noch vertraglich vorgeschrieben. Ohne deine Angaben können wir eine Anfrage allerdings nicht beantworten."
+    },
+    {
+      "heading": "Deine Rechte",
+      "body": "Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21). Eine erteilte Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO). Wende dich dazu einfach an hallo@dcentral.at.\n\nWenn du glaubst, dass die Verarbeitung deiner Daten gegen das Datenschutzrecht verstößt, kannst du dich bei der Aufsichtsbehörde beschweren. In Österreich ist das die Datenschutzbehörde, Barichgasse 40–42, 1030 Wien, dsb@dsb.gv.at, www.dsb.gv.at."
+    },
+    {
+      "heading": "Stand",
+      "body": "November 2026. Wir passen diese Erklärung an, wenn sich die Website oder die rechtlichen Vorgaben ändern."
+    }
   ]
 }

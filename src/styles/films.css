@@ -112,3 +112,7 @@ html.film-open { overflow: hidden; }
   .film, .film-media, .film-meta, .film-cursor { transition: none; }
   .film-modal[open]::backdrop { animation: none; }
 }
+
+/* Consent notice for click-to-load embeds (YouTube/Vimeo) — see /datenschutz. */
+.films-privacy { max-width: 62ch; margin: 22px 0 0; font-size: 12px; line-height: 1.5; opacity: .62; }
+.films-privacy a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
